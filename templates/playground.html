@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+
+{% block title %}Python Playground - Python Kurz{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Playground Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Domů</a></li>
+                    <li class="breadcrumb-item active">Python Playground</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="playground-header">
+                <div class="playground-icon">
+                    <i class="fas fa-code text-success"></i>
+                </div>
+                <h1 class="playground-title">Python Playground</h1>
+                <p class="playground-description">
+                    Vyzkoušejte si Python kód přímo v prohlížeči. Napište kód a stiskněte "Spustit"!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Editor and Output -->
+    <div class="row">
+        <div class="col-12">
+            <div class="playground-container">
+                <!-- Code Editor -->
+                <div class="code-editor-section">
+                    <div class="editor-header">
+                        <h5><i class="fas fa-edit me-2"></i>Python Editor</h5>
+                        <div class="editor-actions">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearCode()">
+                                <i class="fas fa-trash me-1"></i>Vymazat
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="loadExample()">
+                                <i class="fas fa-lightbulb me-1"></i>Příklad
+                            </button>
+                        </div>
+                    </div>
+                    <div class="code-editor">
+                        <textarea id="codeEditor" placeholder="# Napište svůj Python kód zde...
+print('Ahoj, světe!')
+print('Vítejte v Python Playground!')"># Napište svůj Python kód zde...
+print('Ahoj, světe!')
+print('Vítejte v Python Playground!')
+
+# Zkuste něco jednoduchého:
+jmeno = "{{ student.name }}"
+print(f"Ahoj, {jmeno}!")
+
+# Nebo něco složitějšího:
+for i in range(5):
+    print(f"Počítám: {i + 1}")</textarea>
+                    </div>
+                    <div class="editor-footer">
+                        <button class="btn btn-success btn-lg" onclick="runCode()">
+                            <i class="fas fa-play me-2"></i>Spustit kód
+                        </button>
+                        <div class="run-info">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Kód se spustí na serveru s timeoutem 5 sekund
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Section -->
+                <div class="output-section">
+                    <div class="output-header">
+                        <h5><i class="fas fa-terminal me-2"></i>Výstup</h5>
+                        <div class="output-actions">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearOutput()">
+                                <i class="fas fa-trash me-1"></i>Vymazat
+                            </button>
+                        </div>
+                    </div>
+                    <div class="output-content">
+                        <div id="output" class="output-text">
+                            <div class="output-placeholder">
+                                <i class="fas fa-play-circle text-muted"></i>
+                                <p class="text-muted">Výstup vašeho kódu se zobrazí zde</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Examples Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-4">
+                <i class="fas fa-lightbulb me-2"></i>Příklady k vyzkoušení
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="example-card">
+                <div class="example-header">
+                    <i class="fas fa-calculator text-primary"></i>
+                    <h6>Základní matematika</h6>
+                </div>
+                <div class="example-code">
+                    <pre><code># Základní matematické operace
+a = 10
+b = 5
+print(f"Součet: {a + b}")
+print(f"Rozdíl: {a - b}")
+print(f"Součin: {a * b}")
+print(f"Podíl: {a / b}")</code></pre>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" onclick="loadExample('math')">
+                    <i class="fas fa-play me-1"></i>Vyzkoušet
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="example-card">
+                <div class="example-header">
+                    <i class="fas fa-list text-success"></i>
+                    <h6>Seznamy a cykly</h6>
+                </div>
+                <div class="example-code">
+                    <pre><code># Práce se seznamy
+barvy = ["červená", "modrá", "zelená"]
+print("Barvy:")
+for barva in barvy:
+    print(f"- {barva}")
+
+# Přidání nové barvy
+barvy.append("žlutá")
+print(f"Celkem barev: {len(barvy)}")</code></pre>
+                </div>
+                <button class="btn btn-outline-success btn-sm" onclick="loadExample('lists')">
+                    <i class="fas fa-play me-1"></i>Vyzkoušet
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="example-card">
+                <div class="example-header">
+                    <i class="fas fa-question-circle text-warning"></i>
+                    <h6>Podmínky</h6>
+                </div>
+                <div class="example-code">
+                    <pre><code># Podmíněné příkazy
+vek = 15
+if vek >= 18:
+    print("Jste dospělý")
+elif vek >= 13:
+    print("Jste teenager")
+else:
+    print("Jste dítě")</code></pre>
+                </div>
+                <button class="btn btn-outline-warning btn-sm" onclick="loadExample('conditions')">
+                    <i class="fas fa-play me-1"></i>Vyzkoušet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <div class="playground-actions">
+                <a href="/" class="btn btn-outline-primary me-3">
+                    <i class="fas fa-arrow-left me-1"></i>Zpět na domů
+                </a>
+                <a href="/profil" class="btn btn-outline-info">
+                    <i class="fas fa-user me-1"></i>Můj profil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const examples = {
+    math: `# Základní matematické operace
+a = 10
+b = 5
+print(f"Součet: {a + b}")
+print(f"Rozdíl: {a - b}")
+print(f"Součin: {a * b}")
+print(f"Podíl: {a / b}")`,
+    
+    lists: `# Práce se seznamy
+barvy = ["červená", "modrá", "zelená"]
+print("Barvy:")
+for barva in barvy:
+    print(f"- {barva}")
+
+# Přidání nové barvy
+barvy.append("žlutá")
+print(f"Celkem barev: {len(barvy)}")`,
+    
+    conditions: `# Podmíněné příkazy
+vek = 15
+if vek >= 18:
+    print("Jste dospělý")
+elif vek >= 13:
+    print("Jste teenager")
+else:
+    print("Jste dítě")`
+};
+
+function clearCode() {
+    document.getElementById('codeEditor').value = '';
+}
+
+function clearOutput() {
+    document.getElementById('output').innerHTML = `
+        <div class="output-placeholder">
+            <i class="fas fa-play-circle text-muted"></i>
+            <p class="text-muted">Výstup vašeho kódu se zobrazí zde</p>
+        </div>
+    `;
+}
+
+function loadExample(type = null) {
+    const editor = document.getElementById('codeEditor');
+    if (type && examples[type]) {
+        editor.value = examples[type];
+    } else {
+        // Default example
+        editor.value = `# Napište svůj Python kód zde...
+print('Ahoj, světe!')
+print('Vítejte v Python Playground!')
+
+# Zkuste něco jednoduchého:
+jmeno = "{{ student.name }}"
+print(f"Ahoj, {jmeno}!")
+
+# Nebo něco složitějšího:
+for i in range(5):
+    print(f"Počítám: {i + 1}")`;
+    }
+}
+
+async function runCode() {
+    const code = document.getElementById('codeEditor').value;
+    const outputDiv = document.getElementById('output');
+    
+    if (!code.trim()) {
+        outputDiv.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Napište nějaký kód před spuštěním!
+            </div>
+        `;
+        return;
+    }
+    
+    // Show loading
+    outputDiv.innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Spouštím kód...</span>
+            </div>
+            <p class="mt-2 text-muted">Spouštím váš kód...</p>
+        </div>
+    `;
+    
+    try {
+        const formData = new FormData();
+        formData.append('code', code);
+        
+        const response = await fetch('/run_code', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        let outputHtml = '';
+        
+        if (result.error) {
+            outputHtml = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Chyba:</strong><br>
+                    <pre class="mb-0">${result.error}</pre>
+                </div>
+            `;
+        } else {
+            if (result.output) {
+                outputHtml += `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Výstup:</strong><br>
+                        <pre class="mb-0">${result.output}</pre>
+                    </div>
+                `;
+            }
+            
+            if (result.return_code !== 0) {
+                outputHtml += `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Kód skončil s kódem: ${result.return_code}
+                    </div>
+                `;
+            }
+        }
+        
+        outputDiv.innerHTML = outputHtml || `
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Kód byl spuštěn úspěšně, ale nevypsal žádný výstup.
+            </div>
+        `;
+        
+    } catch (error) {
+        outputDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Chyba při spouštění:</strong><br>
+                ${error.message}
+            </div>
+        `;
+    }
+}
+</script>
+{% endblock %}

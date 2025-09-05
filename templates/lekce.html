@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}{{ lesson.title }} - {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Lesson Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Domů</a></li>
+                    <li class="breadcrumb-item"><a href="/kurz/{{ course_id }}">{{ course.title }}</a></li>
+                    <li class="breadcrumb-item active">{{ lesson.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Lesson Content -->
+        <div class="col-lg-8">
+            <div class="lesson-content-section">
+                <div class="lesson-header">
+                    <div class="lesson-icon">
+                        {% if course_id == "uvod" %}
+                            <i class="fas fa-play-circle text-primary"></i>
+                        {% elif course_id == "zaklady" %}
+                            <i class="fas fa-code text-success"></i>
+                        {% else %}
+                            <i class="fas fa-rocket text-warning"></i>
+                        {% endif %}
+                    </div>
+                    <h1 class="lesson-title-main">{{ lesson.title }}</h1>
+                    <p class="lesson-description-main">{{ lesson.description }}</p>
+                </div>
+
+                <!-- Lesson Content Placeholder -->
+                <div class="lesson-content-body">
+                    <div class="content-placeholder">
+                        <div class="placeholder-icon">
+                            <i class="fas fa-book-open text-muted"></i>
+                        </div>
+                        <h3>Obsah lekce</h3>
+                        <p class="text-muted">
+                            Tato lekce je připravena pro budoucí obsah. Zde bude:
+                        </p>
+                        <ul class="text-muted">
+                            <li>Teoretické vysvětlení tématu</li>
+                            <li>Praktické příklady kódu</li>
+                            <li>Interaktivní cvičení</li>
+                            <li>Testování znalostí</li>
+                        </ul>
+                    </div>
+
+                    <!-- Sample Code Example -->
+                    <div class="code-example">
+                        <h4><i class="fas fa-code me-2"></i>Ukázkový kód</h4>
+                        <div class="code-block">
+                            <pre><code># {{ lesson.title }}
+print("Ahoj, světe!")
+print("Vítejte v lekci: {{ lesson.title }}")
+
+# Toto je ukázkový kód pro lekci
+jmeno = "{{ student.name }}"
+print(f"Ahoj, {jmeno}!")
+
+# Zkuste si tento kód v Python Playground
+for i in range(3):
+    print(f"Počítám: {i + 1}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lesson Actions -->
+                <div class="lesson-actions">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="/playground" class="btn btn-success w-100">
+                                <i class="fas fa-code me-2"></i>Vyzkoušet v Playground
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            {% if lesson.id not in student.completed_lessons %}
+                            <button class="btn btn-primary w-100" onclick="markAsCompleted({{ lesson.id }})">
+                                <i class="fas fa-check me-2"></i>Označit jako dokončené
+                            </button>
+                            {% else %}
+                            <button class="btn btn-outline-success w-100" disabled>
+                                <i class="fas fa-check me-2"></i>Lekce dokončena
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="lesson-sidebar">
+                <!-- Progress Card -->
+                <div class="sidebar-card">
+                    <h5><i class="fas fa-chart-line me-2"></i>Pokrok v kurzu</h5>
+                    <div class="progress mb-2">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ (student.completed_lessons|length / course.lessons|length * 100)|round }}%">
+                        </div>
+                    </div>
+                    <small class="text-muted">
+                        {{ student.completed_lessons|length }} z {{ course.lessons|length }} lekcí
+                    </small>
+                </div>
+
+                <!-- Navigation Card -->
+                <div class="sidebar-card">
+                    <h5><i class="fas fa-list me-2"></i>Lekce v kurzu</h5>
+                    <div class="lesson-list">
+                        {% for l in course.lessons %}
+                        <div class="lesson-item {% if l.id == lesson.id %}active{% endif %}">
+                            <div class="lesson-item-number">{{ loop.index }}</div>
+                            <div class="lesson-item-content">
+                                <a href="/lekce/{{ course_id }}/{{ l.id }}" 
+                                   class="lesson-item-link {% if l.id == lesson.id %}active{% endif %}">
+                                    {{ l.title }}
+                                </a>
+                                {% if l.id in student.completed_lessons %}
+                                    <i class="fas fa-check text-success lesson-item-status"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h5><i class="fas fa-bolt me-2"></i>Rychlé akce</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/kurz/{{ course_id }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i>Zpět na kurz
+                        </a>
+                        <a href="/playground" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-code me-1"></i>Playground
+                        </a>
+                        <a href="/profil" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-user me-1"></i>Můj profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function markAsCompleted(lessonId) {
+    try {
+        const formData = new FormData();
+        formData.append('lesson_id', lessonId);
+        
+        const response = await fetch('/update_progress', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Chyba při označování lekce jako dokončené');
+        }
+    } catch (error) {
+        alert('Chyba: ' + error.message);
+    }
+}
+</script>
+{% endblock %}

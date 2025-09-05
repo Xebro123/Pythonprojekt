@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Domů - Python Kurz{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <div class="hero-section">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-python me-3"></i>Vítejte v Python Kurzu!
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Naučte se programovat v Pythonu zábavnou a interaktivní formou
+                </p>
+                <div class="hero-stats">
+                    <div class="row justify-content-center">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-book-open text-success"></i>
+                                <h4>{{ student.completed_lessons|length }}</h4>
+                                <p>Dokončené lekce</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-trophy text-warning"></i>
+                                <h4>{{ student.current_level }}</h4>
+                                <p>Aktuální úroveň</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Section -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-5">
+                <i class="fas fa-graduation-cap me-2"></i>Dostupné kurzy
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for course_id, course in courses.items() %}
+        <div class="col-lg-4 col-md-6">
+            <div class="course-card h-100">
+                <div class="course-header">
+                    <div class="course-icon">
+                        {% if course_id == "uvod" %}
+                            <i class="fas fa-play-circle text-primary"></i>
+                        {% elif course_id == "zaklady" %}
+                            <i class="fas fa-code text-success"></i>
+                        {% else %}
+                            <i class="fas fa-rocket text-warning"></i>
+                        {% endif %}
+                    </div>
+                    <h3 class="course-title">{{ course.title }}</h3>
+                </div>
+                <div class="course-body">
+                    <p class="course-description">{{ course.description }}</p>
+                    <div class="course-stats">
+                        <span class="badge bg-light text-dark">
+                            <i class="fas fa-list me-1"></i>{{ course.lessons|length }} lekcí
+                        </span>
+                    </div>
+                </div>
+                <div class="course-footer">
+                    <a href="/kurz/{{ course_id }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-arrow-right me-2"></i>Začít kurz
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-bolt me-2"></i>Rychlé akce
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-play text-success"></i>
+                </div>
+                <h5>Python Playground</h5>
+                <p>Vyzkoušejte si Python kód přímo v prohlížeči</p>
+                <a href="/playground" class="btn btn-outline-success">
+                    <i class="fas fa-code me-1"></i>Otevřít
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-user text-info"></i>
+                </div>
+                <h5>Můj Profil</h5>
+                <p>Sledujte svůj pokrok a úspěchy</p>
+                <a href="/profil" class="btn btn-outline-info">
+                    <i class="fas fa-chart-line me-1"></i>Zobrazit
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="quick-action-card">
+                <div class="quick-action-icon">
+                    <i class="fas fa-question-circle text-warning"></i>
+                </div>
+                <h5>Nápověda</h5>
+                <p>Potřebujete pomoc? Podívejte se na nápovědu</p>
+                <button class="btn btn-outline-warning" onclick="showHelp()">
+                    <i class="fas fa-lightbulb me-1"></i>Nápověda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showHelp() {
+    alert('Vítejte v Python kurzu! Začněte výběrem kurzu výše, nebo vyzkoušejte Python Playground pro testování kódu.');
+}
+</script>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Můj Profil - Python Kurz{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Profile Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Domů</a></li>
+                    <li class="breadcrumb-item active">Můj Profil</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <h1 class="profile-name">{{ student.name }}</h1>
+                    <p class="profile-level">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Aktuální úroveň: <strong>{{ student.current_level }}</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-chart-line me-2"></i>Přehled pokroku
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Overall Progress -->
+        <div class="col-md-4">
+            <div class="progress-card">
+                <div class="progress-card-icon">
+                    <i class="fas fa-trophy text-warning"></i>
+                </div>
+                <h4>{{ student.completed_lessons|length }}</h4>
+                <p>Dokončené lekce</p>
+                <div class="progress">
+                    <div class="progress-bar bg-warning" role="progressbar" 
+                         style="width: {{ (student.completed_lessons|length / 10 * 100)|round }}%">
+                    </div>
+                </div>
+                <small class="text-muted">z 10 celkem</small>
+            </div>
+        </div>
+
+        <!-- Current Streak -->
+        <div class="col-md-4">
+            <div class="progress-card">
+                <div class="progress-card-icon">
+                    <i class="fas fa-fire text-danger"></i>
+                </div>
+                <h4>3</h4>
+                <p>Dní v řadě</p>
+                <div class="progress">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 30%">
+                    </div>
+                </div>
+                <small class="text-muted">Nejlepší: 7 dní</small>
+            </div>
+        </div>
+
+        <!-- Time Spent -->
+        <div class="col-md-4">
+            <div class="progress-card">
+                <div class="progress-card-icon">
+                    <i class="fas fa-clock text-info"></i>
+                </div>
+                <h4>2h 30m</h4>
+                <p>Celkový čas</p>
+                <div class="progress">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 25%">
+                    </div>
+                </div>
+                <small class="text-muted">Tento týden: 45m</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Progress -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-book me-2"></i>Pokrok v kurzech
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for course_id, course in courses.items() %}
+        <div class="col-lg-4 col-md-6">
+            <div class="course-progress-card">
+                <div class="course-progress-header">
+                    <div class="course-progress-icon">
+                        {% if course_id == "uvod" %}
+                            <i class="fas fa-play-circle text-primary"></i>
+                        {% elif course_id == "zaklady" %}
+                            <i class="fas fa-code text-success"></i>
+                        {% else %}
+                            <i class="fas fa-rocket text-warning"></i>
+                        {% endif %}
+                    </div>
+                    <h5>{{ course.title }}</h5>
+                </div>
+                
+                <div class="course-progress-body">
+                    <div class="progress mb-2">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ (student.completed_lessons|length / course.lessons|length * 100)|round }}%">
+                        </div>
+                    </div>
+                    <div class="course-progress-stats">
+                        <span class="completed">
+                            {{ student.completed_lessons|length }} dokončeno
+                        </span>
+                        <span class="total">
+                            z {{ course.lessons|length }} lekcí
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="course-progress-footer">
+                    <a href="/kurz/{{ course_id }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-arrow-right me-1"></i>Pokračovat
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Achievements -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-medal me-2"></i>Úspěchy
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-3 col-6">
+            <div class="achievement-card earned">
+                <div class="achievement-icon">
+                    <i class="fas fa-play text-success"></i>
+                </div>
+                <h6>První kroky</h6>
+                <p>Dokončil jste první lekci</p>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-6">
+            <div class="achievement-card earned">
+                <div class="achievement-icon">
+                    <i class="fas fa-code text-primary"></i>
+                </div>
+                <h6>Programátor</h6>
+                <p>Spustil jste kód v Playground</p>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-6">
+            <div class="achievement-card">
+                <div class="achievement-icon">
+                    <i class="fas fa-fire text-warning"></i>
+                </div>
+                <h6>Výdrž</h6>
+                <p>Učte se 7 dní v řadě</p>
+            </div>
+        </div>
+        
+        <div class="col-md-3 col-6">
+            <div class="achievement-card">
+                <div class="achievement-icon">
+                    <i class="fas fa-graduation-cap text-info"></i>
+                </div>
+                <h6>Absolvent</h6>
+                <p>Dokončete všechny kurzy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-history me-2"></i>Nedávná aktivita
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="activity-timeline">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-check text-success"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h6>Dokončena lekce: "První program"</h6>
+                        <p class="text-muted">Dnes v 14:30</p>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-code text-primary"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h6>Spuštěn kód v Playground</h6>
+                        <p class="text-muted">Včera v 16:45</p>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-play text-info"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h6>Začata lekce: "Instalace Pythonu"</h6>
+                        <p class="text-muted">Včera v 15:20</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <div class="profile-actions">
+                <a href="/" class="btn btn-primary me-3">
+                    <i class="fas fa-home me-1"></i>Zpět na domů
+                </a>
+                <a href="/playground" class="btn btn-success me-3">
+                    <i class="fas fa-code me-1"></i>Python Playground
+                </a>
+                <button class="btn btn-outline-secondary" onclick="resetProgress()">
+                    <i class="fas fa-redo me-1"></i>Resetovat pokrok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function resetProgress() {
+    if (confirm('Opravdu chcete resetovat svůj pokrok? Tato akce se nedá vrátit zpět.')) {
+        // In a real app, this would make an API call to reset progress
+        alert('Pokrok byl resetován!');
+        location.reload();
+    }
+}
+</script>
+{% endblock %}

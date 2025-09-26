@@ -35,8 +35,178 @@
                     <p class="lesson-description-main">{{ lesson.description }}</p>
                 </div>
 
-                <!-- Lesson Content Placeholder -->
+                <!-- Lesson Content -->
                 <div class="lesson-content-body">
+                    {% if lesson.title == "Co je Python?" %}
+                    <div class="lesson-content-actual">
+                        <div class="lesson-intro">
+                            <div class="intro-icon">
+                                <i class="fas fa-python text-primary"></i>
+                            </div>
+                            <h3>🐍 Co je Python?</h3>
+                            <p class="intro-text">
+                                Python je <strong>super zábavný programovací jazyk</strong>, který je jako kouzelná hůlka pro počítače! 
+                                S Pythonem můžeš vytvářet úžasné věci a stát se malým programátorem! 🚀
+                            </p>
+                        </div>
+
+                        <div class="lesson-sections">
+                            <div class="lesson-section">
+                                <h4><i class="fas fa-star text-warning me-2"></i>Proč je Python skvělý?</h4>
+                                <div class="section-content">
+                                    <div class="feature-grid">
+                                        <div class="feature-item">
+                                            <i class="fas fa-heart text-danger"></i>
+                                            <h5>Snadný na učení</h5>
+                                            <p>Python je jako psaní v angličtině - rozumíš mu hned!</p>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-rocket text-success"></i>
+                                            <h5>Rychlý start</h5>
+                                            <p>Za pár minut můžeš vytvořit svůj první program!</p>
+                                        </div>
+                                        <div class="feature-item">
+                                            <i class="fas fa-magic text-primary"></i>
+                                            <h5>Kouzelné možnosti</h5>
+                                            <p>Můžeš dělat skoro cokoliv - hry, roboty, webové stránky!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lesson-section">
+                                <h4><i class="fas fa-gamepad text-info me-2"></i>Co všechno můžeš s Pythonem vytvořit?</h4>
+                                <div class="section-content">
+                                    <div class="use-cases">
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-gamepad"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>🎮 Hry a zábava</h5>
+                                                <p>Vytvoř si vlastní hry, animace a interaktivní příběhy!</p>
+                                                <small>Minecraft mody, hádanky, kvízy</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>🤖 Robotika a AI</h5>
+                                                <p>Naprogramuj roboty, kteří tě poslouchají a pomáhají ti!</p>
+                                                <small>Lego roboti, chytré domy, umělá inteligence</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-globe"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>🌐 Webové stránky</h5>
+                                                <p>Vytvoř si vlastní webové stránky a aplikace!</p>
+                                                <small>Instagram, YouTube, TikTok - všechny používají Python!</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-chart-line"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>📊 Věda a data</h5>
+                                                <p>Analyzuj data, vytvářej grafy a objevuj tajemství!</p>
+                                                <small>Vědecké experimenty, předpovědi počasí</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-mobile-alt"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>📱 Mobilní aplikace</h5>
+                                                <p>Vytvoř si vlastní aplikace do telefonu!</p>
+                                                <small>Hry, kalkulačky, organizéry</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="use-case">
+                                            <div class="use-case-icon">
+                                                <i class="fas fa-palette"></i>
+                                            </div>
+                                            <div class="use-case-content">
+                                                <h5>🎨 Umění a design</h5>
+                                                <p>Vytvářej digitální umění a animace!</p>
+                                                <small>Kreslení, animace, hudba</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lesson-section">
+                                <h4><i class="fas fa-lightbulb text-warning me-2"></i>Proč se učit Python už teď?</h4>
+                                <div class="section-content">
+                                    <div class="benefits">
+                                        <div class="benefit-item">
+                                            <i class="fas fa-trophy text-warning"></i>
+                                            <h5>Budoucnost je digitální</h5>
+                                            <p>Programování bude stejně důležité jako čtení a psaní!</p>
+                                        </div>
+                                        <div class="benefit-item">
+                                            <i class="fas fa-brain text-info"></i>
+                                            <h5>Rozvíjíš logické myšlení</h5>
+                                            <p>Python tě naučí řešit problémy krok za krokem!</p>
+                                        </div>
+                                        <div class="benefit-item">
+                                            <i class="fas fa-users text-success"></i>
+                                            <h5>Můžeš pomáhat ostatním</h5>
+                                            <p>Vytvoříš programy, které usnadní život tobě i kamarádům!</p>
+                                        </div>
+                                        <div class="benefit-item">
+                                            <i class="fas fa-money-bill-wave text-primary"></i>
+                                            <h5>Lepší práce v budoucnosti</h5>
+                                            <p>Programátoři jsou velmi žádaní a dobře placení!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lesson-section">
+                                <h4><i class="fas fa-rocket text-danger me-2"></i>Připraven začít?</h4>
+                                <div class="section-content">
+                                    <div class="ready-to-start">
+                                        <p class="ready-text">
+                                            <strong>Python je jako kouzelná hůlka</strong> - s ním můžeš vytvořit cokoliv si představíš! 
+                                            Od jednoduchých kalkulaček až po složité hry a roboty.
+                                        </p>
+                                        <div class="ready-features">
+                                            <div class="ready-feature">
+                                                <i class="fas fa-check-circle text-success"></i>
+                                                <span>Začneš s jednoduchými příkazy</span>
+                                            </div>
+                                            <div class="ready-feature">
+                                                <i class="fas fa-check-circle text-success"></i>
+                                                <span>Postupně se naučíš složitější věci</span>
+                                            </div>
+                                            <div class="ready-feature">
+                                                <i class="fas fa-check-circle text-success"></i>
+                                                <span>Vytvoříš si vlastní projekty</span>
+                                            </div>
+                                        </div>
+                                        <p class="ready-encouragement">
+                                            <strong>Neboj se!</strong> Python je navržený tak, aby byl zábavný a snadný na učení. 
+                                            Každý programátor začínal stejně jako ty - s prvním "Ahoj, světe!" 🎉
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
                     <div class="content-placeholder">
                         <div class="placeholder-icon">
                             <i class="fas fa-book-open text-muted"></i>
@@ -52,6 +222,7 @@
                             <li>Testování znalostí</li>
                         </ul>
                     </div>
+                    {% endif %}
 
                     <!-- Sample Code Example -->
                     <div class="code-example">

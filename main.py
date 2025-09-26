@@ -126,8 +126,8 @@ async def playground(request: Request):
 @app.post("/run_code")
 async def run_code(code: str = Form(...)):
     try:
-        # Create temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        # Create temporary file with UTF-8 encoding
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
             f.write(code)
             temp_file = f.name
         

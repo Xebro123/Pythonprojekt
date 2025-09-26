@@ -253,7 +253,7 @@ for i in range(3):
                         </div>
                         <div class="col-md-6">
                             {% if lesson.id not in student.completed_lessons %}
-                            <button class="btn btn-primary w-100" onclick="markAsCompleted({{ lesson.id }})">
+                            <button class="btn btn-primary w-100" onclick="markAsCompleted('{{ lesson.id }}')">
                                 <i class="fas fa-check me-2"></i>Označit jako dokončené
                             </button>
                             {% else %}

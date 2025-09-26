@@ -273,11 +273,12 @@ for i in range(3):
                 <!-- Progress Card -->
                 <div class="sidebar-card">
                     <h5><i class="fas fa-chart-line me-2"></i>Pokrok v kurzu</h5>
-                    <div class="progress mb-2">
-                        <div class="progress-bar" role="progressbar" 
-                             style="width: {{ (student.completed_lessons|length / course.lessons|length * 100)|round }}%">
-                        </div>
-                    </div>
+            <div class="progress mb-2">
+                <div class="progress-bar" role="progressbar" 
+                     style="width: {{ (student.completed_lessons|length / course.lessons|length * 100)|round }}%"
+                     data-width="{{ (student.completed_lessons|length / course.lessons|length * 100)|round }}">
+                </div>
+            </div>
                     <small class="text-muted">
                         {{ student.completed_lessons|length }} z {{ course.lessons|length }} lekcí
                     </small>
@@ -327,6 +328,15 @@ for i in range(3):
 
 {% block scripts %}
 <script>
+// Nastavení progress baru
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+    progressBars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width + '%';
+    });
+});
+
 async function markAsCompleted(lessonId) {
     try {
         const formData = new FormData();

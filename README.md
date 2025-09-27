@@ -6,7 +6,10 @@ Výuková platforma pro Python vytvořená s FastAPI, určená pro studenty zák
 
 - **Interaktivní kurzy**: Úvod, Základy a Pokročilé koncepty Pythonu
 - **Python Playground**: Spouštění Python kódu přímo v prohlížeči
-- **Sledování pokroku**: Profil studenta s dokončenými lekcemi
+- **Uživatelské účty**: Registrace, přihlášení a správa profilů
+- **Sledování pokroku**: Individuální pokrok každého studenta
+- **Systém odměn**: Achievementy a bodování za dokončené lekce
+- **SQLite databáze**: Portabilní databáze pro offline i online verzi
 - **Responzivní design**: Vhodný pro tablety i počítače
 - **Dětský design**: Barevný a přátelský interface
 
@@ -15,15 +18,21 @@ Výuková platforma pro Python vytvořená s FastAPI, určená pro studenty zák
 ```
 python-kurz/
 ├── main.py                 # Hlavní FastAPI aplikace
+├── database.py             # Databázové modely a konfigurace
+├── auth.py                 # Autentifikace a autorizace
+├── schemas.py              # Pydantic modely pro API
 ├── requirements.txt        # Python závislosti
 ├── README.md              # Tento soubor
+├── python_kurz.db         # SQLite databáze (vytvoří se automaticky)
 ├── templates/             # HTML šablony (Jinja2)
 │   ├── base.html          # Základní šablona
 │   ├── index.html         # Hlavní stránka
 │   ├── kurz.html          # Stránka kurzu
 │   ├── lekce.html         # Stránka lekce
 │   ├── playground.html    # Python playground
-│   └── profil.html        # Profil studenta
+│   ├── profil.html        # Profil studenta
+│   ├── login.html         # Přihlašovací stránka
+│   └── register.html      # Registrační stránka
 └── static/                # Statické soubory
     ├── css/
     │   └── style.css      # Hlavní styly
@@ -68,17 +77,48 @@ python-kurz/
    ```bash
    python main.py
    ```
+   
+   **Poznámka**: Při prvním spuštění se automaticky vytvoří SQLite databáze s výchozími daty.
 
 5. **Otevřete prohlížeč**
    - Přejděte na: http://localhost:8000
    - Nebo: http://127.0.0.1:8000
 
+## 🗄️ Databáze
+
+Aplikace používá **SQLite databázi** pro maximální portabilitu:
+
+### Výhody SQLite pro tento projekt:
+- ✅ **Portabilita** - jeden soubor, snadno se přenáší
+- ✅ **Nulová konfigurace** - funguje out-of-the-box
+- ✅ **Offline verze** - žádné síťové závislosti
+- ✅ **Jednoduché nasazení** - stačí zkopírovat soubor
+- ✅ **Dostatečný výkon** - pro vzdělávací platformu více než dostačující
+
+### Databázové tabulky:
+- **users** - Uživatelské účty
+- **courses** - Kurzy
+- **lessons** - Lekce
+- **user_progress** - Pokrok uživatelů
+- **achievements** - Systém odměn
+- **user_achievements** - Získané odměny
+
+### Migrace databáze:
+Databáze se vytvoří automaticky při prvním spuštění. Pokud potřebujete resetovat databázi, smažte soubor `python_kurz.db` a restartujte aplikaci.
+
 ## 📚 Použití
+
+### Autentifikace
+- **Registrace**: Vytvoření nového účtu
+- **Přihlášení**: Bezpečné přihlášení s JWT tokeny
+- **Profil**: Správa osobních údajů
+- **Odhlášení**: Bezpečné ukončení session
 
 ### Hlavní stránka
 - Přehled všech dostupných kurzů
-- Statistiky pokroku studenta
+- Statistiky pokroku studenta (pouze pro přihlášené)
 - Rychlé akce (Playground, Profil)
+- Přihlašovací/registrační odkazy
 
 ### Kurzy
 - **Úvod do Pythonu**: Základní koncepty programování
@@ -91,10 +131,11 @@ python-kurz/
 - Předpřipravené příklady
 - Zobrazení výstupu a chyb
 
-### Profil studenta
+### Profil studenta (pouze pro přihlášené)
 - Sledování dokončených lekcí
 - Pokrok v jednotlivých kurzech
-- Úspěchy a statistiky
+- Systém odměn a achievementů
+- Celkové skóre a statistiky
 - Nedávná aktivita
 
 ## 🎨 Design
@@ -159,6 +200,26 @@ Aplikace používá:
 - Vymažte cache prohlížeče
 - Zkontrolujte, zda se načítají CSS soubory
 - Ověřte JavaScript konzoli pro chyby
+
+## 🚀 Nasazení
+
+### Online verze (VPS/Cloud)
+1. **Nahrajte soubory** na server
+2. **Nainstalujte závislosti**: `pip install -r requirements.txt`
+3. **Spusťte aplikaci**: `python main.py`
+4. **Nastavte reverse proxy** (nginx/apache) pro port 8000
+5. **Databáze se vytvoří automaticky**
+
+### Offline verze (PC)
+1. **Stáhněte celý projekt** včetně `python_kurz.db`
+2. **Nainstalujte Python** a závislosti
+3. **Spusťte**: `python main.py`
+4. **Otevřete**: http://localhost:8000
+
+### Portabilní verze
+- **SQLite databáze** je jeden soubor - snadno se přenáší
+- **Žádné externí závislosti** - funguje offline
+- **Jednoduché zálohování** - stačí zkopírovat celou složku
 
 ## 📞 Podpora
 

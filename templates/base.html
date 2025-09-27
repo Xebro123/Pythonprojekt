@@ -31,7 +31,22 @@
                     </li>
                 </ul>
                 <div class="navbar-text text-white">
-                    <i class="fas fa-user me-1"></i>{{ student.name }}
+                    {% if is_offline %}
+                        <i class="fas fa-laptop me-1"></i>Offline verze
+                        <span class="badge bg-success ms-2">Lokální data</span>
+                    {% elif user %}
+                        <i class="fas fa-user me-1"></i>{{ user.full_name or user.username }}
+                        <a href="/logout" class="btn btn-outline-light btn-sm ms-2">
+                            <i class="fas fa-sign-out-alt me-1"></i>Odhlásit
+                        </a>
+                    {% else %}
+                        <a href="/login" class="btn btn-outline-light btn-sm me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i>Přihlásit
+                        </a>
+                        <a href="/register" class="btn btn-light btn-sm">
+                            <i class="fas fa-user-plus me-1"></i>Registrovat
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

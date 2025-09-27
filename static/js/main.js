@@ -387,7 +387,66 @@ window.addEventListener('resize', Utils.debounce(handleResize, 250));
 handleResize();
 
 // Export pro použití v jiných souborech
+// Autentifikace
+function getAuthToken() {
+    return localStorage.getItem('access_token');
+}
+
+function setAuthToken(token) {
+    localStorage.setItem('access_token', token);
+}
+
+function removeAuthToken() {
+    localStorage.removeItem('access_token');
+}
+
+function isLoggedIn() {
+    return getAuthToken() !== null;
+}
+
+// AJAX helper s autentifikací
+async function apiRequest(url, options = {}) {
+    const token = getAuthToken();
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers
+    };
+    
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+    
+    if (response.status === 401) {
+        // Token je neplatný, odhlásit uživatele
+        removeAuthToken();
+        window.location.href = '/login';
+        return;
+    }
+    
+    return response;
+}
+
+// Logout funkce
+function logout() {
+    removeAuthToken();
+    window.location.href = '/';
+}
+
+// Přidání logout funkce do window objektu
+window.logout = logout;
+
 window.PythonKurz = {
     Utils: Utils,
-    initializeApp: initializeApp
+    initializeApp: initializeApp,
+    getAuthToken: getAuthToken,
+    setAuthToken: setAuthToken,
+    removeAuthToken: removeAuthToken,
+    isLoggedIn: isLoggedIn,
+    apiRequest: apiRequest,
+    logout: logout
 };

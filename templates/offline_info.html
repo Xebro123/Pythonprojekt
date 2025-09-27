@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Offline Verze - Python Kurz{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-laptop text-primary" style="font-size: 4rem;"></i>
+                        <h2 class="mt-3 mb-3">Offline Verze</h2>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            {{ message }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-download text-success mb-3" style="font-size: 2rem;"></i>
+                                    <h5>Jak to funguje</h5>
+                                    <p class="text-muted">
+                                        Všechny vaše údaje a pokrok se ukládají lokálně do souboru 
+                                        <code>offline_progress.json</code> na vašem počítači.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-users text-warning mb-3" style="font-size: 2rem;"></i>
+                                    <h5>Více uživatelů</h5>
+                                    <p class="text-muted">
+                                        Pokud používáte počítač více lidí, každý bude mít svůj vlastní pokrok 
+                                        v rámci této offline verze.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-sync text-info mb-3" style="font-size: 2rem;"></i>
+                                    <h5>Synchronizace</h5>
+                                    <p class="text-muted">
+                                        Pro synchronizaci mezi zařízeními použijte online verzi 
+                                        s přihlašováním.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <i class="fas fa-shield-alt text-danger mb-3" style="font-size: 2rem;"></i>
+                                    <h5>Bezpečnost</h5>
+                                    <p class="text-muted">
+                                        Všechna data zůstávají na vašem počítači. 
+                                        Nikdo jiný k nim nemá přístup.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-primary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Zpět na hlavní stránku
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

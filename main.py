@@ -161,17 +161,21 @@ async def playground(request: Request, db: Session = Depends(get_db)):
 @app.post("/run_code")
 async def run_code(code: str = Form(...)):
     try:
-        # Create temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        # Create temporary file with UTF-8 encoding
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+            # Add encoding declaration to the file
+            f.write('# -*- coding: utf-8 -*-\n')
             f.write(code)
             temp_file = f.name
         
-        # Run the code
+        # Run the code with UTF-8 encoding
         result = subprocess.run(
             ['python', temp_file],
             capture_output=True,
             text=True,
-            timeout=5
+            timeout=5,
+            encoding='utf-8',
+            errors='replace'
         )
         
         # Clean up

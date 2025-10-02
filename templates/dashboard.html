@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Python Kurz - NextGen Coders{% endblock %}
+{% block title %}Dashboard - NextGen Coders{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -9,16 +9,12 @@
         <div class="col-12 text-center">
             <div class="hero-section">
                 <h1 class="display-4 fw-bold text-primary mb-3">
-                    <i class="fas fa-python me-3"></i>Python Kurz
+                    <i class="fas fa-graduation-cap me-3"></i>Vítejte na NextGen Coders!
                 </h1>
-                <div class="mb-3">
-                    <a href="/" class="btn btn-outline-primary">
-                        <i class="fas fa-arrow-left me-2"></i>Zpět na Dashboard
-                    </a>
-                </div>
                 <p class="lead text-muted mb-4">
-                    Naučte se programovat v Pythonu zábavnou a interaktivní formou
+                    Platforma pro výuku programování pro žáky základních škol
                 </p>
+                {% if user %}
                 <div class="hero-stats">
                     <div class="row justify-content-center">
                         <div class="col-md-3 col-6 mb-3">
@@ -31,12 +27,20 @@
                         <div class="col-md-3 col-6 mb-3">
                             <div class="stat-card">
                                 <i class="fas fa-trophy text-warning"></i>
-                                <h4>{{ student.current_level }}</h4>
-                                <p>Aktuální úroveň</p>
+                                <h4>{{ student.total_points }}</h4>
+                                <p>Celkové body</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-card">
+                                <i class="fas fa-medal text-info"></i>
+                                <h4>{{ student.achievements|length }}</h4>
+                                <p>Odměny</p>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -45,39 +49,51 @@
     <div class="row">
         <div class="col-12">
             <h2 class="text-center mb-5">
-                <i class="fas fa-graduation-cap me-2"></i>Dostupné kurzy
+                <i class="fas fa-code me-2"></i>Dostupné kurzy
             </h2>
         </div>
     </div>
 
     <div class="row g-4">
-        {% for course_id, course in courses.items() %}
+        {% for course in courses %}
         <div class="col-lg-4 col-md-6">
-            <div class="course-card h-100">
+            <div class="course-card h-100 {% if course.status == 'coming_soon' %}coming-soon{% endif %}">
                 <div class="course-header">
                     <div class="course-icon">
-                        {% if course_id == "uvod" %}
-                            <i class="fas fa-play-circle text-primary"></i>
-                        {% elif course_id == "zaklady" %}
-                            <i class="fas fa-code text-success"></i>
-                        {% else %}
-                            <i class="fas fa-rocket text-warning"></i>
-                        {% endif %}
+                        <i class="{{ course.icon }} text-{{ course.color }}"></i>
                     </div>
                     <h3 class="course-title">{{ course.title }}</h3>
+                    {% if course.status == 'coming_soon' %}
+                    <span class="badge bg-secondary">Brzy</span>
+                    {% endif %}
                 </div>
                 <div class="course-body">
                     <p class="course-description">{{ course.description }}</p>
-                    <div class="course-stats">
-                        <span class="badge bg-light text-dark">
-                            <i class="fas fa-list me-1"></i>{{ course.lessons|length }} lekcí
-                        </span>
+                    {% if course.status == 'available' %}
+                    <div class="course-progress mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-muted">Pokrok</small>
+                            <small class="text-muted">{{ course.progress }}/{{ course.total_lessons }}</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-{{ course.color }}" role="progressbar" 
+                                 style="width: {{ (course.progress / course.total_lessons * 100) if course.total_lessons > 0 else 0 }}%">
+                            </div>
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="course-footer">
-                    <a href="/kurz/{{ course_id }}" class="btn btn-primary btn-lg w-100">
-                        <i class="fas fa-arrow-right me-2"></i>Začít kurz
+                    {% if course.status == 'available' %}
+                    <a href="/python" class="btn btn-{{ course.color }} btn-lg w-100">
+                        <i class="fas fa-arrow-right me-2"></i>
+                        {% if course.progress > 0 %}Pokračovat{% else %}Začít kurz{% endif %}
                     </a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary btn-lg w-100" disabled>
+                        <i class="fas fa-clock me-2"></i>Brzy dostupné
+                    </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -99,8 +115,8 @@
                 <div class="quick-action-icon">
                     <i class="fas fa-play text-success"></i>
                 </div>
-                <h5>Python Playground</h5>
-                <p>Vyzkoušejte si Python kód přímo v prohlížeči</p>
+                <h5>Code Playground</h5>
+                <p>Vyzkoušejte si kód přímo v prohlížeči</p>
                 <a href="/playground" class="btn btn-outline-success">
                     <i class="fas fa-code me-1"></i>Otevřít
                 </a>
@@ -137,7 +153,7 @@
 {% block scripts %}
 <script>
 function showHelp() {
-    alert('Vítejte v Python kurzu! Začněte výběrem kurzu výše, nebo vyzkoušejte Python Playground pro testování kódu.');
+    alert('Vítejte na NextGen Coders! Vyberte si kurz výše a začněte s výukou programování. Můžete také vyzkoušet Code Playground pro testování kódu.');
 }
 </script>
 {% endblock %}

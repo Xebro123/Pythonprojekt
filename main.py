@@ -12,7 +12,7 @@ import tempfile
 import os
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Python Kurz pro Základní Školy", description="Výuková platforma pro Python")
+app = FastAPI(title="NextGen Coders", description="Platforma pro výuku programování")
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -71,12 +71,60 @@ def get_student_progress(db: Session, user: User = None) -> StudentProgress:
     )
 
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request, db: Session = Depends(get_db)):
+async def dashboard(request: Request, db: Session = Depends(get_db)):
+    """Hlavní dashboard platformy"""
+    current_user = get_current_user_optional(request, db)
+    student = get_student_progress(db, current_user)
+    
+    # Seznam dostupných kurzů na platformě
+    available_courses = [
+        {
+            "id": "python",
+            "title": "Python Kurz",
+            "description": "Naučte se základy programování v Pythonu",
+            "icon": "fas fa-python",
+            "color": "success",
+            "status": "available",
+            "progress": len(student.completed_lessons) if student else 0,
+            "total_lessons": 10
+        },
+        {
+            "id": "javascript",
+            "title": "JavaScript Kurz", 
+            "description": "Webové programování s JavaScriptem",
+            "icon": "fab fa-js-square",
+            "color": "warning",
+            "status": "coming_soon",
+            "progress": 0,
+            "total_lessons": 0
+        },
+        {
+            "id": "ai",
+            "title": "AI Kurz",
+            "description": "Umělá inteligence pro začátečníky",
+            "icon": "fas fa-robot",
+            "color": "info",
+            "status": "coming_soon", 
+            "progress": 0,
+            "total_lessons": 0
+        }
+    ]
+    
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "courses": available_courses,
+        "student": student,
+        "user": current_user
+    })
+
+@app.get("/python", response_class=HTMLResponse)
+async def python_course(request: Request, db: Session = Depends(get_db)):
+    """Python kurz - původní hlavní stránka"""
     current_user = get_current_user_optional(request, db)
     courses = get_courses_data(db)
     student = get_student_progress(db, current_user)
     
-    return templates.TemplateResponse("index.html", {
+    return templates.TemplateResponse("python_course.html", {
         "request": request,
         "courses": courses,
         "student": student,
@@ -90,7 +138,7 @@ async def course_page(request: Request, course_id: str, db: Session = Depends(ge
     student = get_student_progress(db, current_user)
     
     if course_id not in courses:
-        return templates.TemplateResponse("index.html", {
+        return templates.TemplateResponse("dashboard.html", {
             "request": request,
             "courses": courses,
             "student": student,
@@ -113,7 +161,7 @@ async def lesson_page(request: Request, course_id: str, lesson_id: int, db: Sess
     student = get_student_progress(db, current_user)
     
     if course_id not in courses:
-        return templates.TemplateResponse("index.html", {
+        return templates.TemplateResponse("dashboard.html", {
             "request": request,
             "courses": courses,
             "student": student,

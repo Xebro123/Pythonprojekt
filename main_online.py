@@ -20,13 +20,20 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Templates
 templates = Jinja2Templates(directory="templates")
 
-# Helper funkce pro získání dat z Directus
+# Inicializace databáze při startu (pouze pro offline režim)
+@app.on_event("startup")
+async def startup_event():
+    if settings.is_offline:
+        from database import init_database
+        init_database()
+
+# Helper funkce pro získání dat
 async def get_courses_data():
-    """Získání všech kurzů z Directus"""
+    """Získání všech kurzů"""
     return await data_service.get_courses()
 
 async def get_student_progress(user_id: str = None) -> StudentProgress:
-    """Získání pokroku studenta z Directus"""
+    """Získání pokroku studenta"""
     if user_id:
         return await data_service.get_user_progress(user_id)
     else:

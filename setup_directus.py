@@ -23,20 +23,47 @@ class DirectusSetup:
         """Přihlášení jako admin"""
         try:
             async with httpx.AsyncClient() as client:
-                response = await client.post(
+                # Zkusíme různé endpointy pro přihlášení
+                endpoints = [
+                    f"{self.base_url}/admin/login",
                     f"{self.base_url}/auth/login",
-                    json={"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD}
-                )
+                    f"{self.base_url}/auth/authenticate",
+                    f"{self.base_url}/login"
+                ]
                 
-                if response.status_code == 200:
-                    data = response.json()
-                    self.token = data["data"]["access_token"]
-                    self.headers["Authorization"] = f"Bearer {self.token}"
-                    print("✅ Přihlášení úspěšné!")
-                    return True
-                else:
-                    print(f"❌ Chyba přihlášení: {response.text}")
-                    return False
+                for endpoint in endpoints:
+                    try:
+                        print(f"🔍 Zkouším endpoint: {endpoint}")
+                        response = await client.post(
+                            endpoint,
+                            json={"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD}
+                        )
+                        
+                        print(f"📊 Status: {response.status_code}")
+                        print(f"📊 Response: {response.text[:200]}...")
+                        
+                        if response.status_code == 200:
+                            data = response.json()
+                            # Různé možnosti struktury odpovědi
+                            if "data" in data and "access_token" in data["data"]:
+                                self.token = data["data"]["access_token"]
+                            elif "access_token" in data:
+                                self.token = data["access_token"]
+                            elif "token" in data:
+                                self.token = data["token"]
+                            else:
+                                print(f"❌ Neznámá struktura odpovědi: {data}")
+                                continue
+                            
+                            self.headers["Authorization"] = f"Bearer {self.token}"
+                            print("✅ Přihlášení úspěšné!")
+                            return True
+                    except Exception as e:
+                        print(f"❌ Chyba s endpointem {endpoint}: {e}")
+                        continue
+                
+                print("❌ Všechny endpointy selhaly")
+                return False
         except Exception as e:
             print(f"❌ Chyba připojení: {e}")
             return False

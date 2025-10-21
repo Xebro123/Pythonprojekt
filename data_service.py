@@ -14,7 +14,16 @@ class DataService:
     async def register_user(self, email: str, password: str, first_name: str, last_name: str) -> Optional[Dict]:
         """Registrace nového uživatele přes Directus"""
         try:
-            result = await directus.register(email, password, first_name, last_name)
+            # Použijte users kolekci místo directus_users
+            user_data = {
+                "username": email.split("@")[0],  # Použijte email jako username
+                "email": email,
+                "password": password,
+                "full_name": f"{first_name} {last_name}".strip(),
+                "status": "active"
+            }
+            
+            result = await directus.create_item("users", user_data)
             if result:
                 print(f"User registered successfully: {email}")
                 return result

@@ -62,14 +62,27 @@ class DirectusClient:
                 "password": password,
                 "first_name": first_name,
                 "last_name": last_name,
-                "status": "active"
+                "status": "active",
+                "role": "authenticated"  # Přidáno pro Directus
+            }
+            
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.token}" if self.token else None
             }
             
             async with httpx.AsyncClient() as client:
-                response = await client.post(url, json=data)
-                response.raise_for_status()
-                return response.json()
-        except httpx.HTTPError:
+                response = await client.post(url, json=data, headers=headers)
+                
+                if response.status_code in [200, 201]:
+                    return response.json()
+                else:
+                    print(f"Directus register error: {response.status_code}")
+                    print(f"Response: {response.text}")
+                    return None
+                    
+        except Exception as e:
+            print(f"Directus register exception: {e}")
             return None
     
     # Kurzy

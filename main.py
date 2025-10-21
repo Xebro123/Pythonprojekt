@@ -198,19 +198,26 @@ async def register_page(request: Request):
 async def register(request: Request, email: str = Form(...), password: str = Form(...), 
                   first_name: str = Form(...), last_name: str = Form(...)):
     """Registrace nového uživatele"""
-    register_result = await data_service.register_user(email, password, first_name, last_name)
-    
-    if register_result:
-        # Automatické přihlášení po registraci
-        access_token = create_access_token(data={"sub": email})
+    try:
+        register_result = await data_service.register_user(email, password, first_name, last_name)
         
-        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key="access_token", value=access_token, httponly=True)
-        return response
-    else:
+        if register_result:
+            # Automatické přihlášení po registraci
+            access_token = create_access_token(data={"sub": email})
+            
+            response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+            response.set_cookie(key="access_token", value=access_token, httponly=True)
+            return response
+        else:
+            return templates.TemplateResponse("register.html", {
+                "request": request,
+                "error": "Chyba při registraci. Email může být již používán nebo došlo k chybě serveru."
+            })
+    except Exception as e:
+        print(f"Registration error in main.py: {e}")
         return templates.TemplateResponse("register.html", {
             "request": request,
-            "error": "Chyba při registraci. Email může být již používán."
+            "error": f"Chyba při registraci: {str(e)}"
         })
 
 @app.post("/logout")

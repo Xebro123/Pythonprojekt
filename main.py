@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from config import settings
 from data_service import data_service
-from auth import create_access_token, get_current_user_optional
+from auth_directus import create_access_token, get_current_user_optional
 from schemas import UserCreate, UserLogin, StudentProgress
 import uvicorn
 import subprocess

@@ -34,15 +34,64 @@ async def get_student_progress(user_id: str = None) -> StudentProgress:
 
 # Routes
 @app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    """Hlavní stránka"""
-    courses = await get_courses_data()
-    student = await get_student_progress()
+async def dashboard(request: Request):
+    """Hlavní dashboard platformy"""
+    current_user = await get_current_user_optional(request)
+    student = await get_student_progress(current_user.get("id") if current_user else None)
     
-    return templates.TemplateResponse("index.html", {
+    # Seznam dostupných kurzů na platformě
+    available_courses = [
+        {
+            "id": "python",
+            "title": "Python Kurz",
+            "description": "Naučte se základy programování v Pythonu",
+            "icon": "fas fa-python",
+            "color": "success",
+            "status": "available",
+            "progress": len(student.completed_lessons) if student else 0,
+            "total_lessons": 10
+        },
+        {
+            "id": "javascript",
+            "title": "JavaScript Kurz", 
+            "description": "Webové programování s JavaScriptem",
+            "icon": "fab fa-js-square",
+            "color": "warning",
+            "status": "coming_soon",
+            "progress": 0,
+            "total_lessons": 0
+        },
+        {
+            "id": "ai",
+            "title": "AI Kurz",
+            "description": "Umělá inteligence pro začátečníky",
+            "icon": "fas fa-robot",
+            "color": "info",
+            "status": "coming_soon", 
+            "progress": 0,
+            "total_lessons": 0
+        }
+    ]
+    
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "courses": available_courses,
+        "student": student,
+        "user": current_user
+    })
+
+@app.get("/python", response_class=HTMLResponse)
+async def python_course(request: Request):
+    """Python kurz - původní hlavní stránka"""
+    current_user = await get_current_user_optional(request)
+    courses = await get_courses_data()
+    student = await get_student_progress(current_user.get("id") if current_user else None)
+    
+    return templates.TemplateResponse("python_course.html", {
         "request": request,
         "courses": courses,
-        "student": student
+        "student": student,
+        "user": current_user
     })
 
 @app.get("/kurz/{course_id}", response_class=HTMLResponse)
@@ -50,7 +99,7 @@ async def course_page(request: Request, course_id: str):
     """Stránka kurzu"""
     courses = await get_courses_data()
     if course_id not in courses:
-        return templates.TemplateResponse("index.html", {
+        return templates.TemplateResponse("dashboard.html", {
             "request": request,
             "courses": courses,
             "student": await get_student_progress(),
@@ -69,7 +118,7 @@ async def lesson_page(request: Request, course_id: str, lesson_id: int):
     """Stránka lekce"""
     courses = await get_courses_data()
     if course_id not in courses:
-        return templates.TemplateResponse("index.html", {
+        return templates.TemplateResponse("dashboard.html", {
             "request": request,
             "courses": courses,
             "student": await get_student_progress(),

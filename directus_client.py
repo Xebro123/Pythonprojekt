@@ -53,47 +53,56 @@ class DirectusClient:
         except httpx.HTTPError:
             return None
     
-    async def register(self, email: str, password: str, first_name: str, last_name: str) -> Optional[Dict]:
-        """Registrace nového uživatele"""
+    async def register(self, username: str, email: str, password: str) -> Optional[Dict]:
+        """
+        Registrace nového studenta přes Directus.
+        
+        Používá kolekci 'students' s poli: username, email, password (Hash), status
+        Pro správnou funkčnost vytvořte v Directus:
+        1. Kolekci 'students' s poli: username (Unique), email (Unique), password (Hash), status
+        2. Public Access Policy s právy Create a Read pro kolekci students
+        """
         try:
-            # Zkusíme nejdřív veřejný registrační endpoint
-            url = f"{self.base_url}/users/register"
             data = {
+                "username": username,
                 "email": email,
                 "password": password,
-                "first_name": first_name,
-                "last_name": last_name
-            }
-            
-            headers = {
-                "Content-Type": "application/json"
+                "status": "active"
             }
             
             async with httpx.AsyncClient() as client:
-                # Pokus o veřejnou registraci
-                response = await client.post(url, json=data, headers=headers)
-                
-                if response.status_code in [200, 201]:
-                    return response.json()
-                elif response.status_code == 404:
-                    # Pokud /users/register neexistuje, zkusíme admin endpoint s tokenem
-                    print("Public registration endpoint not available, trying admin endpoint...")
-                    url = f"{self.base_url}/users"
-                    data["status"] = "active"
-                    data["role"] = None  # Directus přiřadí default roli
-                    
-                    headers["Authorization"] = f"Bearer {self.token}"
+                # 1. Zkusíme custom registration endpoint (pokud existuje)
+                try:
+                    url = f"{self.base_url}/register"
+                    headers = {"Content-Type": "application/json"}
                     response = await client.post(url, json=data, headers=headers)
                     
                     if response.status_code in [200, 201]:
+                        print(f"Student registered via custom endpoint: {username}")
                         return response.json()
+                    else:
+                        print(f"Custom endpoint failed: {response.status_code}")
+                except Exception as e:
+                    print(f"Custom endpoint not available: {e}")
                 
-                print(f"Directus register error: {response.status_code}")
-                print(f"Response: {response.text}")
-                return None
+                # 2. Fallback: Přímé vytvoření v kolekci students (vyžaduje Public policy)
+                try:
+                    url = f"{self.base_url}/items/students"
+                    headers = {"Content-Type": "application/json"}
+                    response = await client.post(url, json=data, headers=headers)
+                    
+                    if response.status_code in [200, 201]:
+                        print(f"Student registered via items API: {username}")
+                        return response.json()
+                    else:
+                        print(f"Items API failed: {response.status_code} - {response.text}")
+                        return None
+                except Exception as e:
+                    print(f"Items API exception: {e}")
+                    return None
                     
         except Exception as e:
-            print(f"Directus register exception: {e}")
+            print(f"Registration exception: {e}")
             import traceback
             traceback.print_exc()
             return None

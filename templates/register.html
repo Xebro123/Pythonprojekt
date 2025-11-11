@@ -21,8 +21,10 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-user"></i>
                                 </span>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       placeholder="Vyberte si své přihlašovací jméno" required>
                             </div>
+                            <small class="text-muted">Toto jméno uvidí ostatní studenti.</small>
                         </div>
 
                         <div class="mb-3">
@@ -31,18 +33,10 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-envelope"></i>
                                 </span>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       placeholder="vas.email@priklad.cz" required>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="full_name" class="form-label">Celé jméno (volitelné)</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-id-card"></i>
-                                </span>
-                                <input type="text" class="form-control" id="full_name" name="full_name">
-                            </div>
+                            <small class="text-muted">Pro obnovení hesla a důležité notifikace.</small>
                         </div>
 
                         <div class="mb-3">
@@ -51,7 +45,8 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-lock"></i>
                                 </span>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       placeholder="Minimálně 6 znaků" minlength="6" required>
                             </div>
                         </div>
 
@@ -61,7 +56,8 @@
                                 <span class="input-group-text">
                                     <i class="fas fa-lock"></i>
                                 </span>
-                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                <input type="password" class="form-control" id="confirm_password" 
+                                       name="confirm_password" placeholder="Zadejte heslo znovu" required>
                             </div>
                         </div>
 
@@ -90,18 +86,30 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     e.preventDefault();
     
     const formData = new FormData(this);
+    const username = formData.get('username');
+    const email = formData.get('email');
     const password = formData.get('password');
     const confirmPassword = formData.get('confirm_password');
     
+    // Validace
     if (password !== confirmPassword) {
         alert('Hesla se neshodují!');
         return;
     }
     
+    if (password.length < 6) {
+        alert('Heslo musí mít alespoň 6 znaků!');
+        return;
+    }
+    
+    if (username.length < 3) {
+        alert('Uživatelské jméno musí mít alespoň 3 znaky!');
+        return;
+    }
+    
     const registerData = {
-        username: formData.get('username'),
-        email: formData.get('email'),
-        full_name: formData.get('full_name') || null,
+        username: username,
+        email: email,
         password: password
     };
     
@@ -120,7 +128,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             if (data.access_token) {
                 document.cookie = `access_token=${data.access_token}; path=/; max-age=86400`;
             }
-            alert('Účet úspěšně vytvořen!');
+            alert(`Vítej, ${data.username}! Účet byl úspěšně vytvořen.`);
             window.location.href = '/';
         } else {
             const error = await response.json();

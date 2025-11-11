@@ -11,15 +11,15 @@ class DataService:
         """Přihlášení uživatele přes Directus"""
         return await directus.authenticate(email, password)
     
-    async def register_user(self, email: str, password: str, first_name: str, last_name: str) -> Optional[Dict]:
-        """Registrace nového uživatele přes Directus"""
+    async def register_user(self, username: str, email: str, password: str) -> Optional[Dict]:
+        """Registrace nového studenta přes Directus"""
         try:
-            result = await directus.register(email, password, first_name, last_name)
+            result = await directus.register(username, email, password)
             if result:
-                print(f"User registered successfully: {email}")
+                print(f"Student registered successfully: {username}")
                 return result
             else:
-                print(f"Failed to register user: {email}")
+                print(f"Failed to register student: {username}")
                 return None
         except Exception as e:
             print(f"Registration error: {e}")

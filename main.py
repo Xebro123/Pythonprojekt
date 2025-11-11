@@ -245,34 +245,28 @@ async def register_page(request: Request):
 
 @app.post("/register")
 async def register(user_data: UserCreate):
-    """Registrace nového uživatele"""
+    """Registrace nového studenta"""
     try:
-        # Rozdělení full_name na first_name a last_name
-        full_name = user_data.full_name or user_data.username
-        name_parts = full_name.strip().split(" ", 1)
-        first_name = name_parts[0]
-        last_name = name_parts[1] if len(name_parts) > 1 else ""
-        
         register_result = await data_service.register_user(
-            user_data.email, 
-            user_data.password, 
-            first_name, 
-            last_name
+            user_data.username, 
+            user_data.email,
+            user_data.password
         )
         
         if register_result:
             # Automatické přihlášení po registraci
-            access_token = create_access_token(data={"sub": user_data.email})
+            access_token = create_access_token(data={"sub": user_data.username})
             
             return {
                 "success": True,
                 "access_token": access_token,
-                "message": "Registrace úspěšná"
+                "message": "Registrace úspěšná",
+                "username": user_data.username
             }
         else:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Chyba při registraci. Email může být již používán nebo došlo k chybě serveru."
+                detail="Chyba při registraci. Uživatelské jméno nebo email už mohou být použity."
             )
     except HTTPException:
         raise
@@ -289,6 +283,50 @@ async def logout():
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="access_token")
     return response
+
+@app.get("/api/health")
+async def health_check():
+    """Health check endpoint pro testování Directus připojení"""
+    import httpx
+    from config import settings
+    
+    health_status = {
+        "app": "ok",
+        "directus": {
+            "url": settings.DIRECTUS_URL,
+            "reachable": False,
+            "authenticated": False,
+            "collections": []
+        }
+    }
+    
+    try:
+        # Test 1: Je Directus dostupný?
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            try:
+                response = await client.get(f"{settings.DIRECTUS_URL}/server/ping")
+                health_status["directus"]["reachable"] = response.status_code == 200
+            except Exception as e:
+                health_status["directus"]["error"] = f"Cannot reach Directus: {str(e)}"
+            
+            # Test 2: Funguje autentifikace?
+            if settings.DIRECTUS_TOKEN:
+                try:
+                    headers = {"Authorization": f"Bearer {settings.DIRECTUS_TOKEN}"}
+                    response = await client.get(f"{settings.DIRECTUS_URL}/collections", headers=headers)
+                    health_status["directus"]["authenticated"] = response.status_code == 200
+                    
+                    if response.status_code == 200:
+                        collections = response.json().get("data", [])
+                        health_status["directus"]["collections"] = [c["collection"] for c in collections]
+                    else:
+                        health_status["directus"]["auth_error"] = response.text
+                except Exception as e:
+                    health_status["directus"]["auth_error"] = str(e)
+    except Exception as e:
+        health_status["error"] = str(e)
+    
+    return health_status
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

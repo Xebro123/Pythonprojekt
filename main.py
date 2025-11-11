@@ -244,30 +244,44 @@ async def register_page(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
 @app.post("/register")
-async def register(request: Request, email: str = Form(...), password: str = Form(...), 
-                  first_name: str = Form(...), last_name: str = Form(...)):
+async def register(user_data: UserCreate):
     """Registrace nového uživatele"""
     try:
-        register_result = await data_service.register_user(email, password, first_name, last_name)
+        # Rozdělení full_name na first_name a last_name
+        full_name = user_data.full_name or user_data.username
+        name_parts = full_name.strip().split(" ", 1)
+        first_name = name_parts[0]
+        last_name = name_parts[1] if len(name_parts) > 1 else ""
+        
+        register_result = await data_service.register_user(
+            user_data.email, 
+            user_data.password, 
+            first_name, 
+            last_name
+        )
         
         if register_result:
             # Automatické přihlášení po registraci
-            access_token = create_access_token(data={"sub": email})
+            access_token = create_access_token(data={"sub": user_data.email})
             
-            response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-            response.set_cookie(key="access_token", value=access_token, httponly=True)
-            return response
+            return {
+                "success": True,
+                "access_token": access_token,
+                "message": "Registrace úspěšná"
+            }
         else:
-            return templates.TemplateResponse("register.html", {
-                "request": request,
-                "error": "Chyba při registraci. Email může být již používán nebo došlo k chybě serveru."
-            })
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Chyba při registraci. Email může být již používán nebo došlo k chybě serveru."
+            )
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"Registration error in main.py: {e}")
-        return templates.TemplateResponse("register.html", {
-            "request": request,
-            "error": f"Chyba při registraci: {str(e)}"
-        })
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Chyba při registraci: {str(e)}"
+        )
 
 @app.post("/logout")
 async def logout():

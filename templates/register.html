@@ -116,13 +116,18 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         
         if (response.ok) {
             const data = await response.json();
-            alert('Účet úspěšně vytvořen! Nyní se můžete přihlásit.');
-            window.location.href = '/login';
+            // Uložit token do cookie
+            if (data.access_token) {
+                document.cookie = `access_token=${data.access_token}; path=/; max-age=86400`;
+            }
+            alert('Účet úspěšně vytvořen!');
+            window.location.href = '/';
         } else {
             const error = await response.json();
-            alert('Chyba při registraci: ' + error.detail);
+            alert('Chyba při registraci: ' + (error.detail || error.message || 'Neznámá chyba'));
         }
     } catch (error) {
+        console.error('Registration error:', error);
         alert('Chyba při registraci: ' + error.message);
     }
 });

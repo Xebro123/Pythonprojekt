@@ -61,10 +61,14 @@
                         <i class="fas fa-laptop me-1"></i>Offline verze
                         <span class="badge bg-success ms-2">Lokální data</span>
                     {% elif user %}
-                        <i class="fas fa-user me-1"></i>{{ user.full_name or user.username }}
-                        <a href="/logout" class="btn btn-outline-light btn-sm ms-2">
-                            <i class="fas fa-sign-out-alt me-1"></i>Odhlásit
-                        </a>
+                        <span class="me-2">
+                            <i class="fas fa-user me-1"></i>{{ user.username }}
+                        </span>
+                        <form action="/logout" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-outline-light btn-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i>Odhlásit
+                            </button>
+                        </form>
                     {% else %}
                         <a href="/login" class="btn btn-outline-light btn-sm me-2">
                             <i class="fas fa-sign-in-alt me-1"></i>Přihlásit

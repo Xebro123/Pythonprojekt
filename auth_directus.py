@@ -68,28 +68,45 @@ async def get_current_user(
     return user
 
 async def get_current_user_optional(request: Request) -> Optional[dict]:
-    """Získání aktuálního uživatele (volitelné)"""
-    authorization: str = request.headers.get("Authorization")
-    if not authorization:
+    """Získání aktuálního uživatele z cookie (volitelné)"""
+    # Nejprve zkusíme cookie
+    token = request.cookies.get("access_token")
+    
+    # Pokud není v cookie, zkusíme Authorization header
+    if not token:
+        authorization: str = request.headers.get("Authorization")
+        if authorization:
+            try:
+                scheme, token = authorization.split()
+                if scheme.lower() != "bearer":
+                    return None
+            except ValueError:
+                return None
+        else:
+            return None
+    
+    if not token:
         return None
     
     try:
-        scheme, token = authorization.split()
-        if scheme.lower() != "bearer":
-            return None
-        
         payload = verify_token(token)
         if payload is None:
             return None
         
-        user_id: str = payload.get("sub")
-        if user_id is None:
+        username: str = payload.get("sub")
+        if username is None:
             return None
         
-        # Získání uživatele z Directus
-        user = await data_service.get_user_by_username(user_id)
-        return user
-    except (ValueError, HTTPException):
+        print(f"🔍 Token decoded, username: {username}")
+        
+        # Vrátíme jednoduchý user objekt s username
+        # TODO: Implementovat get_user_by_username v data_service pro získání dat z Directus
+        return {
+            "username": username,
+            "full_name": username  # Prozatím použijeme username jako full_name
+        }
+    except Exception as e:
+        print(f"❌ Error getting current user: {e}")
         return None
 
 async def authenticate_user(username: str, password: str) -> Optional[dict]:

@@ -1134,3 +1134,59 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: #2c5aa0;
 }
+
+/* ============================================ */
+/* METALLIC BLUE BUTTONS - Kovové modré tlačítka */
+/* ============================================ */
+
+/* Hover a Active efekty pro kovové buttony */
+.metallic-btn-1:hover {
+    filter: brightness(1.15) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.5),
+        inset 0 3px 6px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.metallic-btn-1:active {
+    transform: translateY(1px) !important;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.metallic-btn-2:hover {
+    filter: brightness(1.15) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.5),
+        inset 0 3px 6px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.metallic-btn-2:active {
+    transform: translateY(1px) !important;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.metallic-btn-3:hover {
+    filter: brightness(1.15) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.5),
+        inset 0 3px 6px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.metallic-btn-3:active {
+    transform: translateY(1px) !important;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+}

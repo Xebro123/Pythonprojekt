@@ -9,6 +9,23 @@
     <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
 </head>
 <body>
+    <!-- SVG Filters for Voltage Buttons -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+        <defs>
+            <filter id="glow">
+                <feGaussianBlur class="blur" result="coloredBlur" stdDeviation="2"></feGaussianBlur>
+                <feTurbulence type="fractalNoise" baseFrequency="0.075" numOctaves="0.3" result="turbulence"></feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="30" xChannelSelector="R" yChannelSelector="G" result="displace"></feDisplacementMap>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="coloredBlur"></feMergeNode>
+                    <feMergeNode in="displace"></feMergeNode>
+                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
         <div class="container">
@@ -34,26 +51,81 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/">Dashboard</a>
+                <ul class="navbar-nav me-auto flex-column">
+                    <li class="nav-item" style="margin: 0.5rem 0;">
+                        <a href="/" class="metallic-btn metallic-btn-1" style="
+                            background: linear-gradient(145deg, #3b82f6, #1e3a8a) !important;
+                            color: #1e3a8a !important;
+                            padding: 0.75rem 2rem;
+                            width: 220px;
+                            border-radius: 0.5rem;
+                            text-decoration: none;
+                            text-align: center;
+                            text-transform: uppercase;
+                            font-weight: 700;
+                            letter-spacing: 0.08em;
+                            display: block;
+                            position: relative;
+                            border: 2px solid #1e40af;
+                            box-shadow: 
+                                0 8px 16px rgba(0, 0, 0, 0.4),
+                                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                                inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+                            text-shadow: 
+                                1px 1px 2px rgba(0, 0, 0, 0.5),
+                                -1px -1px 1px rgba(255, 255, 255, 0.3);
+                            transition: all 0.3s ease;
+                        ">Dashboard</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Kurzy
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
-                            <li><a class="dropdown-item" href="/python">Python Kurz</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item disabled" href="#">JavaScript Kurz <small class="text-muted">(brzy)</small></a></li>
-                            <li><a class="dropdown-item disabled" href="#">AI Kurz <small class="text-muted">(brzy)</small></a></li>
-                        </ul>
+                    <li class="nav-item" style="margin: 0.5rem 0;">
+                        <a href="/playground" class="metallic-btn metallic-btn-2" style="
+                            background: linear-gradient(145deg, #38bdf8, #0369a1) !important;
+                            color: #0369a1 !important;
+                            padding: 0.75rem 2rem;
+                            width: 220px;
+                            border-radius: 0.5rem;
+                            text-decoration: none;
+                            text-align: center;
+                            text-transform: uppercase;
+                            font-weight: 700;
+                            letter-spacing: 0.08em;
+                            display: block;
+                            position: relative;
+                            border: 2px solid #0284c7;
+                            box-shadow: 
+                                0 8px 16px rgba(0, 0, 0, 0.4),
+                                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                                inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+                            text-shadow: 
+                                1px 1px 2px rgba(0, 0, 0, 0.5),
+                                -1px -1px 1px rgba(255, 255, 255, 0.3);
+                            transition: all 0.3s ease;
+                        ">Playground</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/playground">Playground</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/profil">Můj Profil</a>
+                    <li class="nav-item" style="margin: 0.5rem 0;">
+                        <a href="/profil" class="metallic-btn metallic-btn-3" style="
+                            background: linear-gradient(145deg, #60a5fa, #1d4ed8) !important;
+                            color: #1d4ed8 !important;
+                            padding: 0.75rem 2rem;
+                            width: 220px;
+                            border-radius: 0.5rem;
+                            text-decoration: none;
+                            text-align: center;
+                            text-transform: uppercase;
+                            font-weight: 700;
+                            letter-spacing: 0.08em;
+                            display: block;
+                            position: relative;
+                            border: 2px solid #2563eb;
+                            box-shadow: 
+                                0 8px 16px rgba(0, 0, 0, 0.4),
+                                inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                                inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+                            text-shadow: 
+                                1px 1px 2px rgba(0, 0, 0, 0.5),
+                                -1px -1px 1px rgba(255, 255, 255, 0.3);
+                            transition: all 0.3s ease;
+                        ">Můj Profil</a>
                     </li>
                 </ul>
                 <div class="navbar-text text-white">
@@ -107,6 +179,36 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    <script>
+        // Metallic button hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.metallic-btn');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.filter = 'brightness(1.15)';
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.5), inset 0 3px 6px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(0, 0, 0, 0.6)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.filter = 'brightness(1)';
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.5), inset 0 -2px 4px rgba(0, 0, 0, 0.5)';
+                });
+                
+                btn.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(1px)';
+                    this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3), inset 0 -2px 4px rgba(255, 255, 255, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.6)';
+                });
+                
+                btn.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.5), inset 0 3px 6px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(0, 0, 0, 0.6)';
+                });
+            });
+        });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

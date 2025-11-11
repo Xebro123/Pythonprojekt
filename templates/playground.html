@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Python Playground - Python Kurz{% endblock %}
+{% block title %}Code Playground - NextGen Coders{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -10,7 +10,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Domů</a></li>
-                    <li class="breadcrumb-item active">Python Playground</li>
+                    <li class="breadcrumb-item active">Playground</li>
                 </ol>
             </nav>
         </div>
@@ -22,169 +22,128 @@
                 <div class="playground-icon">
                     <i class="fas fa-code text-success"></i>
                 </div>
-                <h1 class="playground-title">Python Playground</h1>
+                <h1 class="playground-title">Code Playground</h1>
                 <p class="playground-description">
-                    Vyzkoušejte si Python kód přímo v prohlížeči. Napište kód a stiskněte "Spustit"!
+                    Vyzkoušejte si Python nebo JavaScript kód přímo v prohlížeči!
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Code Editor and Output -->
-    <div class="row">
+    <!-- Language Tabs -->
+    <div class="row mb-3">
         <div class="col-12">
+            <ul class="nav nav-pills nav-fill bg-light p-2 rounded" id="languageTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="python-tab" data-bs-toggle="pill" 
+                            data-bs-target="#python-playground" type="button" role="tab">
+                        <i class="fab fa-python me-2"></i>Python
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="javascript-tab" data-bs-toggle="pill" 
+                            data-bs-target="#javascript-playground" type="button" role="tab">
+                        <i class="fab fa-js-square me-2"></i>JavaScript
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="playgroundTabContent">
+        <!-- Python Playground -->
+        <div class="tab-pane fade show active" id="python-playground" role="tabpanel">
             <div class="playground-container">
-                <!-- Code Editor -->
                 <div class="code-editor-section">
                     <div class="editor-header">
-                        <h5><i class="fas fa-edit me-2"></i>Python Editor</h5>
+                        <h5><i class="fab fa-python me-2 text-primary"></i>Python Editor</h5>
                         <div class="editor-actions">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="clearCode()">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearPythonCode()">
                                 <i class="fas fa-trash me-1"></i>Vymazat
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary" onclick="loadExample()">
-                                <i class="fas fa-lightbulb me-1"></i>Příklad
                             </button>
                         </div>
                     </div>
                     <div class="code-editor">
-                        <textarea id="codeEditor" placeholder="# Napište svůj Python kód zde...
-print('Ahoj, světe!')
-print('Vítejte v Python Playground!')"># Napište svůj Python kód zde...
-print('Ahoj, světe!')
-print('Vítejte v Python Playground!')
+                        <textarea id="pythonEditor" class="form-control" rows="15"># Napište svůj Python kód zde...
+print("Ahoj, světe!")
+print("Vítejte v Python Playground!")
 
 # Zkuste něco jednoduchého:
-jmeno = "{{ student.name }}"
-print(f"Ahoj, {jmeno}!")
-
-# Nebo něco složitějšího:
 for i in range(5):
     print(f"Počítám: {i + 1}")</textarea>
                     </div>
                     <div class="editor-footer">
-                        <button class="btn btn-success btn-lg" onclick="runCode()">
-                            <i class="fas fa-play me-2"></i>Spustit kód
+                        <button class="btn btn-success btn-lg" onclick="runPython()">
+                            <i class="fas fa-play me-2"></i>Spustit Python
                         </button>
-                        <div class="run-info">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Kód se spustí na serveru s timeoutem 5 sekund
-                            </small>
-                        </div>
+                        <small class="text-muted ms-3">
+                            <i class="fas fa-server me-1"></i>Běží na serveru (timeout 5s)
+                        </small>
                     </div>
                 </div>
-
-                <!-- Output Section -->
                 <div class="output-section">
                     <div class="output-header">
                         <h5><i class="fas fa-terminal me-2"></i>Výstup</h5>
-                        <div class="output-actions">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="clearOutput()">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="clearPythonOutput()">
+                            <i class="fas fa-trash me-1"></i>Vymazat
+                        </button>
+                    </div>
+                    <div id="pythonOutput" class="output-content">
+                        <div class="output-placeholder">
+                            <i class="fas fa-play-circle text-muted"></i>
+                            <p class="text-muted">Výstup vašeho Python kódu se zobrazí zde</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript Playground -->
+        <div class="tab-pane fade" id="javascript-playground" role="tabpanel">
+            <div class="playground-container">
+                <div class="code-editor-section">
+                    <div class="editor-header">
+                        <h5><i class="fab fa-js-square me-2 text-warning"></i>JavaScript Editor</h5>
+                        <div class="editor-actions">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="clearJavaScriptCode()">
                                 <i class="fas fa-trash me-1"></i>Vymazat
                             </button>
                         </div>
                     </div>
-                    <div class="output-content">
-                        <div id="output" class="output-text">
-                            <div class="output-placeholder">
-                                <i class="fas fa-play-circle text-muted"></i>
-                                <p class="text-muted">Výstup vašeho kódu se zobrazí zde</p>
-                            </div>
+                    <div class="code-editor">
+                        <textarea id="javascriptEditor" class="form-control" rows="15">// Napište svůj JavaScript kód zde...
+console.log("Ahoj, světe!");
+console.log("Vítejte v JavaScript Playground!");
+
+// Zkuste něco jednoduchého:
+for (let i = 0; i < 5; i++) {
+    console.log(`Počítám: ${i + 1}`);
+}</textarea>
+                    </div>
+                    <div class="editor-footer">
+                        <button class="btn btn-warning btn-lg" onclick="runJavaScript()">
+                            <i class="fas fa-play me-2"></i>Spustit JavaScript
+                        </button>
+                        <small class="text-muted ms-3">
+                            <i class="fas fa-browser me-1"></i>Běží v prohlížeči (bezpečné)
+                        </small>
+                    </div>
+                </div>
+                <div class="output-section">
+                    <div class="output-header">
+                        <h5><i class="fas fa-terminal me-2"></i>Výstup</h5>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="clearJavaScriptOutput()">
+                            <i class="fas fa-trash me-1"></i>Vymazat
+                        </button>
+                    </div>
+                    <div id="javascriptOutput" class="output-content">
+                        <div class="output-placeholder">
+                            <i class="fas fa-play-circle text-muted"></i>
+                            <p class="text-muted">Výstup vašeho JavaScript kódu se zobrazí zde</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Examples Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3 class="mb-4">
-                <i class="fas fa-lightbulb me-2"></i>Příklady k vyzkoušení
-            </h3>
-        </div>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="example-card">
-                <div class="example-header">
-                    <i class="fas fa-calculator text-primary"></i>
-                    <h6>Základní matematika</h6>
-                </div>
-                <div class="example-code">
-                    <pre><code># Základní matematické operace
-a = 10
-b = 5
-print(f"Součet: {a + b}")
-print(f"Rozdíl: {a - b}")
-print(f"Součin: {a * b}")
-print(f"Podíl: {a / b}")</code></pre>
-                </div>
-                <button class="btn btn-outline-primary btn-sm" onclick="loadExample('math')">
-                    <i class="fas fa-play me-1"></i>Vyzkoušet
-                </button>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="example-card">
-                <div class="example-header">
-                    <i class="fas fa-list text-success"></i>
-                    <h6>Seznamy a cykly</h6>
-                </div>
-                <div class="example-code">
-                    <pre><code># Práce se seznamy
-barvy = ["červená", "modrá", "zelená"]
-print("Barvy:")
-for barva in barvy:
-    print(f"- {barva}")
-
-# Přidání nové barvy
-barvy.append("žlutá")
-print(f"Celkem barev: {len(barvy)}")</code></pre>
-                </div>
-                <button class="btn btn-outline-success btn-sm" onclick="loadExample('lists')">
-                    <i class="fas fa-play me-1"></i>Vyzkoušet
-                </button>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="example-card">
-                <div class="example-header">
-                    <i class="fas fa-question-circle text-warning"></i>
-                    <h6>Podmínky</h6>
-                </div>
-                <div class="example-code">
-                    <pre><code># Podmíněné příkazy
-vek = 15
-if vek >= 18:
-    print("Jste dospělý")
-elif vek >= 13:
-    print("Jste teenager")
-else:
-    print("Jste dítě")</code></pre>
-                </div>
-                <button class="btn btn-outline-warning btn-sm" onclick="loadExample('conditions')">
-                    <i class="fas fa-play me-1"></i>Vyzkoušet
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="row mt-5">
-        <div class="col-12 text-center">
-            <div class="playground-actions">
-                <a href="/" class="btn btn-outline-primary me-3">
-                    <i class="fas fa-arrow-left me-1"></i>Zpět na domů
-                </a>
-                <a href="/profil" class="btn btn-outline-info">
-                    <i class="fas fa-user me-1"></i>Můj profil
-                </a>
             </div>
         </div>
     </div>
@@ -193,71 +152,23 @@ else:
 
 {% block scripts %}
 <script>
-const examples = {
-    math: `# Základní matematické operace
-a = 10
-b = 5
-print(f"Součet: {a + b}")
-print(f"Rozdíl: {a - b}")
-print(f"Součin: {a * b}")
-print(f"Podíl: {a / b}")`,
-    
-    lists: `# Práce se seznamy
-barvy = ["červená", "modrá", "zelená"]
-print("Barvy:")
-for barva in barvy:
-    print(f"- {barva}")
-
-# Přidání nové barvy
-barvy.append("žlutá")
-print(f"Celkem barev: {len(barvy)}")`,
-    
-    conditions: `# Podmíněné příkazy
-vek = 15
-if vek >= 18:
-    print("Jste dospělý")
-elif vek >= 13:
-    print("Jste teenager")
-else:
-    print("Jste dítě")`
-};
-
-function clearCode() {
-    document.getElementById('codeEditor').value = '';
+// ====== PYTHON FUNCTIONS ======
+function clearPythonCode() {
+    document.getElementById('pythonEditor').value = '';
 }
 
-function clearOutput() {
-    document.getElementById('output').innerHTML = `
+function clearPythonOutput() {
+    document.getElementById('pythonOutput').innerHTML = `
         <div class="output-placeholder">
             <i class="fas fa-play-circle text-muted"></i>
-            <p class="text-muted">Výstup vašeho kódu se zobrazí zde</p>
+            <p class="text-muted">Výstup vašeho Python kódu se zobrazí zde</p>
         </div>
     `;
 }
 
-function loadExample(type = null) {
-    const editor = document.getElementById('codeEditor');
-    if (type && examples[type]) {
-        editor.value = examples[type];
-    } else {
-        // Default example
-        editor.value = `# Napište svůj Python kód zde...
-print('Ahoj, světe!')
-print('Vítejte v Python Playground!')
-
-# Zkuste něco jednoduchého:
-jmeno = "{{ student.name }}"
-print(f"Ahoj, {jmeno}!")
-
-# Nebo něco složitějšího:
-for i in range(5):
-    print(f"Počítám: {i + 1}")`;
-    }
-}
-
-async function runCode() {
-    const code = document.getElementById('codeEditor').value;
-    const outputDiv = document.getElementById('output');
+async function runPython() {
+    const code = document.getElementById('pythonEditor').value;
+    const outputDiv = document.getElementById('pythonOutput');
     
     if (!code.trim()) {
         outputDiv.innerHTML = `
@@ -271,11 +182,9 @@ async function runCode() {
     
     // Show loading
     outputDiv.innerHTML = `
-        <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Spouštím kód...</span>
-            </div>
-            <p class="mt-2 text-muted">Spouštím váš kód...</p>
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Spouštím Python kód na serveru...</p>
         </div>
     `;
     
@@ -297,46 +206,143 @@ async function runCode() {
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     <strong>Chyba:</strong><br>
-                    <pre class="mb-0">${result.error}</pre>
+                    <pre class="mb-0">${escapeHtml(result.error)}</pre>
+                </div>
+            `;
+        } else if (result.output) {
+            outputHtml = `
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong>Výstup:</strong><br>
+                    <pre class="mb-0">${escapeHtml(result.output)}</pre>
                 </div>
             `;
         } else {
-            if (result.output) {
-                outputHtml += `
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <strong>Výstup:</strong><br>
-                        <pre class="mb-0">${result.output}</pre>
-                    </div>
-                `;
-            }
-            
-            if (result.return_code !== 0) {
-                outputHtml += `
-                    <div class="alert alert-warning">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Kód skončil s kódem: ${result.return_code}
-                    </div>
-                `;
-            }
+            outputHtml = `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Kód byl spuštěn úspěšně, ale nevypsal žádný výstup.
+                </div>
+            `;
         }
         
-        outputDiv.innerHTML = outputHtml || `
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle me-2"></i>
-                Kód byl spuštěn úspěšně, ale nevypsal žádný výstup.
-            </div>
-        `;
+        outputDiv.innerHTML = outputHtml;
         
     } catch (error) {
         outputDiv.innerHTML = `
             <div class="alert alert-danger">
                 <i class="fas fa-exclamation-triangle me-2"></i>
                 <strong>Chyba při spouštění:</strong><br>
-                ${error.message}
+                ${escapeHtml(error.message)}
             </div>
         `;
     }
 }
+
+// ====== JAVASCRIPT FUNCTIONS ======
+function clearJavaScriptCode() {
+    document.getElementById('javascriptEditor').value = '';
+}
+
+function clearJavaScriptOutput() {
+    document.getElementById('javascriptOutput').innerHTML = `
+        <div class="output-placeholder">
+            <i class="fas fa-play-circle text-muted"></i>
+            <p class="text-muted">Výstup vašeho JavaScript kódu se zobrazí zde</p>
+        </div>
+    `;
+}
+
+function runJavaScript() {
+    const code = document.getElementById('javascriptEditor').value;
+    const outputDiv = document.getElementById('javascriptOutput');
+    
+    if (!code.trim()) {
+        outputDiv.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Napište nějaký kód před spuštěním!
+            </div>
+        `;
+        return;
+    }
+    
+    // Clear output
+    outputDiv.innerHTML = '';
+    
+    // Capture console output
+    const logs = [];
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    console.log = (...args) => {
+        logs.push({type: 'log', message: args.map(a => String(a)).join(' ')});
+        originalLog.apply(console, args);
+    };
+    console.error = (...args) => {
+        logs.push({type: 'error', message: args.map(a => String(a)).join(' ')});
+        originalError.apply(console, args);
+    };
+    console.warn = (...args) => {
+        logs.push({type: 'warn', message: args.map(a => String(a)).join(' ')});
+        originalWarn.apply(console, args);
+    };
+    
+    try {
+        // Run the code
+        eval(code);
+        
+        // Restore console
+        console.log = originalLog;
+        console.error = originalError;
+        console.warn = originalWarn;
+        
+        // Display output
+        if (logs.length > 0) {
+            let outputHtml = '<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i><strong>Výstup:</strong><br><pre class="mb-0">';
+            logs.forEach(log => {
+                if (log.type === 'error') {
+                    outputHtml += `<span class="text-danger">${escapeHtml(log.message)}</span>\n`;
+                } else if (log.type === 'warn') {
+                    outputHtml += `<span class="text-warning">${escapeHtml(log.message)}</span>\n`;
+                } else {
+                    outputHtml += `${escapeHtml(log.message)}\n`;
+                }
+            });
+            outputHtml += '</pre></div>';
+            outputDiv.innerHTML = outputHtml;
+        } else {
+            outputDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Kód byl spuštěn úspěšně, ale nevypsal žádný výstup.
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        // Restore console
+        console.log = originalLog;
+        console.error = originalError;
+        console.warn = originalWarn;
+        
+        outputDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Chyba:</strong><br>
+                <pre class="mb-0">${escapeHtml(error.toString())}</pre>
+            </div>
+        `;
+    }
+}
+
+// Helper function to escape HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 </script>
 {% endblock %}
+

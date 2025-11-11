@@ -124,14 +124,22 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         
         if (response.ok) {
             const data = await response.json();
-            // Uložit token do cookie
+            console.log('✅ Registration successful:', data);
+            
+            // Uložit token do cookie (max-age v sekundách: 86400 = 24h)
             if (data.access_token) {
-                document.cookie = `access_token=${data.access_token}; path=/; max-age=86400`;
+                document.cookie = `access_token=${data.access_token}; path=/; max-age=86400; SameSite=Lax`;
+                console.log('🍪 Cookie set:', document.cookie);
             }
-            alert(`Vítej, ${data.username}! Účet byl úspěšně vytvořen.`);
+            
+            // Zobrazit úspěšnou zprávu a přesměrovat
+            alert(`🎉 Vítej, ${data.username}! Účet byl úspěšně vytvořen.\n\nNyní budeš přihlášen(a).`);
+            
+            // Přesměrovat na dashboard
             window.location.href = '/';
         } else {
             const error = await response.json();
+            console.error('❌ Registration failed:', error);
             alert('Chyba při registraci: ' + (error.detail || error.message || 'Neznámá chyba'));
         }
     } catch (error) {

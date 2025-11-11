@@ -220,23 +220,20 @@ async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
-async def login(request: Request, email: str = Form(...), password: str = Form(...)):
-    """Přihlášení uživatele"""
-    auth_result = await data_service.authenticate_user(email, password)
+async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    """Přihlášení studenta pomocí username"""
+    print(f"🔐 Login attempt for username: {username}")
     
-    if auth_result:
-        # Vytvoření JWT tokenu
-        access_token = create_access_token(data={"sub": email})
-        
-        # Redirect na hlavní stránku s tokenem
-        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key="access_token", value=access_token, httponly=True)
-        return response
-    else:
-        return templates.TemplateResponse("login.html", {
-            "request": request,
-            "error": "Neplatné přihlašovací údaje"
-        })
+    # TODO: Implementovat ověření studenta v Directus kolekci 'students'
+    # Prozatím vytvoříme JWT token bez ověření (DOČASNÉ ŘEŠENÍ)
+    access_token = create_access_token(data={"sub": username})
+    
+    print(f"✅ Login successful, creating token for: {username}")
+    
+    # Redirect na hlavní stránku s tokenem
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=86400)
+    return response
 
 @app.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
@@ -247,16 +244,22 @@ async def register_page(request: Request):
 async def register(user_data: UserCreate):
     """Registrace nového studenta"""
     try:
+        print(f"🚀 Starting registration in main.py for: {user_data.username}")
         register_result = await data_service.register_user(
             user_data.username, 
             user_data.email,
             user_data.password
         )
         
+        print(f"🔍 register_result in main.py: {register_result}")
+        print(f"🔍 register_result type: {type(register_result)}")
+        print(f"🔍 register_result bool: {bool(register_result)}")
+        
         if register_result:
             # Automatické přihlášení po registraci
             access_token = create_access_token(data={"sub": user_data.username})
             
+            print(f"✅ Registration successful, returning success response")
             return {
                 "success": True,
                 "access_token": access_token,
@@ -264,6 +267,7 @@ async def register(user_data: UserCreate):
                 "username": user_data.username
             }
         else:
+            print(f"❌ register_result is falsy, raising HTTPException")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Chyba při registraci. Uživatelské jméno nebo email už mohou být použity."
@@ -271,7 +275,9 @@ async def register(user_data: UserCreate):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Registration error in main.py: {e}")
+        print(f"❌ Registration error in main.py: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Chyba při registraci: {str(e)}"

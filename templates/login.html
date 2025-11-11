@@ -60,31 +60,26 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     e.preventDefault();
     
     const formData = new FormData(this);
-    const loginData = {
-        username: formData.get('username'),
-        password: formData.get('password')
-    };
     
     try {
+        // Poslat jako Form Data (ne JSON)
         const response = await fetch('/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(loginData)
+            body: formData
         });
         
-        if (response.ok) {
-            const data = await response.json();
-            // Uložení tokenu do localStorage
-            localStorage.setItem('access_token', data.access_token);
-            // Přesměrování na domovskou stránku
+        if (response.redirected) {
+            // Server provedl redirect, následujme ho
+            window.location.href = response.url;
+        } else if (response.ok) {
+            // Úspěch, přesměrovat na homepage
             window.location.href = '/';
         } else {
             const error = await response.json();
-            alert('Chyba při přihlašování: ' + error.detail);
+            alert('Chyba při přihlašování: ' + (error.detail || 'Neplatné přihlašovací údaje'));
         }
     } catch (error) {
+        console.error('Login error:', error);
         alert('Chyba při přihlašování: ' + error.message);
     }
 });

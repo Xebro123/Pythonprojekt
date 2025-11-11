@@ -91,14 +91,32 @@ class DirectusClient:
                     headers = {"Content-Type": "application/json"}
                     response = await client.post(url, json=data, headers=headers)
                     
-                    if response.status_code in [200, 201]:
-                        print(f"Student registered via items API: {username}")
-                        return response.json()
+                    print(f"📊 Directus response status: {response.status_code}")
+                    
+                    if response.status_code in [200, 201, 204]:
+                        print(f"✅ Student registered successfully: {username} (status: {response.status_code})")
+                        # Pokud je 204, nevrací JSON, vytvoříme náhradní response
+                        if response.status_code == 204:
+                            result = {
+                                "data": {
+                                    "username": username,
+                                    "email": email,
+                                    "status": "active"
+                                }
+                            }
+                            print(f"📦 Returning custom response for 204: {result}")
+                            return result
+                        
+                        json_response = response.json()
+                        print(f"📦 Returning JSON response: {json_response}")
+                        return json_response
                     else:
-                        print(f"Items API failed: {response.status_code} - {response.text}")
+                        print(f"❌ Items API failed: {response.status_code} - {response.text}")
                         return None
                 except Exception as e:
-                    print(f"Items API exception: {e}")
+                    print(f"❌ Items API exception: {e}")
+                    import traceback
+                    traceback.print_exc()
                     return None
                     
         except Exception as e:

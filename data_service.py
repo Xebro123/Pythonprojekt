@@ -14,15 +14,22 @@ class DataService:
     async def register_user(self, username: str, email: str, password: str) -> Optional[Dict]:
         """Registrace nového studenta přes Directus"""
         try:
+            print(f"🔄 Calling directus.register for: {username}")
             result = await directus.register(username, email, password)
+            print(f"🔍 Result from directus.register: {result}")
+            print(f"🔍 Result type: {type(result)}")
+            print(f"🔍 Result bool: {bool(result)}")
+            
             if result:
-                print(f"Student registered successfully: {username}")
+                print(f"✅ Student registered successfully in data_service: {username}")
                 return result
             else:
-                print(f"Failed to register student: {username}")
+                print(f"❌ Failed to register student in data_service: {username}")
                 return None
         except Exception as e:
-            print(f"Registration error: {e}")
+            print(f"❌ Registration error in data_service: {e}")
+            import traceback
+            traceback.print_exc()
             return None
     
     # Kurzy

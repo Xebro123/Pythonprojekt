@@ -56,33 +56,46 @@ class DirectusClient:
     async def register(self, email: str, password: str, first_name: str, last_name: str) -> Optional[Dict]:
         """Registrace nového uživatele"""
         try:
-            url = f"{self.base_url}/users"
+            # Zkusíme nejdřív veřejný registrační endpoint
+            url = f"{self.base_url}/users/register"
             data = {
                 "email": email,
                 "password": password,
                 "first_name": first_name,
-                "last_name": last_name,
-                "status": "active",
-                "role": "authenticated"  # Přidáno pro Directus
+                "last_name": last_name
             }
             
             headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.token}" if self.token else None
+                "Content-Type": "application/json"
             }
             
             async with httpx.AsyncClient() as client:
+                # Pokus o veřejnou registraci
                 response = await client.post(url, json=data, headers=headers)
                 
                 if response.status_code in [200, 201]:
                     return response.json()
-                else:
-                    print(f"Directus register error: {response.status_code}")
-                    print(f"Response: {response.text}")
-                    return None
+                elif response.status_code == 404:
+                    # Pokud /users/register neexistuje, zkusíme admin endpoint s tokenem
+                    print("Public registration endpoint not available, trying admin endpoint...")
+                    url = f"{self.base_url}/users"
+                    data["status"] = "active"
+                    data["role"] = None  # Directus přiřadí default roli
+                    
+                    headers["Authorization"] = f"Bearer {self.token}"
+                    response = await client.post(url, json=data, headers=headers)
+                    
+                    if response.status_code in [200, 201]:
+                        return response.json()
+                
+                print(f"Directus register error: {response.status_code}")
+                print(f"Response: {response.text}")
+                return None
                     
         except Exception as e:
             print(f"Directus register exception: {e}")
+            import traceback
+            traceback.print_exc()
             return None
     
     # Kurzy

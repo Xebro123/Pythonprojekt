@@ -1190,3 +1190,400 @@ footer {
         inset 0 -2px 4px rgba(255, 255, 255, 0.3),
         inset 0 2px 4px rgba(0, 0, 0, 0.6) !important;
 }
+
+/* ============================================
+   PŘEDLEKCE - ANIMOVANÁ ŽELVA TERRY
+   ============================================ */
+
+.predlekce-container {
+    display: flex;
+    min-height: calc(100vh - 100px);
+    gap: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    align-items: flex-start;
+}
+
+/* === LEVÁ STRANA - COOL ŽELVA === */
+.terry-section {
+    flex: 0 0 200px;
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.terry-character {
+    text-align: center;
+    animation: float 3s ease-in-out infinite;
+}
+
+.terry-svg {
+    width: 140px;
+    height: 170px;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+}
+
+/* Animace cool želvy */
+.terry-head {
+    animation: nod 2.5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.terry-leg {
+    animation: wiggle 1.5s ease-in-out infinite alternate;
+}
+
+.skateboard {
+    animation: skateRoll 0.5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.wheel {
+    animation: wheelSpin 0.8s linear infinite;
+}
+
+.sparkle {
+    animation: sparkleAnim 2s ease-in-out infinite;
+}
+
+.sparkle-1 { animation-delay: 0s; }
+.sparkle-2 { animation-delay: 0.5s; }
+.sparkle-3 { animation-delay: 1s; }
+.sparkle-4 { animation-delay: 1.5s; }
+
+.lens-glare {
+    animation: glare 3s ease-in-out infinite;
+}
+
+.cap {
+    animation: capBob 2s ease-in-out infinite;
+    transform-origin: 100px 72px;
+}
+
+.terry-name {
+    margin-top: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #FFD93D;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 20px rgba(255, 217, 61, 0.5);
+    letter-spacing: 1px;
+}
+
+.terry-status {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    margin-top: 0.2rem;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+/* === PRAVÁ STRANA - OBSAH === */
+.content-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.intro-title {
+    color: #FFD93D;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.4), 0 0 30px rgba(255, 217, 61, 0.3);
+    animation: slideIn 0.5s ease-out;
+}
+
+/* === TYPEWRITER TEXT === */
+.typewriter-text {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #fff;
+}
+
+.text-paragraph {
+    margin: 0.5rem 0;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 3px solid;
+    background: rgba(255, 255, 255, 0.95);
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.text-paragraph:hover {
+    transform: translateX(5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.paragraph-blue {
+    border-color: #2196F3;
+    color: #1565C0;
+}
+
+.paragraph-green {
+    border-color: #10B981;
+    color: #047857;
+}
+
+.paragraph-purple {
+    border-color: #8B5CF6;
+    color: #6D28D9;
+}
+
+.paragraph-orange {
+    border-color: #FF9800;
+    color: #E65100;
+}
+
+.paragraph-teal {
+    border-color: #14B8A6;
+    color: #0F766E;
+}
+
+.paragraph-pink {
+    border-color: #EC4899;
+    color: #BE185D;
+}
+
+.paragraph-cyan {
+    border-color: #06B6D4;
+    color: #0E7490;
+}
+
+.paragraph-lime {
+    border-color: #84CC16;
+    color: #4D7C0F;
+}
+
+.paragraph-amber {
+    border-color: #F59E0B;
+    color: #B45309;
+}
+
+.paragraph-indigo {
+    border-color: #6366F1;
+    color: #4338CA;
+}
+
+.paragraph-red {
+    border-color: #EF4444;
+    color: #B91C1C;
+}
+
+.paragraph-large {
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 1.5rem;
+    color: #667eea !important;
+}
+
+.text-divider {
+    border: none;
+    border-top: 3px dashed rgba(255, 255, 255, 0.4);
+    margin: 1.2rem 0;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* === TLAČÍTKA === */
+.predlekce-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-skip,
+.btn-continue {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn-skip {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.btn-skip:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.btn-skip:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+.btn-continue {
+    background: linear-gradient(135deg, #FFD93D 0%, #FF6B6B 100%);
+    color: #2C3E50;
+    font-weight: 800;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-continue::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+}
+
+.btn-continue:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 217, 61, 0.6);
+    animation: none;
+}
+
+.btn-continue:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+@keyframes shine {
+    0% { left: -50%; }
+    100% { left: 150%; }
+}
+
+/* === ANIMACE === */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes nod {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(-2deg); }
+}
+
+@keyframes wiggle {
+    from { transform: rotate(-3deg); }
+    to { transform: rotate(3deg); }
+}
+
+@keyframes skateRoll {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+}
+
+@keyframes wheelSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes sparkleAnim {
+    0%, 100% { 
+        opacity: 0.8; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.3; 
+        transform: scale(1.5);
+    }
+}
+
+@keyframes glare {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.9; }
+}
+
+@keyframes capBob {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(-8deg); }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 968px) {
+    .predlekce-container {
+        flex-direction: column;
+        padding: 1.5rem;
+        gap: 2rem;
+    }
+    
+    .terry-section {
+        flex: 0 0 auto;
+        position: static;
+        margin-bottom: 1rem;
+    }
+    
+    .terry-svg {
+        width: 150px;
+        height: 180px;
+    }
+    
+    .intro-title {
+        font-size: 2rem;
+    }
+    
+    .typewriter-text {
+        font-size: 1.05rem;
+    }
+    
+    .text-paragraph {
+        padding: 0.9rem 1.2rem;
+        font-size: 1rem;
+    }
+    
+    .predlekce-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-skip,
+    .btn-continue {
+        width: 100%;
+    }
+}
+
+/* === KONEC PŘEDLEKCE === */

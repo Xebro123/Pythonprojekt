@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Vítej v Pythonu! - NextGen Coders{% endblock %}
+
+{% block content %}
+<style>
+    /* Inline styles pro okamžitý efekt - přepíše cache */
+    .predlekce-container {
+        display: flex !important;
+        min-height: calc(100vh - 100px) !important;
+        gap: 2rem !important;
+        padding: 2rem !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        align-items: flex-start !important;
+    }
+    .terry-section {
+        flex: 0 0 200px !important;
+        position: sticky !important;
+        top: 2rem !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+    }
+    .terry-character {
+        animation: float 3s ease-in-out infinite !important;
+    }
+    .terry-svg {
+        width: 140px !important;
+        height: 170px !important;
+    }
+    .terry-head {
+        animation: nod 2.5s ease-in-out infinite !important;
+    }
+    .terry-leg {
+        animation: wiggle 1.5s ease-in-out infinite alternate !important;
+    }
+    .skateboard {
+        animation: skateRoll 0.5s ease-in-out infinite !important;
+    }
+    .wheel {
+        animation: wheelSpin 0.8s linear infinite !important;
+    }
+    .sparkle {
+        animation: sparkleAnim 2s ease-in-out infinite !important;
+    }
+    .typewriter-text {
+        font-size: 1.05rem !important;
+        line-height: 1.3 !important;
+    }
+    .text-paragraph {
+        margin: 0.4rem 0 !important;
+        padding: 0.7rem 1.1rem !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        border-radius: 12px !important;
+        border: 3px solid !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        min-height: 3rem !important;
+    }
+    .paragraph-blue { border-color: #2196F3 !important; color: #1565C0 !important; }
+    .paragraph-green { border-color: #10B981 !important; color: #047857 !important; }
+    .paragraph-purple { border-color: #8B5CF6 !important; color: #6D28D9 !important; }
+    .paragraph-orange { border-color: #FF9800 !important; color: #E65100 !important; }
+    .paragraph-teal { border-color: #14B8A6 !important; color: #0F766E !important; }
+    .paragraph-pink { border-color: #EC4899 !important; color: #BE185D !important; }
+    .paragraph-cyan { border-color: #06B6D4 !important; color: #0E7490 !important; }
+    .paragraph-lime { border-color: #84CC16 !important; color: #4D7C0F !important; }
+    .paragraph-amber { border-color: #F59E0B !important; color: #B45309 !important; }
+    .paragraph-indigo { border-color: #6366F1 !important; color: #4338CA !important; }
+    .paragraph-red { border-color: #EF4444 !important; color: #B91C1C !important; }
+    .btn-pause {
+        background: rgba(255, 255, 255, 0.25) !important;
+        color: white !important;
+        backdrop-filter: blur(10px) !important;
+        border: 2px solid rgba(255, 255, 255, 0.4) !important;
+        padding: 1rem 2rem !important;
+        font-size: 1.1rem !important;
+        border-radius: 10px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        font-weight: 600 !important;
+    }
+    .btn-pause:hover {
+        background: rgba(255, 255, 255, 0.4) !important;
+        transform: translateY(-3px) scale(1.02) !important;
+    }
+</style>
+<div class="predlekce-container">
+    <!-- Levá strana - cool želva Terry -->
+    <div class="terry-section">
+        <div class="terry-character">
+            <!-- SVG Cool Želva s brýlemi a skateboardem -->
+            <svg class="terry-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+                <!-- Skateboard pod želvou -->
+                <g class="skateboard">
+                    <rect x="50" y="220" width="100" height="8" rx="4" fill="#FF6B6B" class="board"/>
+                    <circle cx="60" cy="232" r="6" fill="#4ECDC4" class="wheel"/>
+                    <circle cx="140" cy="232" r="6" fill="#4ECDC4" class="wheel"/>
+                </g>
+                
+                <!-- Stín -->
+                <ellipse cx="100" cy="225" rx="80" ry="10" fill="rgba(0,0,0,0.2)" class="shadow"/>
+                
+                <!-- Zadní nohy -->
+                <ellipse cx="70" cy="190" rx="18" ry="12" fill="#00D9FF" class="terry-leg back-leg"/>
+                <ellipse cx="130" cy="190" rx="18" ry="12" fill="#00D9FF" class="terry-leg back-leg"/>
+                
+                <!-- Krunýř - gradient a cool vzor -->
+                <defs>
+                    <linearGradient id="shellGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00D9FF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#667EEA;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#00B8D4;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <ellipse cx="100" cy="150" rx="75" ry="55" fill="url(#shellGradient)" class="terry-shell" style="filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));"/>
+                
+                <!-- Hexagon vzor na krunýři -->
+                <g class="shell-pattern">
+                    <polygon points="100,120 115,128 115,144 100,152 85,144 85,128" fill="#FFD93D" opacity="0.8"/>
+                    <polygon points="75,135 85,140 85,150 75,155 65,150 65,140" fill="#6BCF7F" opacity="0.8"/>
+                    <polygon points="125,135 135,140 135,150 125,155 115,150 115,140" fill="#FF6B9D" opacity="0.8"/>
+                    <polygon points="100,160 110,165 110,175 100,180 90,175 90,165" fill="#C44569" opacity="0.8"/>
+                </g>
+                
+                <!-- Tělo -->
+                <ellipse cx="100" cy="180" rx="55" ry="35" fill="url(#bodyGradient)" class="terry-body"/>
+                
+                <!-- Přední nohy -->
+                <ellipse cx="70" cy="175" rx="16" ry="10" fill="#00D9FF" class="terry-leg front-leg"/>
+                <ellipse cx="130" cy="175" rx="16" ry="10" fill="#00D9FF" class="terry-leg front-leg"/>
+                
+                <!-- Krk a hlava -->
+                <ellipse cx="100" cy="115" rx="22" ry="28" fill="url(#bodyGradient)" class="terry-neck"/>
+                <ellipse cx="100" cy="90" rx="30" ry="25" fill="url(#bodyGradient)" class="terry-head"/>
+                
+                <!-- Cool brýle -->
+                <g class="sunglasses">
+                    <ellipse cx="88" cy="88" rx="12" ry="10" fill="#2C3E50" opacity="0.9"/>
+                    <ellipse cx="112" cy="88" rx="12" ry="10" fill="#2C3E50" opacity="0.9"/>
+                    <line x1="100" y1="88" x2="104" y2="88" stroke="#2C3E50" stroke-width="3"/>
+                    <ellipse cx="88" cy="88" rx="10" ry="8" fill="#FFD93D" opacity="0.6" class="lens-glare"/>
+                    <ellipse cx="112" cy="88" rx="10" ry="8" fill="#FFD93D" opacity="0.6" class="lens-glare"/>
+                </g>
+                
+                <!-- Úsměv -->
+                <path d="M 88 98 Q 100 105 112 98" stroke="#2C3E50" stroke-width="2.5" fill="none" class="terry-smile" stroke-linecap="round"/>
+                
+                <!-- Cool čepice -->
+                <g class="cap">
+                    <ellipse cx="100" cy="72" rx="32" ry="8" fill="#FF6B6B" transform="rotate(-5 100 72)"/>
+                    <path d="M 70 72 Q 100 50 130 72" fill="#FF6B6B"/>
+                    <ellipse cx="100" cy="58" rx="8" ry="6" fill="#FFD93D"/>
+                </g>
+                
+                <!-- Sparkles kolem želvy -->
+                <g class="sparkles">
+                    <circle cx="40" cy="100" r="3" fill="#FFD93D" opacity="0.8" class="sparkle sparkle-1"/>
+                    <circle cx="160" cy="120" r="2" fill="#FF6B9D" opacity="0.8" class="sparkle sparkle-2"/>
+                    <circle cx="50" cy="150" r="2.5" fill="#00D9FF" opacity="0.8" class="sparkle sparkle-3"/>
+                    <circle cx="150" cy="90" r="2" fill="#6BCF7F" opacity="0.8" class="sparkle sparkle-4"/>
+                </g>
+            </svg>
+            
+            <!-- Jméno a status -->
+            <div class="terry-name">🛹 Terry the Cool</div>
+            <div class="terry-status">Python Guru</div>
+        </div>
+    </div>
+
+    <!-- Pravá strana - textový obsah -->
+    <div class="content-section">
+        <h2 class="intro-title">Ahoj! Jsem Terry 🐢</h2>
+        <div id="typewriter-text" class="typewriter-text">
+            <!-- Text se bude vypisovat postupně -->
+        </div>
+        
+        <!-- Tlačítka navigace -->
+        <div class="predlekce-buttons">
+            <button class="btn btn-pause" id="pauseBtn">
+                <i class="fas fa-pause"></i> Pauza
+            </button>
+            <button class="btn btn-skip" id="skipBtn">
+                <i class="fas fa-forward"></i> Přeskočit
+            </button>
+            <button class="btn btn-continue" id="continueBtn" style="display: none;">
+                <i class="fas fa-arrow-right"></i> Pokračovat
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden text content for typewriter -->
+<div id="text-content" style="display: none;">
+    <div class="text-paragraph paragraph-blue">
+        Naučím tě ovládat počítače. 🐢<br><br>
+        Python je tajný jazyk, kterým můžeš počítačům říkat, co mají dělat.<br><br>
+        Je to jako mít magickou hůlku – napíšeš pár slov a počítač poslouchá.
+    </div>
+    
+    <hr class="text-divider">
+    
+    <div class="text-paragraph paragraph-orange">
+        A víš co? Python používají profíci celého světa!<br><br>
+        Dělají s ním videohry, ovládají roboty, vytvářejí aplikace v telefonu.<br><br>
+        Dokonce s ním NASA řídí vesmírné mise. Vážně!
+    </div>
+    
+    <hr class="text-divider">
+    
+    <div class="text-paragraph paragraph-purple">
+        A to nejlepší? Python je super jednoduchý.<br><br>
+        Není potřeba být génius. Stačí umět psát a chtít zkoušet nové věci.<br><br>
+        Kdybys uměl anglicky říct "jdi dopředu" nebo "otoč se", už víš dost na první program!
+    </div>
+    
+    <hr class="text-divider">
+    
+    <div class="text-paragraph paragraph-teal">
+        Za chvíli tě naučím kreslit pomocí kódu.<br><br>
+        Budeš mi říkat, kam mám jít a já budu kreslit čáru za sebou.<br><br>
+        Společně nakreslíme tvary, vzory, spirály... a pak úplně cokoliv, co tě napadne!
+    </div>
+    
+    <hr class="text-divider">
+    
+    <div class="text-paragraph paragraph-pink paragraph-large">
+        Připravený? Tak do toho! 🚀
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/predlekce.js"></script>
+{% endblock %}
+

@@ -113,6 +113,18 @@ async def course_page(request: Request, course_id: str):
         "student": await get_student_progress()
     })
 
+@app.get("/predlekce/python", response_class=HTMLResponse)
+async def python_intro(request: Request):
+    """Předlekce - Vítej v Pythonu s Terry želvou"""
+    current_user = await get_current_user_optional(request)
+    student = await get_student_progress(current_user.get("id") if current_user else None)
+    
+    return templates.TemplateResponse("predlekce.html", {
+        "request": request,
+        "student": student,
+        "user": current_user
+    })
+
 @app.get("/lekce/{course_id}/{lesson_id}", response_class=HTMLResponse)
 async def lesson_page(request: Request, course_id: str, lesson_id: int):
     """Stránka lekce"""

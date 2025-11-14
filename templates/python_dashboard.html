@@ -177,11 +177,14 @@
 .lesson-card {
     background: white;
     border-radius: 15px;
-    padding: 2rem;
+    padding: 1.5rem;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .lesson-card:hover {
@@ -200,34 +203,37 @@
     right: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .lesson-icon {
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: #667eea;
     margin-bottom: 1rem;
 }
 
 .lesson-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: #2d3748;
     margin-bottom: 0.5rem;
+    padding-right: 50px;
 }
 
 .lesson-description {
     color: #718096;
     margin-bottom: 1rem;
     line-height: 1.6;
+    flex-grow: 1;
+    font-size: 0.95rem;
 }
 
 .lesson-meta {
@@ -235,17 +241,20 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .lesson-duration {
     color: #a0aec0;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .btn-lesson {
     width: 100%;
     padding: 0.75rem;
     font-weight: 600;
+    font-size: 1rem;
 }
 
 .stat-box {
@@ -254,12 +263,12 @@
 }
 
 .stat-box i {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 0.5rem;
 }
 
 .stat-box h3 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     margin: 0.5rem 0;
     color: #2d3748;
@@ -268,6 +277,98 @@
 .stat-box p {
     color: #718096;
     margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem !important;
+    }
+    
+    .display-4 {
+        font-size: 2rem !important;
+    }
+    
+    .lead {
+        font-size: 1rem !important;
+    }
+    
+    .lesson-card {
+        padding: 1.25rem;
+    }
+    
+    .lesson-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+    
+    .lesson-icon {
+        font-size: 2rem;
+    }
+    
+    .lesson-title {
+        font-size: 1.15rem;
+        padding-right: 45px;
+    }
+    
+    .lesson-description {
+        font-size: 0.9rem;
+    }
+    
+    .stat-box {
+        padding: 0.75rem;
+    }
+    
+    .stat-box i {
+        font-size: 1.5rem;
+    }
+    
+    .stat-box h3 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-box p {
+        font-size: 0.85rem;
+    }
+    
+    .btn-lesson {
+        font-size: 0.95rem;
+        padding: 0.65rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    h4 {
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .display-4 {
+        font-size: 1.75rem !important;
+    }
+    
+    .lesson-card {
+        padding: 1rem;
+    }
+    
+    .lesson-title {
+        font-size: 1.1rem;
+    }
+    
+    .lesson-description {
+        font-size: 0.85rem;
+    }
+    
+    .stat-box h3 {
+        font-size: 1.3rem;
+    }
 }
 </style>
 {% endblock %}

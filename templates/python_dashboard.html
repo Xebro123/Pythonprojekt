@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Python Kurz - NextGen Coders{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="fas fa-python me-3"></i>Python Kurz
+        </h1>
+        <p class="lead text-muted">
+            Nauč se programovat v Pythonu zábavnou a interaktivní formou
+        </p>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Zpět na hlavní stránku
+        </a>
+    </div>
+
+    <!-- Progress Card -->
+    <div class="card mb-5 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-chart-line me-2"></i>Tvůj pokrok
+            </h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="stat-box">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <h3>{{ completed_lessons }}</h3>
+                        <p>Dokončené lekce</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-box">
+                        <i class="fas fa-book-open text-primary"></i>
+                        <h3>{{ total_lessons }}</h3>
+                        <p>Celkem lekcí</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="stat-box">
+                        <i class="fas fa-trophy text-warning"></i>
+                        <h3>{{ progress_percent }}%</h3>
+                        <p>Hotovo</p>
+                    </div>
+                </div>
+            </div>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar bg-success" role="progressbar" 
+                     style="width: {{ progress_percent }}%;" 
+                     aria-valuenow="{{ progress_percent }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                    {{ progress_percent }}%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lekce -->
+    <h2 class="mb-4">
+        <i class="fas fa-list me-2"></i>Lekce kurzu
+    </h2>
+
+    <div class="row g-4">
+        <!-- Předlekce -->
+        <div class="col-lg-6">
+            <div class="lesson-card">
+                <div class="lesson-number">0</div>
+                <div class="lesson-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <h3 class="lesson-title">Vítej v Pythonu!</h3>
+                <p class="lesson-description">
+                    Poznej želvu Terry a zjisti, co všechno můžeš s Pythonem dělat
+                </p>
+                <div class="lesson-meta">
+                    <span class="badge bg-info">Úvod</span>
+                    <span class="lesson-duration">
+                        <i class="fas fa-clock me-1"></i>5 min
+                    </span>
+                </div>
+                <a href="/predlekce/python" class="btn btn-primary btn-lesson">
+                    <i class="fas fa-play me-2"></i>Začít
+                </a>
+            </div>
+        </div>
+
+        <!-- Lekce 1 -->
+        <div class="col-lg-6">
+            <div class="lesson-card">
+                <div class="lesson-number">1</div>
+                <div class="lesson-icon">
+                    <i class="fas fa-turtle"></i>
+                </div>
+                <h3 class="lesson-title">Nauč želvu kreslit</h3>
+                <p class="lesson-description">
+                    Live Python editor s turtle graphics - nakresli své první tvary
+                </p>
+                <div class="lesson-meta">
+                    <span class="badge bg-success">Základy</span>
+                    <span class="lesson-duration">
+                        <i class="fas fa-clock me-1"></i>15 min
+                    </span>
+                </div>
+                <a href="/lekce/python/1" class="btn btn-primary btn-lesson">
+                    <i class="fas fa-play me-2"></i>Začít
+                </a>
+            </div>
+        </div>
+
+        <!-- Lekce 2 -->
+        <div class="col-lg-6">
+            <div class="lesson-card lesson-locked">
+                <div class="lesson-number">2</div>
+                <div class="lesson-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3 class="lesson-title">Smyčky a opakování</h3>
+                <p class="lesson-description">
+                    Nauč se používat cykly a opakovat příkazy - vytvoř spirály a vzory
+                </p>
+                <div class="lesson-meta">
+                    <span class="badge bg-warning text-dark">Brzy</span>
+                    <span class="lesson-duration">
+                        <i class="fas fa-clock me-1"></i>20 min
+                    </span>
+                </div>
+                <button class="btn btn-secondary btn-lesson" disabled>
+                    <i class="fas fa-lock me-2"></i>Brzy dostupné
+                </button>
+            </div>
+        </div>
+
+        <!-- Lekce 3 -->
+        <div class="col-lg-6">
+            <div class="lesson-card lesson-locked">
+                <div class="lesson-number">3</div>
+                <div class="lesson-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3 class="lesson-title">Barvy a kreativita</h3>
+                <p class="lesson-description">
+                    Přidej barvy do svých kreseb a vytvoř barevné umělecké díla
+                </p>
+                <div class="lesson-meta">
+                    <span class="badge bg-warning text-dark">Brzy</span>
+                    <span class="lesson-duration">
+                        <i class="fas fa-clock me-1"></i>20 min
+                    </span>
+                </div>
+                <button class="btn btn-secondary btn-lesson" disabled>
+                    <i class="fas fa-lock me-2"></i>Brzy dostupné
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playground odkaz -->
+    <div class="card mt-5 bg-light">
+        <div class="card-body text-center">
+            <h4 class="mb-3">
+                <i class="fas fa-code me-2"></i>Chceš experimentovat?
+            </h4>
+            <p class="text-muted mb-3">
+                Vyzkoušej Python Playground - můžeš psát a testovat jakýkoliv Python kód
+            </p>
+            <a href="/playground" class="btn btn-success btn-lg">
+                <i class="fas fa-play-circle me-2"></i>Otevřít Playground
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.lesson-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.lesson-card.lesson-locked {
+    opacity: 0.6;
+    background: #f8f9fa;
+}
+
+.lesson-number {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.lesson-icon {
+    font-size: 3rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.lesson-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.lesson-description {
+    color: #718096;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.lesson-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.lesson-duration {
+    color: #a0aec0;
+    font-size: 0.9rem;
+}
+
+.btn-lesson {
+    width: 100%;
+    padding: 0.75rem;
+    font-weight: 600;
+}
+
+.stat-box {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-box i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-box h3 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+    color: #2d3748;
+}
+
+.stat-box p {
+    color: #718096;
+    margin: 0;
+}
+</style>
+{% endblock %}
+

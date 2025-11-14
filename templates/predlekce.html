@@ -84,6 +84,29 @@
         background: rgba(255, 255, 255, 0.4) !important;
         transform: translateY(-3px) scale(1.02) !important;
     }
+    .btn-back {
+        background: rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        backdrop-filter: blur(10px) !important;
+        border: 2px solid rgba(255, 255, 255, 0.3) !important;
+        padding: 1rem 2rem !important;
+        font-size: 1.1rem !important;
+        border-radius: 10px !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+    }
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.35) !important;
+        transform: translateY(-3px) scale(1.02) !important;
+    }
+    .predlekce-buttons {
+        display: flex !important;
+        gap: 1rem !important;
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+    }
 </style>
 <div class="predlekce-container">
     <!-- Levá strana - cool želva Terry -->
@@ -181,6 +204,9 @@
         
         <!-- Tlačítka navigace -->
         <div class="predlekce-buttons">
+            <a href="/python" class="btn btn-back">
+                <i class="fas fa-arrow-left"></i> Zpět na lekce
+            </a>
             <button class="btn btn-pause" id="pauseBtn">
                 <i class="fas fa-pause"></i> Pauza
             </button>
@@ -188,7 +214,7 @@
                 <i class="fas fa-forward"></i> Přeskočit
             </button>
             <button class="btn btn-continue" id="continueBtn" style="display: none;">
-                <i class="fas fa-arrow-right"></i> Pokračovat
+                <i class="fas fa-arrow-right"></i> Pokračovat na Lekci 1
             </button>
         </div>
     </div>

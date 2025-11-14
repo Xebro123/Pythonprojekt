@@ -82,16 +82,22 @@ async def dashboard(request: Request):
 
 @app.get("/python", response_class=HTMLResponse)
 async def python_course(request: Request):
-    """Python kurz - původní hlavní stránka"""
+    """Python kurz dashboard - seznam lekcí"""
     current_user = await get_current_user_optional(request)
-    courses = await get_courses_data()
     student = await get_student_progress(current_user.get("id") if current_user else None)
     
-    return templates.TemplateResponse("python_course.html", {
+    # Počet lekcí
+    total_lessons = 4  # Předlekce + 3 lekce
+    completed_lessons = len(student.completed_lessons) if student else 0
+    progress_percent = int((completed_lessons / total_lessons) * 100) if total_lessons > 0 else 0
+    
+    return templates.TemplateResponse("python_dashboard.html", {
         "request": request,
-        "courses": courses,
         "student": student,
-        "user": current_user
+        "user": current_user,
+        "total_lessons": total_lessons,
+        "completed_lessons": completed_lessons,
+        "progress_percent": progress_percent
     })
 
 @app.get("/kurz/{course_id}", response_class=HTMLResponse)

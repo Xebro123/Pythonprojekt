@@ -1783,10 +1783,28 @@ code {
 }
 
 .solution-box {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.5);
     padding: 1rem;
     border-radius: 8px;
     margin-top: 1rem;
+}
+
+.solution-box h4 {
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.solution-box .code-block {
+    background: #1e1e1e;
+    margin: 0.5rem 0 0 0;
+}
+
+.solution-box .code-block pre {
+    color: #abb2bf;
+}
+
+.solution-box .code-block code {
+    color: #61dafb;
 }
 
 /* ===== SUCCESS SECTION ===== */

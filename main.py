@@ -6,6 +6,7 @@ from config import settings
 from data_service import data_service
 from auth_directus import create_access_token, get_current_user_optional
 from schemas import UserCreate, UserLogin, StudentProgress
+from api.courses import router as courses_router
 import uvicorn
 import subprocess
 import tempfile
@@ -13,6 +14,9 @@ import os
 from datetime import datetime, timedelta
 
 app = FastAPI(title=settings.APP_TITLE, description=settings.APP_DESCRIPTION)
+
+# Include API routers
+app.include_router(courses_router)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -126,6 +130,18 @@ async def python_intro(request: Request):
     student = await get_student_progress(current_user.get("id") if current_user else None)
     
     return templates.TemplateResponse("predlekce.html", {
+        "request": request,
+        "student": student,
+        "user": current_user
+    })
+
+@app.get("/python-course/lesson-1", response_class=HTMLResponse)
+async def python_lesson_1(request: Request):
+    """Lekce 1: Nauč želvu kreslit"""
+    current_user = await get_current_user_optional(request)
+    student = await get_student_progress(current_user.get("id") if current_user else None)
+    
+    return templates.TemplateResponse("python_lesson_1.html", {
         "request": request,
         "student": student,
         "user": current_user

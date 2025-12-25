@@ -1683,6 +1683,8 @@ footer {
 
 .code-block code {
     color: #61dafb;
+    background: transparent;
+    padding: 0;
 }
 
 /* Inline code */

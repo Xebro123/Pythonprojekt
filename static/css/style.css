@@ -1214,55 +1214,38 @@ footer {
     justify-content: center;
 }
 
+.terry-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
 .terry-character {
     text-align: center;
-    animation: float 3s ease-in-out infinite;
 }
 
-.terry-svg {
-    width: 140px;
-    height: 170px;
-    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+/* Terry Video Container */
+.terry-video {
+    max-width: 300px;
+    height: auto;
+    border-radius: 20px;
+    /* Odstraň stínování, pokud nechceš */
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
 }
 
-/* Animace cool želvy */
-.terry-head {
-    animation: nod 2.5s ease-in-out infinite;
-    transform-origin: center;
+/* Fallback image styling (pokud video nefunguje) */
+.terry-fallback {
+    max-width: 300px;
+    height: auto;
 }
 
-.terry-leg {
-    animation: wiggle 1.5s ease-in-out infinite alternate;
+/* Terry Info text */
+.terry-info {
+    text-align: center;
 }
 
-.skateboard {
-    animation: skateRoll 0.5s ease-in-out infinite;
-    transform-origin: center;
-}
-
-.wheel {
-    animation: wheelSpin 0.8s linear infinite;
-}
-
-.sparkle {
-    animation: sparkleAnim 2s ease-in-out infinite;
-}
-
-.sparkle-1 { animation-delay: 0s; }
-.sparkle-2 { animation-delay: 0.5s; }
-.sparkle-3 { animation-delay: 1s; }
-.sparkle-4 { animation-delay: 1.5s; }
-
-.lens-glare {
-    animation: glare 3s ease-in-out infinite;
-}
-
-.cap {
-    animation: capBob 2s ease-in-out infinite;
-    transform-origin: 100px 72px;
-}
-
-.terry-name {
+.terry-info h3 {
     margin-top: 0.8rem;
     font-size: 1.1rem;
     font-weight: 900;
@@ -1271,7 +1254,7 @@ footer {
     letter-spacing: 1px;
 }
 
-.terry-status {
+.terry-info p {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.8);
     font-weight: 600;
@@ -1472,6 +1455,7 @@ footer {
     50% { transform: translateY(-15px); }
 }
 
+/* === Zakomentované staré SVG animace - nejsou už potřeba s video Terry ===
 @keyframes nod {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-3px) rotate(-2deg); }
@@ -1512,6 +1496,7 @@ footer {
     0%, 100% { transform: rotate(-5deg); }
     50% { transform: rotate(-8deg); }
 }
+*/
 
 @keyframes slideIn {
     from {
@@ -1558,9 +1543,8 @@ footer {
         margin-bottom: 1rem;
     }
     
-    .terry-svg {
-        width: 150px;
-        height: 180px;
+    .terry-video {
+        max-width: 200px;
     }
     
     .intro-title {

@@ -88,37 +88,102 @@ POST /items/students 204 1ms
 
 **1. Directus pro appdílnu (Python platforma) - NEFUNGUJE**
 - Instance pravděpodobně neběží nebo není dostupná
-- Možné příčiny:
-  - Directus proces není spuštěný
-  - Špatná URL v `DIRECTUS_URL`
-  - Token vypršel nebo je neplatný
-  - Firewall/port blokuje přístup
 
 **2. Directus pro dropshipping (eshop) - NEFUNGUJE**
-- Stejný problém
 - Instance neodpovídá
+
+### ⚠️ DŮLEŽITÝ KONTEXT - Co jsme dělali před tím:
+
+**Manipulace s Docker a Redis:**
+- ✅ Měnili jsme `docker-compose.yml` nebo `docker-compose.config`
+- ✅ Pracovali jsme s Redis konfigurací
+- ✅ **Pokusili jsme se o hromadný restart Docker kontejnerů**
+- ⚠️ **Při restartu jsme možná vypli Directus instance**
+
+**Pravděpodobná příčina:**
+- Docker kontejnery s Directus se **zastavily** při hromadném restartu
+- Kontejnery se **automaticky nespustily zpět**
+- Možný conflict v docker-compose konfiguraci
+- Redis restart mohl způsobit problém s závislostmi
+
+**Co to znamená:**
+- ✅ **Data v databázi jsou pravděpodobně v pořádku** (uložená v Docker volumes)
+- ❌ Docker kontejnery jsou stopped nebo v error stavu
+- ❌ Možný port conflict mezi kontejnery
+- ❌ Redis dependency problém
 
 ### Diagnostika pro Claude.ai:
 
-**Otázky k prověření:**
-1. Jak spustit/restartovat Directus instance?
-2. Jak zkontrolovat, že Directus běží? (proces, port)
-3. Kde jsou Directus instance uloženy na serveru?
-4. Jaké jsou správné URL pro jednotlivé instance?
-5. Jak zkontrolovat/regenerovat API tokeny?
-6. Jsou instance správně nakonfigurovány v databázi?
-7. Logují instance chyby někam? Kde najít error logy?
+**Kritické otázky k prověření:**
+1. **Jak zjistit stav všech Docker kontejnerů?** (běžící/stopped/error)
+2. **Jak identifikovat Directus kontejnery?** (pro appdílnu i dropshipping)
+3. **Jak bezpečně restartovat zastavené Directus kontejnery?**
+4. **Jak zkontrolovat Docker volumes** (že databázová data jsou stále tam)?
+5. **Jak ověřit Redis kontejner a jeho připojení?**
+6. **Jak řešit port conflicts mezi kontejnery?**
+7. **Kde najít Docker logy pro Directus?** (error messages)
+8. **Jak ověřit docker-compose.yml konfiguraci?**
+9. **Jak zkontrolovat dependencies mezi kontejnery?** (depends_on)
+10. **Jak zkontrolovat/regenerovat API tokeny po restartu?**
 
-**Možné příkazy k ověření:**
+**Důležité příkazy pro diagnostiku:**
 ```powershell
-# Kontrola běžících Directus procesů
-Get-Process | Where-Object {$_.ProcessName -like "*directus*"}
+# 1. Zobrazit VŠECHNY kontejnery (běžící i zastavené)
+docker ps -a
 
-# Kontrola portů (standardně 8055)
+# 2. Zobrazit Docker volumes (tam jsou data!)
+docker volume ls
+
+# 3. Zkontrolovat logy konkrétního kontejneru
+docker logs <container_name_or_id>
+docker logs <container_name_or_id> --tail 100
+
+# 4. Zkontrolovat docker-compose služby
+docker-compose ps
+
+# 5. Zkontrolovat které porty jsou obsazené
 netstat -ano | findstr "8055"
+netstat -ano | findstr "6379"  # Redis
 
-# Restart Directus (závisí na instalaci)
-# npm run start nebo docker-compose up nebo systemctl restart directus
+# 6. Inspektovat kontejner (konfigurace, volumes, network)
+docker inspect <container_name_or_id>
+
+# 7. Zkontrolovat Docker networks
+docker network ls
+docker network inspect <network_name>
+```
+
+**Možné postupy pro restart:**
+```powershell
+# POSTUP A: Restart konkrétního kontejneru
+docker start <directus_container_name>
+
+# POSTUP B: Restart všech služeb v docker-compose
+cd cesta\k\docker-compose\souboru
+docker-compose up -d
+
+# POSTUP C: Kompletní rebuild (pokud je problém s konfigurací)
+docker-compose down
+docker-compose up -d --build
+
+# POSTUP D: Restart jen Directus služeb (pokud jsou pojmenované)
+docker-compose restart directus-appdilna
+docker-compose restart directus-dropshipping
+
+# VAROVÁNÍ: NEPOUŽÍVAT pokud nechceš ztratit data:
+# docker-compose down -v  # <-- SMAŽE VOLUMES!
+```
+
+**Kontrola integrity dat:**
+```powershell
+# Zkontrolovat že volumes existují
+docker volume inspect <volume_name>
+
+# Připojit se k databázi uvnitř kontejneru
+docker exec -it <directus_container> sh
+# Pak uvnitř:
+# psql -U postgres -d directus  (pro PostgreSQL)
+# mysql -u root -p directus     (pro MySQL)
 ```
 
 ## 📁 Struktura projektu
@@ -171,12 +236,46 @@ curl -X GET "http://localhost:8055/items/students" \
 
 ## ❓ Co potřebuješ od Claude.ai
 
-1. **Jak diagnostikovat a restartovat Directus instance?**
-2. **Jak ověřit, že instance běží správně?**
-3. **Kde najít error logy?**
-4. **Jak zkontrolovat database connection?**
-5. **Správná konfigurace pro multiple Directus instances na jednom serveru?**
-6. **Troubleshooting guide pro nefunkční Directus**
+### 🎯 Hlavní cíl:
+**Bezpečně restartovat Directus instance pro appdílnu a dropshipping, které se zastavily při Docker restartu, BEZ ZTRÁTY DAT.**
+
+### 📋 Konkrétní kroky k vyřešení:
+
+1. **Jak zjistit stav Docker kontejnerů?**
+   - Seznam všech kontejnerů (běžící i zastavené)
+   - Identifikace Directus kontejnerů
+   - Zjištění proč se zastavily (logy)
+
+2. **Jak zkontrolovat že data jsou v pořádku?**
+   - Verifikace Docker volumes
+   - Kontrola databázových souborů
+   - Backup strategie (pro jistotu)
+
+3. **Jak bezpečně restartovat?**
+   - Správné pořadí (Redis → Database → Directus?)
+   - Kontrola portů a conflicts
+   - Ověření že se vše spustilo správně
+
+4. **Jak opravit docker-compose.yml pokud je problém?**
+   - Kontrola depends_on dependencies
+   - Ověření restart policies
+   - Síťová konfigurace
+
+5. **Post-restart checklist:**
+   - Test API endpointů
+   - Regenerace tokenů pokud potřeba
+   - Ověření že aplikace se připojuje
+
+### 🚨 KRITICKÁ POZNÁMKA:
+**NESMÍME použít `docker-compose down -v` protože by to smazalo volumes s daty!**
+
+### 💡 Ideální odpověď od Claude.ai:
+Krok-za-krokem návod jak:
+1. Diagnostikovat současný stav
+2. Identifikovat problém
+3. Bezpečně restartovat
+4. Ověřit že vše funguje
+5. Prevence do budoucna (auto-restart policies)
 
 ---
 

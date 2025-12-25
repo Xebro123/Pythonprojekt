@@ -111,87 +111,29 @@
 <div class="predlekce-container">
     <!-- Levá strana - cool želva Terry -->
     <div class="terry-section">
-        <div class="terry-character">
-            <!-- SVG Cool Želva s brýlemi a skateboardem -->
-            <svg class="terry-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
-                <!-- Skateboard pod želvou -->
-                <g class="skateboard">
-                    <rect x="50" y="220" width="100" height="8" rx="4" fill="#FF6B6B" class="board"/>
-                    <circle cx="60" cy="232" r="6" fill="#4ECDC4" class="wheel"/>
-                    <circle cx="140" cy="232" r="6" fill="#4ECDC4" class="wheel"/>
-                </g>
-                
-                <!-- Stín -->
-                <ellipse cx="100" cy="225" rx="80" ry="10" fill="rgba(0,0,0,0.2)" class="shadow"/>
-                
-                <!-- Zadní nohy -->
-                <ellipse cx="70" cy="190" rx="18" ry="12" fill="#00D9FF" class="terry-leg back-leg"/>
-                <ellipse cx="130" cy="190" rx="18" ry="12" fill="#00D9FF" class="terry-leg back-leg"/>
-                
-                <!-- Krunýř - gradient a cool vzor -->
-                <defs>
-                    <linearGradient id="shellGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#00D9FF;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#667EEA;stop-opacity:1" />
-                    </linearGradient>
-                    <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#00B8D4;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                
-                <ellipse cx="100" cy="150" rx="75" ry="55" fill="url(#shellGradient)" class="terry-shell" style="filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));"/>
-                
-                <!-- Hexagon vzor na krunýři -->
-                <g class="shell-pattern">
-                    <polygon points="100,120 115,128 115,144 100,152 85,144 85,128" fill="#FFD93D" opacity="0.8"/>
-                    <polygon points="75,135 85,140 85,150 75,155 65,150 65,140" fill="#6BCF7F" opacity="0.8"/>
-                    <polygon points="125,135 135,140 135,150 125,155 115,150 115,140" fill="#FF6B9D" opacity="0.8"/>
-                    <polygon points="100,160 110,165 110,175 100,180 90,175 90,165" fill="#C44569" opacity="0.8"/>
-                </g>
-                
-                <!-- Tělo -->
-                <ellipse cx="100" cy="180" rx="55" ry="35" fill="url(#bodyGradient)" class="terry-body"/>
-                
-                <!-- Přední nohy -->
-                <ellipse cx="70" cy="175" rx="16" ry="10" fill="#00D9FF" class="terry-leg front-leg"/>
-                <ellipse cx="130" cy="175" rx="16" ry="10" fill="#00D9FF" class="terry-leg front-leg"/>
-                
-                <!-- Krk a hlava -->
-                <ellipse cx="100" cy="115" rx="22" ry="28" fill="url(#bodyGradient)" class="terry-neck"/>
-                <ellipse cx="100" cy="90" rx="30" ry="25" fill="url(#bodyGradient)" class="terry-head"/>
-                
-                <!-- Cool brýle -->
-                <g class="sunglasses">
-                    <ellipse cx="88" cy="88" rx="12" ry="10" fill="#2C3E50" opacity="0.9"/>
-                    <ellipse cx="112" cy="88" rx="12" ry="10" fill="#2C3E50" opacity="0.9"/>
-                    <line x1="100" y1="88" x2="104" y2="88" stroke="#2C3E50" stroke-width="3"/>
-                    <ellipse cx="88" cy="88" rx="10" ry="8" fill="#FFD93D" opacity="0.6" class="lens-glare"/>
-                    <ellipse cx="112" cy="88" rx="10" ry="8" fill="#FFD93D" opacity="0.6" class="lens-glare"/>
-                </g>
-                
-                <!-- Úsměv -->
-                <path d="M 88 98 Q 100 105 112 98" stroke="#2C3E50" stroke-width="2.5" fill="none" class="terry-smile" stroke-linecap="round"/>
-                
-                <!-- Cool čepice -->
-                <g class="cap">
-                    <ellipse cx="100" cy="72" rx="32" ry="8" fill="#FF6B6B" transform="rotate(-5 100 72)"/>
-                    <path d="M 70 72 Q 100 50 130 72" fill="#FF6B6B"/>
-                    <ellipse cx="100" cy="58" rx="8" ry="6" fill="#FFD93D"/>
-                </g>
-                
-                <!-- Sparkles kolem želvy -->
-                <g class="sparkles">
-                    <circle cx="40" cy="100" r="3" fill="#FFD93D" opacity="0.8" class="sparkle sparkle-1"/>
-                    <circle cx="160" cy="120" r="2" fill="#FF6B9D" opacity="0.8" class="sparkle sparkle-2"/>
-                    <circle cx="50" cy="150" r="2.5" fill="#00D9FF" opacity="0.8" class="sparkle sparkle-3"/>
-                    <circle cx="150" cy="90" r="2" fill="#6BCF7F" opacity="0.8" class="sparkle sparkle-4"/>
-                </g>
-            </svg>
+        <div class="terry-container">
+            <!-- Terry - Animated Mascot -->
+            <div class="terry-character">
+                <video
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    class="terry-video"
+                    width="300"
+                    height="300"
+                >
+                    <source src="/static/images/terry/animations/turtle_idle_animation_fixed.webm" type="video/webm">
+                    <source src="/static/images/terry/animations/turtle_sitting_idle_animation.mp4" type="video/mp4">
+                    <!-- Fallback pokud prohlížeč nepodporuje video -->
+                    Tvůj prohlížeč nepodporuje video přehrávání.
+                </video>
+            </div>
             
-            <!-- Jméno a status -->
-            <div class="terry-name">🛹 Terry the Cool</div>
-            <div class="terry-status">Python Guru</div>
+            <div class="terry-info">
+                <h3>Terry the Cool</h3>
+                <p>Python Guru</p>
+            </div>
         </div>
     </div>
 

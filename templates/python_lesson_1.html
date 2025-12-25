@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Lekce 1: Nauč želvu kreslit | Python Kurz{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <!-- Levá strana: Instrukce + Úkoly (40%, scrollovatelné) -->
+    <div class="lesson-content">
+        <!-- Breadcrumb navigace -->
+        <div class="breadcrumb">
+            <a href="/dashboard">Dashboard</a> /
+            <a href="/python">Python Kurz</a> /
+            <span>Lekce 1</span>
+        </div>
+
+        <!-- Header lekce -->
+        <div class="lesson-header">
+            <h1>🐢 Lekce 1: Nauč želvu kreslit</h1>
+            <div class="lesson-progress">
+                <span class="badge">Začátečník</span>
+                <span class="time">⏱️ 15 min</span>
+            </div>
+        </div>
+
+        <!-- Úvodní text -->
+        <section class="intro-section">
+            <p class="intro-text">
+                Teď už víš, co je Python. Čas to vyzkoušet!
+            </p>
+            <p class="intro-text">
+                Podívej se vpravo - tam vidíš <strong>Python Playground</strong>.
+                Tam můžeš psát kód a hned vidět, co se stane.
+            </p>
+        </section>
+
+        <!-- Sekce: První příkazy -->
+        <section class="learning-section">
+            <h2>🎨 První příkazy</h2>
+
+            <div class="code-explanation">
+                <p>V Playgroundu už je připravený kód. Zkus kliknout na <strong>"Spustit kód"</strong>.</p>
+                
+                <div class="code-block">
+                    <pre><code class="language-python">import turtle
+
+turtle.forward(100)  # jdi dopředu
+turtle.right(90)     # otoč se doprava</code></pre>
+                </div>
+
+                <div class="explanation-box">
+                    <h3>Co tento kód dělá:</h3>
+                    <ul>
+                        <li><code>import turtle</code> → Říkáš Pythonu, že chceš použít želvu</li>
+                        <li><code>forward(100)</code> → Želva jde 100 kroků dopředu</li>
+                        <li><code>right(90)</code> → Želva se otočí o 90 stupňů doprava</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sekce: Interaktívní výzva -->
+        <section class="challenge-section">
+            <div class="challenge-box">
+                <div class="challenge-header">
+                    <span class="challenge-icon">✨</span>
+                    <h2>VÝZVA: Nakresli čtverec!</h2>
+                </div>
+
+                <div class="challenge-content">
+                    <p><strong>NÁPOVĚDA:</strong> Čtverec má 4 strany.</p>
+                    <p>Každá strana = <code>forward(100)</code> + <code>right(90)</code></p>
+                    <p class="hint">💡 Zkus to napsat 4x pod sebe!</p>
+
+                    <!-- Hint button (volitelné) -->
+                    <button class="hint-button" onclick="toggleHint()">
+                        💡 Zobrazit řešení
+                    </button>
+
+                    <div class="solution-box" id="solution" style="display: none;">
+                        <h4>Řešení:</h4>
+                        <pre><code class="language-python">import turtle
+
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sekce: Gratulace (zobrazí se po dokončení) -->
+        <section class="completion-section" id="completion" style="display: none;">
+            <div class="success-box">
+                <div class="success-animation">
+                    <video
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                        width="150"
+                    >
+                        <source src="/static/images/terry/animations/turtle_sitting_idle_animation.webm" type="video/webm">
+                        <source src="/static/images/terry/animations/turtle_sitting_idle_animation.mp4" type="video/mp4">
+                    </video>
+                </div>
+
+                <h2>🎉 Skvělé!</h2>
+                <p>Nakreslil jsi svůj první tvar v Pythonu!</p>
+
+                <div class="insight-box">
+                    <p>Ale všiml sis, že jsi musel psát to samé 4x?</p>
+                    <p>To je otravné, že? 😤</p>
+                    <p><strong>V další lekci se naučíš, jak říct počítači, aby to zopakoval sám.</strong></p>
+                </div>
+
+                <button class="next-lesson-btn" onclick="window.location.href='/python-course/lesson-2'">
+                    Další lekce: Opakování 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- Navigační tlačítka -->
+        <div class="lesson-navigation">
+            <button class="btn-secondary" onclick="window.location.href='/python'">
+                ← Zpět na přehled
+            </button>
+            <button class="btn-primary" onclick="completeLesson()">
+                Dokončit lekci ✓
+            </button>
+        </div>
+    </div>
+
+    <!-- Pravá strana: Python Playground (60%, fixed) -->
+    <div class="playground-panel">
+        <div class="playground-container">
+            
+            <div class="playground-header">
+                <h3>🐍 Python Playground</h3>
+                <div class="playground-actions">
+                    <button class="btn-icon" onclick="resetCode()" title="Reset kódu">
+                        🔄
+                    </button>
+                    <button class="btn-icon" onclick="clearOutput()" title="Vymazat výstup">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div class="code-editor">
+                <textarea id="python-editor" spellcheck="false">import turtle
+
+# Tvůj kód sem:
+turtle.forward(100)
+turtle.right(90)</textarea>
+            </div>
+
+            <!-- Tlačítko spustit -->
+            <div class="playground-controls">
+                <button class="run-button" onclick="runPythonCode()">
+                    ▶️ Spustit kód
+                </button>
+                <span class="status-text" id="status"></span>
+            </div>
+
+            <!-- Výstup - canvas pro turtle graphics -->
+            <div class="output-container">
+                <h4>Výstup:</h4>
+                <canvas id="turtle-canvas" width="500" height="400"></canvas>
+                <div id="console-output"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- JavaScript pro interaktivitu -->
+<script src="/static/js/lesson_1.js"></script>
+{% endblock %}
+

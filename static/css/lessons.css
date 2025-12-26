@@ -1,0 +1,408 @@
+/* ===== LESSON 2 SPECIFIC STYLES ===== */
+
+/* Terry Message */
+.terry-message {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 2rem 0;
+}
+
+.terry-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message-bubble {
+    flex: 1;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    position: relative;
+}
+
+.message-bubble::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid white;
+}
+
+.message-bubble p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Comparison Section */
+.comparison-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 16px;
+}
+
+.comparison-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.code-block.bad {
+    border-left: 4px solid #EF4444;
+}
+
+.code-block.good {
+    border-left: 4px solid #10B981;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.arrow {
+    font-size: 2rem;
+}
+
+.magic {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #8B5CF6;
+    background: linear-gradient(135deg, #F59E0B 0%, #EC4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.wow-box {
+    background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.wow-box h3 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.wow-box p {
+    font-size: 1.1rem;
+    margin: 0.25rem 0;
+    font-weight: 600;
+}
+
+/* Explanation Steps */
+.explanation-steps {
+    margin: 2rem 0;
+}
+
+.step {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h3 {
+    margin: 0 0 0.5rem 0;
+    color: #3B82F6;
+}
+
+.step-content p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.indent-example {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.indent-arrow {
+    color: #3B82F6;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Challenge variations */
+.challenge-green {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.challenge-purple {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+}
+
+.spiral-challenge {
+    margin: 3rem 0;
+}
+
+.mystery-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.mystery-box h3 {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.mystery-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mystery-box li {
+    padding: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mystery-box li:last-child {
+    border-bottom: none;
+}
+
+.wow-moment {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.wow-moment h3 {
+    color: #FCD34D;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.wow-moment p {
+    color: white;
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+.preview-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+/* Experiment Section */
+.experiment-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+    border-radius: 16px;
+}
+
+.experiment-section h2 {
+    font-size: 1.8rem;
+    color: #1e1e1e;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.experiment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.experiment-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.experiment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.experiment-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.experiment-card h3 {
+    color: #3B82F6;
+    margin-bottom: 0.75rem;
+}
+
+.experiment-card p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.experiment-card .result {
+    color: #10B981;
+    font-weight: 600;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #E5E7EB;
+}
+
+.try-box {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.try-box h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.try-box p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+/* Achievement Earned */
+.achievement-earned {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+}
+
+.badge-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.achievement-earned h3 {
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.badge-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FCD34D;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 1rem 0;
+}
+
+.next-hint {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+/* Badge variations */
+.badge-intermediate {
+    background: #F59E0B;
+}
+
+/* Achievement Notification */
+.achievement-notification {
+    position: fixed;
+    top: 20px;
+    right: -400px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: right 0.5s ease-out;
+    min-width: 300px;
+}
+
+.achievement-notification.show {
+    right: 20px;
+}
+
+.achievement-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.achievement-icon {
+    font-size: 3rem;
+}
+
+.achievement-title {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.achievement-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .terry-message {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .terry-avatar {
+        margin: 0 auto;
+    }
+
+    .message-bubble::before {
+        display: none;
+    }
+
+    .experiment-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

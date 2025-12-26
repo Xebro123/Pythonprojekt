@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block title %}Lekce 2: Tvoje první kouzelná spirála | Python Kurz{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <!-- Levá strana: Instrukce + Úkoly (40%, scrollovatelné) -->
+    <div class="lesson-content">
+        <!-- Breadcrumb navigace -->
+        <div class="breadcrumb">
+            <a href="/dashboard">Dashboard</a> /
+            <a href="/python">Python Kurz</a> /
+            <span>Lekce 2</span>
+        </div>
+
+        <!-- Header lekce -->
+        <div class="lesson-header">
+            <h1>🔄 Lekce 2: Tvoje první kouzelná spirála</h1>
+            <div class="lesson-progress">
+                <span class="badge badge-intermediate">Začátečník+</span>
+                <span class="time">⏱️ 20 min</span>
+            </div>
+        </div>
+
+        <!-- Terry motivace -->
+        <div class="terry-message">
+            <img src="/static/images/terry/pictures/82fd0f8f-47bd-42aa-af3e-6d61e04c7626.webp" alt="Terry" class="terry-avatar">
+            <div class="message-bubble">
+                <p>Pamatuješ si na ten otravný kód se 4x opakováním?</p>
+                <p><strong>Teď se naučíš LOOP - smyčku!</strong> 🔄</p>
+            </div>
+        </div>
+
+        <!-- Úvodní text -->
+        <section class="intro-section">
+            <h2>Co je Loop?</h2>
+            <p class="intro-text">
+                Loop = říkáš počítači: <strong>"Udělej tohle X-krát"</strong>
+            </p>
+            <p class="intro-text">
+                Místo psaní stejného kódu znovu a znovu, Python to zopakuje sám!
+            </p>
+        </section>
+
+        <!-- Sekce: Porovnání PŘED a PÓ -->
+        <section class="comparison-section">
+            <h2>❌ PŘED (otravné):</h2>
+
+            <div class="code-block bad">
+                <pre><code class="language-python"># Musíš psát 4x totéž... 😴
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)
+turtle.forward(100)
+turtle.right(90)</code></pre>
+            </div>
+
+            <div class="divider">
+                <span class="arrow">⬇️</span>
+                <span class="magic">✨ MAGIE LOOPU ✨</span>
+                <span class="arrow">⬇️</span>
+            </div>
+
+            <h2>✅ PÓ (skvělé):</h2>
+
+            <div class="code-block good">
+                <pre><code class="language-python"># Stačí napsat jednou! 🎉
+for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)</code></pre>
+            </div>
+
+            <div class="wow-box">
+                <h3>🤯 WOW!</h3>
+                <p>2 řádky místo 8 řádků!</p>
+                <p>A udělá to úplně to samé!</p>
+            </div>
+        </section>
+
+        <!-- Sekce: Jak Loop funguje -->
+        <section class="learning-section">
+            <h2>🔎 Jak to funguje?</h2>
+
+            <div class="explanation-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3><code>for i in range(4):</code></h3>
+                        <p>Říkáš: "Udělej následující věci 4×"</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Odsazení (4 mezery nebo Tab)</h3>
+                        <p>Všechno co má odsazení se opakuje!</p>
+                        <div class="indent-example">
+                            <span class="indent-arrow">→</span>
+                            <code>turtle.forward(100)</code><br>
+                            <span class="indent-arrow">→</span>
+                            <code>turtle.right(90)</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Python to zopakuje sám</h3>
+                        <p>Python spustí ten kód 4× za sebe - ty nemusíš nic!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-box">
+                <h3>💡 Proč to funguje?</h3>
+                <ul>
+                    <li><code>range(4)</code> = čísla od 0 do 3 (celkem 4 čísla)</li>
+                    <li><code>for i in</code> = pro každé číslo v tomto seznamu</li>
+                    <li><code>i</code> = proměnná, která obsahuje aktuální číslo (0, 1, 2, 3)</li>
+                    <li>Odsazení říká Pythonu: "Tohle všechno opakuj"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Sekce: První výzva - Zkus to! -->
+        <section class="challenge-section">
+            <div class="challenge-box challenge-green">
+                <div class="challenge-header">
+                    <span class="challenge-icon">💚</span>
+                    <h2>VÝZVA 1: Nakresli čtverec pomocí loopu</h2>
+                </div>
+
+                <div class="challenge-content">
+                    <p>Použij to, co ses právě naučil!</p>
+                    <p>Zkopíruj tento kód do Playgroundu a spusť ho:</p>
+
+                    <div class="code-block">
+                        <pre><code class="language-python">import turtle
+
+for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)</code></pre>
+                    </div>
+
+                    <p class="hint">💡 Všimni si, že těch 8 řádků se zmenšilo na 4!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sekce: Hlavní výzva - SPIRÁLA! -->
+        <section class="challenge-section spiral-challenge">
+            <div class="challenge-box challenge-purple">
+                <div class="challenge-header">
+                    <span class="challenge-icon">✨</span>
+                    <h2>VÝZVA 2: Vytvoř kouzelnou spirálu!</h2>
+                </div>
+
+                <div class="challenge-content">
+                    <p><strong>Teď to bude epické!</strong> 🚀</p>
+                    <p>Zkopíruj tento kód a sleduj, co se stane:</p>
+
+                    <div class="code-block">
+                        <pre><code class="language-python">import turtle
+turtle.speed(0)  # super rychlá želva!
+
+for i in range(100):
+    turtle.forward(i * 2)
+    turtle.right(91)</code></pre>
+                    </div>
+
+                    <div class="mystery-box">
+                        <h3>🤔 Co dělá tento kód?</h3>
+                        <ul>
+                            <li><code>range(100)</code> = opakuj 100× (ne jen 4×!)</li>
+                            <li><code>turtle.speed(0)</code> = maximální rychlost (abys nemusel čekat)</li>
+                            <li><code>i * 2</code> = každá čára je o kousek delší než předchozí!</li>
+                            <li><code>right(91)</code> = otočení o 91° (ne 90°!) vytvoří spirálu!</li>
+                        </ul>
+                    </div>
+
+                    <div class="wow-moment">
+                        <h3>😍 Výsledek:</h3>
+                        <p>Uvidíš nádhernou <strong>barevnou spirálu</strong>! 😍</p>
+                        <p>Tohle by bez loopu bylo skoro nemožné napsat!</p>
+                    </div>
+
+                    <button class="hint-button" onclick="showSpiralVideo()">
+                        📹 Ukázat jak má spirála vypadat
+                    </button>
+
+                    <div class="preview-box" id="spiral-preview" style="display: none;">
+                        <img src="/static/images/examples/spiral-preview.gif" alt="Spirála ukázka" style="max-width: 100%; border-radius: 12px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sekce: Experimentuj! -->
+        <section class="experiment-section">
+            <h2>🧪 Čas na experimenty!</h2>
+
+            <div class="experiment-grid">
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">🔄</div>
+                    <h3>Změň úhel</h3>
+                    <p>Co když změníš <code>right(91)</code> na <code>right(90)</code>?</p>
+                    <p class="result">→ Místo spirály dostaneš čtverec!</p>
+                </div>
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">🔍</div>
+                    <h3>Změň délku</h3>
+                    <p>Co když změníš <code>i * 2</code> na <code>i * 3</code>?</p>
+                    <p class="result">→ Větší spirála!</p>
+                </div>
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">🎨</div>
+                    <h3>Více opakování</h3>
+                    <p>Co když změníš <code>range(100)</code> na <code>range(200)</code>?</p>
+                    <p class="result">→ Ještě více krásná spirála!</p>
+                </div>
+
+                <div class="experiment-card">
+                    <div class="experiment-icon">⚡</div>
+                    <h3>Rychlost</h3>
+                    <p>Zkus změnit <code>speed(0)</code> na <code>speed(1)</code></p>
+                    <p class="result">→ Uvidíš jak se spirála kreslí pomalu!</p>
+                </div>
+
+            </div>
+
+            <div class="try-box">
+                <h3>👍 Tvoje úkol:</h3>
+                <p>Zkus změnit čísla a vytvořit <strong>úplně vlastní spirálu</strong>!</p>
+                <p>Neexistuje špatná odpověď - experimentuj a bav se!</p>
+            </div>
+        </section>
+
+        <!-- Sekce: Gratulace (zobrazí se po dokončení) -->
+        <section class="completion-section" id="completion" style="display: none;">
+            <div class="success-box">
+                <div class="success-animation">
+                    <img src="/static/images/terry/pictures/82fd0f8f-47bd-42aa-af3e-6d61e04c7626.webp" alt="Terry" width="150">
+                </div>
+
+                <h2>🎉 Neuvěřitelné!</h2>
+                <p>Vytvořil jsi svou první spirálu pomocí loopu!</p>
+
+                <div class="achievement-earned">
+                    <div class="badge-icon">🏆</div>
+                    <h3>Odznák jsi odznák:</h3>
+                    <p class="badge-name">LOOP MASTER</p>
+                </div>
+
+                <div class="insight-box">
+                    <h3>💡 Co ses naučil:</h3>
+                    <ul>
+                        <li>✅ Jak používat <code>for</code> loop</li>
+                        <li>✅ Proč je odsazení důležité</li>
+                        <li>✅ Jak vytvořit spirálu</li>
+                        <li>✅ Jak experimentovat s kódem</li>
+                    </ul>
+                </div>
+
+                <p class="next-hint">
+                    <strong>V příští lekci:</strong> Přidáme <strong>barvy</strong> do spirály! 🌈
+                </p>
+
+                <button class="next-lesson-btn" onclick="window.location.href='/python-course/lesson-3'">
+                    Další lekce: Barevná spirála 🌈
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pravá strana: Python Playground (60%, fixed) -->
+    <div class="playground-panel">
+        <div class="playground-container">
+            
+            <div class="playground-header">
+                <h3>🐍 Python Playground</h3>
+                <div class="playground-actions">
+                    <button class="btn-icon" onclick="resetCode()" title="Reset kódu">
+                        🔄
+                    </button>
+                    <button class="btn-icon" onclick="clearOutput()" title="Vymazat výstup">
+                        🗑️
+                    </button>
+                    <button class="btn-icon" onclick="loadSpiralExample()" title="Načíst spirálu">
+                        ✨
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div class="code-editor">
+                <textarea id="python-editor" spellcheck="false">import turtle
+
+# Zkus loop!
+for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)</textarea>
+            </div>
+
+            <!-- Tlačítko spustit -->
+            <div class="playground-controls">
+                <button class="run-button" onclick="runPythonCode()">
+                    ▶️ Spustit kód
+                </button>
+                <span class="status-text" id="status"></span>
+            </div>
+
+            <!-- Výstup - canvas pro turtle graphics -->
+            <div class="output-container">
+                <h4>Výstup:</h4>
+                <canvas id="turtle-canvas" width="500" height="400"></canvas>
+                <div id="console-output"></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Navigační tlačítka - umístěné až na konec -->
+<div class="lesson-navigation" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+    <button class="btn-secondary" onclick="window.location.href='/python-course/lesson-1'">
+        ← Předchozí lekce
+    </button>
+    <button class="btn-primary" onclick="completeLesson()">
+        Dokončit lekci ✓
+    </button>
+</div>
+
+<!-- JavaScript pro interaktivitu -->
+<script src="/static/js/lesson_2.js"></script>
+{% endblock %}
+

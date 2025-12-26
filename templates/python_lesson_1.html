@@ -47,7 +47,7 @@
                     <h3>🐢 Co je "turtle"?</h3>
                     <p><code>turtle</code> je <strong>NÁSTROJ</strong> (nebo taky "knihovna"), který můžeš nainstalovat do svého programu.</p>
                     <p>Jeho speciální schopnost? <strong>Umí kreslit podle kódu, který mu zadáš!</strong></p>
-                    <p>Má v sobě želvu, která chodí po plátně a za sebou kreslí čáru. 🖍️</p>
+                    <p>Můžeš si ho představit jako želvu, která chodí po plátně a za sebou kreslí čáru. 🖍️</p>
                 </div>
 
                 <div class="concept-box">
@@ -59,13 +59,13 @@
 
                 <div class="concept-box">
                     <h3>🔹 Co znamená ta TEČKA?</h3>
-                    <p>Tečka <code>.</code> je způsob, jak v Pythonu říct: <strong>"Používám nástroj turtle a chci, aby udělal tohle:"</strong></p>
+                    <p>Tečka <code>.</code> (tečka = použij funkci) je způsob, jak v Pythonu říct: <strong>"Používám nástroj turtle a chci, aby udělal tohle:"</strong></p>
                     <p>Je to propojení mezi nástrojem a příkazem, který má udělat.</p>
                 </div>
 
                 <div class="concept-box">
                     <h3>⚡ Co jsou ta slova za tečkou?</h3>
-                    <p>Slova jako <code>forward</code>, <code>right</code>, <code>left</code> jsou <strong>PŘÍKAZY</strong> (nebo taky "metody").</p>
+                    <p>Slova jako <code>forward</code> (dopředu), <code>right</code> (doprava), <code>left</code> (doleva) jsou <strong>PŘÍKAZY</strong> (nebo taky "metody").</p>
                     <p>To jsou konkrétní věci, které turtle umí udělat - jeho funkce.</p>
                 </div>
 
@@ -90,7 +90,7 @@
                     <p>V Pythonu takhle fungují všechny nástroje. Když budeš používat jiné knihovny, bude to stejné:</p>
                     <ul style="list-style: none; padding: 0;">
                         <li>→ <code>math.sqrt(25)</code> - nástroj math spočítá odmocninu</li>
-                        <li>→ <code>random.choice([1,2,3])</code> - nástroj random vybere náhodně</li>
+                        <li>→ <code>random.choice([1,2,3])</code> - nástroj random vybere náhodně jedno ze zadaných čísel</li>
                         <li>→ <code>turtle.circle(50)</code> - nástroj turtle nakreslí kruh</li>
                     </ul>
                     <p style="margin-top: 1rem;">Tohle je základní princip, jak v Pythonu používáš různé nástroje! 🛠️</p>
@@ -131,7 +131,7 @@ turtle.right(90)     # otoč se doprava</code></pre>
                     
                     <p style="margin-top: 1rem;"><strong>Řádek 4:</strong> <code>turtle.right(90)</code></p>
                     <p style="margin-left: 1.5rem;">→ "turtle" (nástroj) + "." (použij funkci) + "right(90)" (otoč se doprava o 90 stupňů)</p>
-                    <p style="margin-left: 1.5rem;">90 stupňů je přesný roh čtverce - jako když se otočíš z pohledu na hodinách z 12 na 3! ⬜</p>
+                    <p style="margin-left: 1.5rem;">90 stupňů je přesný roh čtverce - jako když otočíš ručičku na hodinách z 12 na 3! ⬜</p>
                 </div>
 
                 <p style="margin-top: 1.5rem; font-size: 1.15rem;"><strong>Krok 3:</strong> Teď klikni na zelené tlačítko <strong>"▶️ Spustit kód"</strong> vpravo a dívej se, co se stane! 🚀</p>
@@ -229,16 +229,6 @@ turtle.right(90)</code></pre>
                 </button>
             </div>
         </section>
-
-        <!-- Navigační tlačítka -->
-        <div class="lesson-navigation">
-            <button class="btn-secondary" onclick="window.location.href='/python'">
-                ← Zpět na přehled
-            </button>
-            <button class="btn-primary" onclick="completeLesson()">
-                Dokončit lekci ✓
-            </button>
-        </div>
     </div>
 
     <!-- Pravá strana: Python Playground (60%, fixed) -->
@@ -284,6 +274,16 @@ turtle.right(90)</textarea>
         </div>
     </div>
 
+</div>
+
+<!-- Navigační tlačítka - umístěné až na konec -->
+<div class="lesson-navigation" style="max-width: 1400px; margin: 2rem auto; padding: 0 1rem;">
+    <button class="btn-secondary" onclick="window.location.href='/python'">
+        ← Zpět na přehled
+    </button>
+    <button class="btn-primary" onclick="completeLesson()">
+        Dokončit lekci ✓
+    </button>
 </div>
 
 <!-- JavaScript pro interaktivitu -->

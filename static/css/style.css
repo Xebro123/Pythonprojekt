@@ -1851,6 +1851,26 @@ code {
     padding: 1.5rem;
     border-radius: 12px;
     margin: 1.5rem 0;
+    text-align: left;
+}
+
+.insight-box h3 {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.insight-box p {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.insight-box code {
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: #FFD700 !important;
+    padding: 0.2rem 0.5rem !important;
+    border-radius: 4px;
+    font-weight: 600;
 }
 
 .next-lesson-btn {

@@ -25,20 +25,20 @@
         <!-- Úvodní text -->
         <section class="intro-section">
             <p class="intro-text">
-                Teď už víš, co je Python. Čas to vyzkoušet!
+                🎉 Teď už víš, co je Python. Čas to zkusit na vlastní kůži!
             </p>
             <p class="intro-text">
-                Podívej se vpravo - tam vidíš <strong>Python Playground</strong>.
-                Tam můžeš psát kód a hned vidět, co se stane.
+                <strong>Krok 1:</strong> Podívej se vpravo 👉 - tam vidíš <strong>Python Playground</strong>.<br>
+                To je tvoje kouzelné místo, kde můžeš psát kód a hned vidět, co se stane!
             </p>
         </section>
 
         <!-- Sekce: První příkazy -->
         <section class="learning-section">
-            <h2>🎨 První příkazy</h2>
+            <h2>🎨 Tvoje první příkazy pro želvu</h2>
 
             <div class="code-explanation">
-                <p>V Playgroundu už je připravený kód. Zkus kliknout na <strong>"Spustit kód"</strong>.</p>
+                <p><strong>Krok 2:</strong> V Playgroundu už je připravený kód. Zatím nic neměň, jen se podívej:</p>
                 
                 <div class="code-block">
                     <pre><code class="language-python">import turtle
@@ -48,13 +48,18 @@ turtle.right(90)     # otoč se doprava</code></pre>
                 </div>
 
                 <div class="explanation-box">
-                    <h3>Co tento kód dělá:</h3>
-                    <ul>
-                        <li><code>import turtle</code> → Říkáš Pythonu, že chceš použít želvu</li>
-                        <li><code>forward(100)</code> → Želva jde 100 kroků dopředu</li>
-                        <li><code>right(90)</code> → Želva se otočí o 90 stupňů doprava</li>
-                    </ul>
+                    <h3>📖 Co znamená každý řádek?</h3>
+                    <p><strong>Řádek 1:</strong> <code>import turtle</code></p>
+                    <p style="margin-left: 1.5rem;">→ Tohle je jako zavolat Terry želvu: "Hele Terry, pojď sem, budeme kreslit!"</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>Řádek 3:</strong> <code>turtle.forward(100)</code></p>
+                    <p style="margin-left: 1.5rem;">→ Řekneš Terry: "Jdi dopředu 100 kroků!" A on kreslí čáru za sebou. 🖍️</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>Řádek 4:</strong> <code>turtle.right(90)</code></p>
+                    <p style="margin-left: 1.5rem;">→ Řekneš Terry: "Otoč se doprava o 90 stupňů!" (To je jako otočit se z hodinek na 12 na hodinky na 3)</p>
                 </div>
+
+                <p style="margin-top: 1rem;"><strong>Krok 3:</strong> Teď klikni na zelené tlačítko <strong>"▶️ Spustit kód"</strong> vpravo a dívej se, co se stane! 🚀</p>
             </div>
         </section>
 
@@ -63,31 +68,49 @@ turtle.right(90)     # otoč se doprava</code></pre>
             <div class="challenge-box">
                 <div class="challenge-header">
                     <span class="challenge-icon">✨</span>
-                    <h2>VÝZVA: Nakresli čtverec!</h2>
+                    <h2>TVOJE MISE: Nakresli čtverec!</h2>
                 </div>
 
                 <div class="challenge-content">
-                    <p><strong>NÁPOVĚDA:</strong> Čtverec má 4 strany.</p>
-                    <p>Každá strana = <code>forward(100)</code> + <code>right(90)</code></p>
-                    <p class="hint">💡 Zkus to napsat 4x pod sebe!</p>
+                    <p><strong>🤔 Jak na to?</strong></p>
+                    <p>Čtverec má 4 stejně dlouhé strany, že jo?</p>
+                    <p>A každý roh je otočka o 90 stupňů doprava.</p>
+                    
+                    <div class="explanation-box" style="background: rgba(255, 255, 255, 0.15); border: none; margin: 1rem 0;">
+                        <p><strong>Takže pro JEDNU stranu potřebuješ:</strong></p>
+                        <p>1️⃣ <code>turtle.forward(100)</code> - nakresli čáru</p>
+                        <p>2️⃣ <code>turtle.right(90)</code> - otoč se v rohu</p>
+                    </div>
 
-                    <!-- Hint button (volitelné) -->
+                    <p><strong>💡 A teď přemýšlej:</strong> Kolikrát to musíš zopakovat, abys nakreslil celý čtverec?</p>
+                    <p style="font-size: 1.3rem;">✏️ Zkus to napsat do Playgroundu! Smaž tam ten starý kód a zkus napsat svůj vlastní.</p>
+
+                    <!-- Hint button -->
                     <button class="hint-button" onclick="toggleHint()">
-                        💡 Zobrazit řešení
+                        💡 Potřebuji nápovědu
                     </button>
 
                     <div class="solution-box" id="solution" style="display: none;">
-                        <h4>Řešení:</h4>
+                        <h4>✅ Řešení (ale fakt to nejdřív zkus sám!):</h4>
+                        <p>Pro čtverec musíš ty dva příkazy zopakovat 4× (pro každou stranu jednou):</p>
                         <pre><code class="language-python">import turtle
 
+# Strana 1
 turtle.forward(100)
 turtle.right(90)
+
+# Strana 2
 turtle.forward(100)
 turtle.right(90)
+
+# Strana 3
 turtle.forward(100)
 turtle.right(90)
+
+# Strana 4
 turtle.forward(100)
 turtle.right(90)</code></pre>
+                        <p style="margin-top: 1rem;">Vidíš? Pořád dokola to samé - 4× za sebou! 🔄</p>
                     </div>
                 </div>
             </div>
@@ -109,17 +132,21 @@ turtle.right(90)</code></pre>
                     </video>
                 </div>
 
-                <h2>🎉 Skvělé!</h2>
-                <p>Nakreslil jsi svůj první tvar v Pythonu!</p>
+                <h2>🎉 Wow! To je fantastické!</h2>
+                <p>Právě jsi napsal svůj první opravdový program v Pythonu! 🐍✨</p>
+                <p>Vidíš ten čtverec? To TY jsi řekl počítači, co má nakreslit!</p>
 
                 <div class="insight-box">
-                    <p>Ale všiml sis, že jsi musel psát to samé 4x?</p>
-                    <p>To je otravné, že? 😤</p>
-                    <p><strong>V další lekci se naučíš, jak říct počítači, aby to zopakoval sám.</strong></p>
+                    <h3>🤔 Všiml sis něčeho?</h3>
+                    <p>Musel jsi napsat <code>forward</code> a <code>right</code> celkem <strong>4x za sebou</strong>.</p>
+                    <p>To je docela otravné, ne? Pořád dokola to samé... 😴</p>
+                    <p style="font-size: 1.2rem; margin-top: 1rem;"><strong>🚀 Ale co kdybych ti řekl, že existuje MNOHEM jednodušší způsob?</strong></p>
+                    <p>Můžeš Pythonu říct: <em>"Hele, tohle opakuj 4×"</em> - a on to udělá!</p>
+                    <p>Tomu se říká <strong>SMYČKA</strong> a naučíš se ji v další lekci. 🔄✨</p>
                 </div>
 
                 <button class="next-lesson-btn" onclick="window.location.href='/python-course/lesson-2'">
-                    Další lekce: Opakování 🚀
+                    Pokračovat na Lekci 2: Smyčky 🚀
                 </button>
             </div>
         </section>
@@ -183,4 +210,5 @@ turtle.right(90)</textarea>
 <!-- JavaScript pro interaktivitu -->
 <script src="/static/js/lesson_1.js"></script>
 {% endblock %}
+
 

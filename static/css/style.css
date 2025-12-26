@@ -1595,6 +1595,7 @@ footer {
     overflow: hidden;
     background: #1e1e1e;
     padding: 2rem;
+    z-index: 1;
 }
 
 /* ===== LESSON HEADER ===== */
@@ -1956,6 +1957,9 @@ code {
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 2px solid #e0e0e0;
+    position: relative;
+    z-index: 10;
+    background: white;
 }
 
 .btn-secondary {

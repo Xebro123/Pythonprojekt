@@ -1664,6 +1664,65 @@ footer {
     margin-bottom: 1rem;
 }
 
+/* ===== CONCEPT EXPLANATION ===== */
+.concept-explanation {
+    color: white;
+}
+
+.concept-explanation p {
+    line-height: 1.7;
+}
+
+.concept-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.25rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border-left: 4px solid rgba(255, 215, 0, 0.6);
+}
+
+.concept-box h3 {
+    color: #FFD700;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.concept-box p {
+    margin-bottom: 0.5rem;
+}
+
+.concept-box ul {
+    margin-top: 0.5rem;
+}
+
+.concept-box li {
+    margin: 0.5rem 0;
+    font-size: 1.05rem;
+}
+
+.concept-box code {
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: #FFD700 !important;
+    padding: 0.2rem 0.5rem !important;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.concept-example {
+    text-align: center;
+}
+
+.concept-example p {
+    line-height: 1.8;
+}
+
+.concept-example code {
+    background: rgba(0, 0, 0, 0.3) !important;
+    color: #61dafb !important;
+    padding: 0.3rem 0.6rem !important;
+    font-size: 1.1rem;
+}
+
 /* ===== CODE BLOCKS ===== */
 .code-block {
     background: #282c34;

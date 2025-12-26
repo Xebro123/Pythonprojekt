@@ -33,12 +33,75 @@
             </p>
         </section>
 
+        <!-- NOVÁ SEKCE: Vysvětlení základního konceptu -->
+        <section class="learning-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2>🧠 Než začneš psát - důležité!</h2>
+            
+            <div class="concept-explanation">
+                <p style="font-size: 1.15rem; margin-bottom: 1.5rem;">
+                    <strong>Tohle ti nikdo neřekne, ale je to MEGA důležité pochopit hned teď!</strong> 
+                    Ušetří ti to spoustu zmatenosti. 🎯
+                </p>
+
+                <div class="concept-box">
+                    <h3>🐢 Co je "turtle"?</h3>
+                    <p>Představ si, že <code>turtle</code> je jako <strong>ROBOT želva</strong>, kterého máš k dispozici.</p>
+                    <p>Má jméno "turtle" (česky želva) a umí dělat různé věci - jít dopředu, otočit se, nakreslit čáru...</p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>🔹 Co znamená ta TEČKA?</h3>
+                    <p>Tečka <code>.</code> je jako <strong>"Hey turtle, udělej tohle!"</strong></p>
+                    <p>Je to způsob, jak v Pythonu říct: <em>"Mluvím s tebou, turtle, a chci po tobě, abys..."</em></p>
+                </div>
+
+                <div class="concept-box">
+                    <h3>⚡ Co jsou ta slova za tečkou?</h3>
+                    <p>Slova jako <code>forward</code>, <code>right</code>, <code>left</code> jsou <strong>PŘÍKAZY</strong> (nebo taky "metody").</p>
+                    <p>To jsou věci, které turtle umí dělat - jeho "schopnosti" nebo "tlačítka".</p>
+                </div>
+
+                <div class="concept-example" style="background: rgba(255, 255, 255, 0.15); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                    <h3>💡 Takže když napíšeš:</h3>
+                    <div class="code-block" style="margin: 1rem 0;">
+                        <pre><code>turtle.forward(100)</code></pre>
+                    </div>
+                    <p><strong>Ve skutečnosti říkáš:</strong></p>
+                    <p style="font-size: 1.2rem; margin: 1rem 0;">
+                        <span style="color: #FFD700;">🐢 "turtle"</span> = <em>robot želva</em><br>
+                        <span style="color: #FFD700;">.</span> = <em>"hey, poslouchej!"</em><br>
+                        <span style="color: #FFD700;">forward(100)</span> = <em>"jdi dopředu 100 kroků"</em>
+                    </p>
+                    <p style="font-size: 1.3rem; font-weight: bold; color: #FFD700;">
+                        → "Hey turtle, jdi dopředu 100 kroků!"
+                    </p>
+                </div>
+
+                <div class="concept-box" style="margin-top: 1.5rem; background: rgba(255, 255, 255, 0.2);">
+                    <h3>🎮 Je to jako ovládat postavičku ve hře!</h3>
+                    <p>Když hraješ hru a máš tam Mario, píšeš v kódu něco jako:</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>→ <code>mario.skoc()</code> - Mario skočí</li>
+                        <li>→ <code>mario.bezi()</code> - Mario běží</li>
+                        <li>→ <code>mario.strelej()</code> - Mario střílí</li>
+                    </ul>
+                    <p style="margin-top: 1rem;">A právě teď máš <strong>turtle</strong> místo Maria! 🐢</p>
+                </div>
+
+                <div style="background: rgba(255, 215, 0, 0.2); padding: 1rem; border-left: 4px solid #FFD700; border-radius: 8px; margin-top: 1.5rem;">
+                    <p style="font-weight: bold; font-size: 1.1rem;">⭐ Pamatuj si:</p>
+                    <p><strong>VĚCÍ.příkaz()</strong> = "Řekni VĚCI, aby udělala příkaz"</p>
+                    <p>Tohle je ZÁKLAD všeho programování. Uvidíš to VŠUDE! 🚀</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Sekce: První příkazy -->
         <section class="learning-section">
             <h2>🎨 Tvoje první příkazy pro želvu</h2>
 
             <div class="code-explanation">
-                <p><strong>Krok 2:</strong> V Playgroundu už je připravený kód. Zatím nic neměň, jen se podívej:</p>
+                <p><strong>Krok 2:</strong> V Playgroundu už je připravený kód. Zatím nic neměň, jen se podívej a TEĎ UŽ POCHOPÍŠ, co znamená:</p>
                 
                 <div class="code-block">
                     <pre><code class="language-python">import turtle
@@ -48,18 +111,26 @@ turtle.right(90)     # otoč se doprava</code></pre>
                 </div>
 
                 <div class="explanation-box">
-                    <h3>📖 Co znamená každý řádek?</h3>
+                    <h3>📖 Teď si to rozeber řádek po řádku:</h3>
+                    
                     <p><strong>Řádek 1:</strong> <code>import turtle</code></p>
-                    <p style="margin-left: 1.5rem;">→ Tohle je jako zavolat Terry želvu: "Hele Terry, pojď sem, budeme kreslit!"</p>
+                    <p style="margin-left: 1.5rem;">→ "Import" znamená <em>"přines mi želvu robot, budu ho potřebovat!"</em></p>
+                    <p style="margin-left: 1.5rem;">Bez tohoto řádku by Python nevěděl, kdo je "turtle". Tohle je jako si vypůjčit hračku ze skříně - musíš ji nejdřív vytáhnout, než si s ní můžeš hrát! 🧸</p>
                     
                     <p style="margin-top: 1rem;"><strong>Řádek 3:</strong> <code>turtle.forward(100)</code></p>
-                    <p style="margin-left: 1.5rem;">→ Řekneš Terry: "Jdi dopředu 100 kroků!" A on kreslí čáru za sebou. 🖍️</p>
+                    <p style="margin-left: 1.5rem;">→ Už víš! "turtle" (želva) + "." (hey!) + "forward(100)" (jdi dopředu 100 kroků)</p>
+                    <p style="margin-left: 1.5rem;">A Terry kreslí čáru za sebou, jak jde! 🖍️</p>
                     
                     <p style="margin-top: 1rem;"><strong>Řádek 4:</strong> <code>turtle.right(90)</code></p>
-                    <p style="margin-left: 1.5rem;">→ Řekneš Terry: "Otoč se doprava o 90 stupňů!" (To je jako otočit se z hodinek na 12 na hodinky na 3)</p>
+                    <p style="margin-left: 1.5rem;">→ "turtle" (želva) + "." (hey!) + "right(90)" (otoč se doprava o 90 stupňů)</p>
+                    <p style="margin-left: 1.5rem;">90 stupňů je jako když se otočíš z pohledu na hodinách z 12 na 3 - je to přesně roh čtverce! ⬜</p>
                 </div>
 
-                <p style="margin-top: 1rem;"><strong>Krok 3:</strong> Teď klikni na zelené tlačítko <strong>"▶️ Spustit kód"</strong> vpravo a dívej se, co se stane! 🚀</p>
+                <p style="margin-top: 1.5rem; font-size: 1.15rem;"><strong>Krok 3:</strong> Teď klikni na zelené tlačítko <strong>"▶️ Spustit kód"</strong> vpravo a dívej se, co se stane! 🚀</p>
+                
+                <div style="background: #FFF3CD; border-left: 4px solid #FFC107; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <p style="color: #856404; margin: 0;"><strong>💡 Tip:</strong> Když si to spustíš, všimni si, že turtle SKUTEČNĚ jde dopředu a pak se otočí. Přesně jak jsi mu řekl!</p>
+                </div>
             </div>
         </section>
 

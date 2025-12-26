@@ -1682,9 +1682,9 @@ footer {
 }
 
 .code-block code {
-    color: #61dafb;
-    background: transparent;
-    padding: 0;
+    color: #61dafb !important;
+    background: transparent !important;
+    padding: 0 !important;
 }
 
 /* Inline code */
@@ -1695,6 +1695,20 @@ code {
     font-family: 'Fira Code', monospace;
     font-size: 0.9em;
     color: #e83e8c;
+}
+
+/* Override for code inside explanation and challenge sections */
+.explanation-box code,
+.challenge-box code {
+    background: transparent !important;
+    color: inherit !important;
+    padding: 0 !important;
+}
+
+.solution-box code {
+    background: transparent !important;
+    color: #61dafb !important;
+    padding: 0 !important;
 }
 
 /* ===== EXPLANATION BOX ===== */
@@ -2020,6 +2034,60 @@ code {
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* Responzivní navbar a logo */
+@media (max-width: 991px) {
+    /* Logo zmenšení */
+    .navbar-brand svg {
+        width: 200px !important;
+        height: 100px !important;
+    }
+    
+    /* Menu pod logem */
+    .navbar-collapse {
+        margin-top: 1rem;
+    }
+    
+    /* Metalické buttony na celou šířku */
+    .navbar-nav {
+        width: 100%;
+    }
+    
+    .metallic-btn {
+        width: 100% !important;
+        margin: 0.5rem 0 !important;
+    }
+    
+    /* Auth buttony (Přihlásit, Registrovat) */
+    .navbar-text {
+        margin-top: 1rem;
+        width: 100%;
+    }
+    
+    .navbar-text .btn {
+        display: block;
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Logo ještě menší pro mobily */
+    .navbar-brand svg {
+        width: 150px !important;
+        height: 75px !important;
+    }
+    
+    .navbar-brand {
+        margin-right: 0 !important;
+    }
+    
+    /* Navbar padding */
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+}
+
 @media (max-width: 1024px) {
     .lesson-container {
         grid-template-columns: 1fr;

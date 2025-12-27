@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Tlačítko "Pokračovat" - přejde na první lekci
     continueBtn.addEventListener('click', () => {
-        window.location.href = '/lekce/python/1';
+        window.location.href = '/python-course/lesson-1';
     });
     
     // Animace želvy - přidat speciální efekty

@@ -159,6 +159,18 @@ async def python_lesson_2(request: Request):
         "user": current_user
     })
 
+@app.get("/python-course/lesson-3", response_class=HTMLResponse)
+async def python_lesson_3(request: Request):
+    """Lekce 3: Barevná spirála (coming soon)"""
+    current_user = await get_current_user_optional(request)
+    student = await get_student_progress(current_user.get("id") if current_user else None)
+    
+    return templates.TemplateResponse("python_lesson_3.html", {
+        "request": request,
+        "student": student,
+        "user": current_user
+    })
+
 @app.get("/lekce/{course_id}/{lesson_id}", response_class=HTMLResponse)
 async def lesson_page(request: Request, course_id: str, lesson_id: int):
     """Stránka lekce"""

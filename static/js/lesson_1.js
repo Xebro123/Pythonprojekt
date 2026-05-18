@@ -140,3 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Lesson 1 loaded');
 });
 
+
+
+

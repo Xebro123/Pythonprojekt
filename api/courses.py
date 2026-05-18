@@ -58,3 +58,6 @@ async def complete_lesson(progress: LessonProgress):
     # For now, just return success
     return {'success': True}
 
+
+
+

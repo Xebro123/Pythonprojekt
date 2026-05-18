@@ -67,7 +67,7 @@ async def dashboard(request: Request):
         },
         {
             "id": "ai",
-            "title": "AI Kurz",
+            "title": "AI Kurz (Vibe Coding)",
             "description": "Umělá inteligence pro začátečníky",
             "icon": "fas fa-robot",
             "color": "info",

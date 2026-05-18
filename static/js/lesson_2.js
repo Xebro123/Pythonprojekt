@@ -194,3 +194,5 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Lesson 2 loaded - Ready to create spirals!');
 });
 
+
+

@@ -9,6 +9,10 @@ class Settings:
     # Veřejná URL aplikace (pro OAuth callback)
     APP_URL: str = os.getenv("APP_URL", "https://pythonprojekt-ten.vercel.app")
 
+    # Google OAuth (přímý flow přes Vercel, bez Directusu)
+    GOOGLE_CLIENT_ID: Optional[str] = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET: Optional[str] = os.getenv("GOOGLE_CLIENT_SECRET")
+
     # JWT
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
     ALGORITHM: str = "HS256"

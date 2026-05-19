@@ -13,6 +13,8 @@ import uvicorn
 import subprocess
 import tempfile
 import os
+import hashlib
+import httpx
 
 app = FastAPI(title=settings.APP_TITLE, description=settings.APP_DESCRIPTION)
 
@@ -29,8 +31,23 @@ templates = Jinja2Templates(directory="templates")
 
 # ── Pomocné funkce ────────────────────────────────────────────────────────────
 
+GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
+
 def _google_auth_url() -> str:
-    return f"{settings.DIRECTUS_URL}/auth/login/google?redirect={settings.APP_URL}/auth/callback"
+    """Sestaví URL pro Google OAuth (přímý flow přes Vercel)."""
+    if not settings.GOOGLE_CLIENT_ID:
+        return ""
+    import urllib.parse
+    params = {
+        "client_id": settings.GOOGLE_CLIENT_ID,
+        "redirect_uri": f"{settings.APP_URL}/auth/callback",
+        "response_type": "code",
+        "scope": "openid email profile",
+        "access_type": "online",
+    }
+    return f"{GOOGLE_AUTH_URL}?{urllib.parse.urlencode(params)}"
 
 async def get_student_progress(user_id: str = None) -> StudentProgress:
     """Pro nepřihlášené vrátí prázdný progress ihned (bez volání Directus)."""
@@ -276,39 +293,84 @@ async def logout():
     return response
 
 
-# ── Google OAuth ──────────────────────────────────────────────────────────────
+# ── Google OAuth (přímý flow přes Vercel) ────────────────────────────────────
 
 @app.get("/auth/google")
 async def auth_google():
-    """Přesměruje na Google OAuth přes Directus."""
-    return RedirectResponse(url=_google_auth_url())
+    """Přesměruje na Google OAuth."""
+    url = _google_auth_url()
+    if not url:
+        return RedirectResponse(url="/login?error=google_not_configured")
+    return RedirectResponse(url=url)
 
 @app.get("/auth/callback")
-async def auth_callback(request: Request, access_token: str = None, error: str = None):
-    """Zpracuje callback po Google OAuth."""
-    if error or not access_token:
+async def auth_callback(request: Request, code: str = None, error: str = None):
+    """Zpracuje callback po Google OAuth — vymění code za token a získá user info."""
+    if error or not code:
         return RedirectResponse(url="/login?error=oauth_failed")
 
-    user_info = await data_service.get_user_info_by_token(access_token)
-    if not user_info:
+    if not settings.GOOGLE_CLIENT_ID or not settings.GOOGLE_CLIENT_SECRET:
+        return RedirectResponse(url="/login?error=google_not_configured")
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            # 1. Vymění authorization code za access token
+            token_response = await client.post(GOOGLE_TOKEN_URL, data={
+                "code": code,
+                "client_id": settings.GOOGLE_CLIENT_ID,
+                "client_secret": settings.GOOGLE_CLIENT_SECRET,
+                "redirect_uri": f"{settings.APP_URL}/auth/callback",
+                "grant_type": "authorization_code",
+            })
+            if token_response.status_code != 200:
+                return RedirectResponse(url="/login?error=oauth_failed")
+
+            access_token = token_response.json().get("access_token")
+            if not access_token:
+                return RedirectResponse(url="/login?error=oauth_failed")
+
+            # 2. Získá info o uživateli od Googlu
+            userinfo_response = await client.get(
+                GOOGLE_USERINFO_URL,
+                headers={"Authorization": f"Bearer {access_token}"}
+            )
+            if userinfo_response.status_code != 200:
+                return RedirectResponse(url="/login?error=oauth_failed")
+
+            google_user = userinfo_response.json()
+            email = google_user.get("email", "")
+            nickname = google_user.get("given_name", "") or email.split("@")[0]
+            google_id = google_user.get("sub", "")
+
+        if not email:
+            return RedirectResponse(url="/login?error=oauth_failed")
+
+        # 3. Vytvoří uživatele v Directus pokud ještě neexistuje
+        #    (chybu ignorujeme — může existovat z dřívějška)
+        google_password = hashlib.sha256(
+            f"{settings.SECRET_KEY}:{google_id}".encode()
+        ).hexdigest()
+        await data_service.register_user(
+            email=email, password=google_password, nickname=nickname
+        )
+
+        # 4. Vytvoří naši session (JWT do cookie)
+        our_token = create_access_token(data={
+            "sub": f"google:{google_id}",
+            "email": email,
+            "nickname": nickname
+        })
+
+        response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+        response.set_cookie(
+            key="access_token", value=our_token,
+            httponly=True, max_age=86400, samesite="lax"
+        )
+        return response
+
+    except Exception as e:
+        print(f"❌ OAuth callback error: {e}")
         return RedirectResponse(url="/login?error=oauth_failed")
-
-    user_id = str(user_info.get("id", ""))
-    email = user_info.get("email", "")
-    nickname = user_info.get("first_name", "")
-
-    our_token = create_access_token(data={
-        "sub": user_id,
-        "email": email,
-        "nickname": nickname
-    })
-
-    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-    response.set_cookie(
-        key="access_token", value=our_token,
-        httponly=True, max_age=86400, samesite="lax"
-    )
-    return response
 
 
 # ── API ───────────────────────────────────────────────────────────────────────

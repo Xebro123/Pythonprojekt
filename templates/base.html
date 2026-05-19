@@ -4,12 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NextGen Coders - Platforma pro výuku programování{% endblock %}</title>
+    <!-- DNS prefetch + preconnect pro rychlejší načítání CDN -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', path='/css/lessons.css') }}" rel="stylesheet">
+
+    <!-- Prefetch pravděpodobných dalších stránek -->
+    {% block prefetch %}
+    <link rel="prefetch" href="/python">
+    {% endblock %}
+
+    <style>
+        /* Page transition loader */
+        #page-loader {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #38ef7d);
+            background-size: 200% 100%;
+            animation: loaderSlide 0.8s ease-in-out infinite;
+            z-index: 9999;
+        }
+        @keyframes loaderSlide {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
 </head>
 <body>
+    <div id="page-loader"></div>
+
     <!-- SVG Filters for Voltage Buttons -->
     <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
         <defs>
@@ -135,7 +164,7 @@
                         <span class="badge bg-success ms-2">Lokální data</span>
                     {% elif user %}
                         <span class="me-2">
-                            <i class="fas fa-user me-1"></i>{{ user.username }}
+                            <i class="fas fa-user me-1"></i>{{ user.display_name or user.username }}
                         </span>
                         <form action="/logout" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-outline-light btn-sm">
@@ -178,8 +207,20 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="{{ url_for('static', path='/js/main.js') }}" defer></script>
+    <script>
+        // Page transition loader
+        const loader = document.getElementById('page-loader');
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href]');
+            if (link && !link.href.startsWith('mailto:') && !link.href.startsWith('#')
+                && !link.target && link.origin === location.origin) {
+                loader.style.display = 'block';
+            }
+        });
+        window.addEventListener('pageshow', () => { loader.style.display = 'none'; });
+    </script>
     <script>
         // Metallic button hover effects
         document.addEventListener('DOMContentLoaded', function() {

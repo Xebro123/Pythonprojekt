@@ -3,23 +3,22 @@ from typing import Optional, List
 from datetime import datetime
 
 # User schemas
-class UserBase(BaseModel):
-    username: str
+class UserCreate(BaseModel):
     email: EmailStr
-
-class UserCreate(UserBase):
     password: str
+    nickname: Optional[str] = None  # volitelná přezdívka
 
 class UserLogin(BaseModel):
-    username: str
+    email: EmailStr
     password: str
 
-class UserResponse(UserBase):
-    id: int
-    is_active: bool
-    created_at: datetime
-    last_login: Optional[datetime] = None
-    
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    nickname: Optional[str] = None
+    display_name: str
+    created_at: Optional[datetime] = None
+
     class Config:
         from_attributes = True
 
@@ -36,7 +35,7 @@ class LessonResponse(LessonBase):
     order_index: int
     is_active: bool
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -52,7 +51,7 @@ class CourseResponse(CourseBase):
     is_active: bool
     created_at: datetime
     lessons: List[LessonResponse] = []
-    
+
     class Config:
         from_attributes = True
 
@@ -69,7 +68,7 @@ class UserProgressResponse(UserProgressBase):
     completed_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -86,7 +85,7 @@ class AchievementResponse(AchievementBase):
     condition_value: Optional[int] = None
     is_active: bool
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -96,7 +95,7 @@ class UserAchievementResponse(BaseModel):
     achievement_id: int
     earned_at: datetime
     achievement: AchievementResponse
-    
+
     class Config:
         from_attributes = True
 
@@ -106,12 +105,18 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    user_id: Optional[str] = None
+    email: Optional[str] = None
 
-# Student progress (for backward compatibility)
+# Student progress (používá se v šablonách)
 class StudentProgress(BaseModel):
     name: str
     completed_lessons: List[int] = []
     current_level: str = "Úvod"
     total_points: int = 0
     achievements: List[UserAchievementResponse] = []
+
+# Lesson progress API
+class LessonProgress(BaseModel):
+    lesson_id: str
+    completed: bool = True

@@ -1,51 +1,73 @@
 {% extends "base.html" %}
-
-{% block title %}Přihlášení - Python Kurz{% endblock %}
+{% block title %}Přihlášení - NextGen Coders{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <div class="card shadow">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="fas fa-python text-primary" style="font-size: 3rem;"></i>
-                        <h2 class="mt-3 mb-1">Přihlášení</h2>
-                        <p class="text-muted">Přihlaste se do svého účtu</p>
+            <div class="card shadow-lg border-0" style="border-radius: 16px; overflow: hidden;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; text-align: center;">
+                    <div style="font-size: 3rem;">🐢</div>
+                    <h2 style="color: white; margin: 0.5rem 0 0; font-size: 1.5rem;">Vítej zpět!</h2>
+                    <p style="color: rgba(255,255,255,0.8); margin: 0.25rem 0 0; font-size: 0.9rem;">Přihlas se a pokračuj v učení</p>
+                </div>
+
+                <div class="card-body p-4">
+
+                    {% if error %}
+                    <div class="alert alert-danger d-flex align-items-center gap-2 py-2" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ error }}</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Google OAuth -->
+                    <a href="{{ google_auth_url }}" class="btn btn-outline-dark w-100 mb-3 d-flex align-items-center justify-content-center gap-2" style="border-radius: 10px; padding: 0.65rem; font-weight: 500;">
+                        <svg width="18" height="18" viewBox="0 0 48 48">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        Přihlásit se přes Google
+                    </a>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <hr class="flex-grow-1 m-0">
+                        <span class="text-muted" style="font-size: 0.8rem;">nebo emailem</span>
+                        <hr class="flex-grow-1 m-0">
                     </div>
 
-                    <form id="loginForm">
+                    <!-- Email login form -->
+                    <form id="loginForm" novalidate>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Uživatelské jméno</label>
+                            <label for="email" class="form-label fw-semibold">Email</label>
                             <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-user"></i>
-                                </span>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email"
+                                       value="{{ email or '' }}" placeholder="tvuj@email.cz" required autocomplete="email">
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label for="password" class="form-label">Heslo</label>
+                            <label for="password" class="form-label fw-semibold">Heslo</label>
                             <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fas fa-lock"></i>
-                                </span>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="Tvoje heslo" required autocomplete="current-password">
                             </div>
                         </div>
 
-                        <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-sign-in-alt me-2"></i>Přihlásit se
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="loginBtn" style="border-radius: 10px;">
+                            <span id="loginBtnText"><i class="fas fa-sign-in-alt me-2"></i>Přihlásit se</span>
+                            <span id="loginBtnSpinner" class="d-none">
+                                <span class="spinner-border spinner-border-sm me-2"></span>Přihlašuji...
+                            </span>
+                        </button>
 
-                        <div class="text-center">
-                            <p class="mb-0">Nemáte účet? 
-                                <a href="/register" class="text-decoration-none">Zaregistrujte se</a>
-                            </p>
-                        </div>
+                        <p class="text-center mt-3 mb-0 text-muted" style="font-size: 0.9rem;">
+                            Nemáš účet? <a href="/register" class="text-decoration-none fw-semibold">Zaregistruj se</a>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -58,29 +80,30 @@
 <script>
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+    const btn = document.getElementById('loginBtn');
+    const btnText = document.getElementById('loginBtnText');
+    const spinner = document.getElementById('loginBtnSpinner');
+
+    btn.disabled = true;
+    btnText.classList.add('d-none');
+    spinner.classList.remove('d-none');
+
     const formData = new FormData(this);
-    
     try {
-        // Poslat jako Form Data (ne JSON)
-        const response = await fetch('/login', {
-            method: 'POST',
-            body: formData
-        });
-        
+        const response = await fetch('/login', { method: 'POST', body: formData });
         if (response.redirected) {
-            // Server provedl redirect, následujme ho
             window.location.href = response.url;
         } else if (response.ok) {
-            // Úspěch, přesměrovat na homepage
             window.location.href = '/';
         } else {
-            const error = await response.json();
-            alert('Chyba při přihlašování: ' + (error.detail || 'Neplatné přihlašovací údaje'));
+            const html = await response.text();
+            document.open(); document.write(html); document.close();
         }
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Chyba při přihlašování: ' + error.message);
+    } catch (err) {
+        alert('Chyba připojení: ' + err.message);
+        btn.disabled = false;
+        btnText.classList.remove('d-none');
+        spinner.classList.add('d-none');
     }
 });
 </script>

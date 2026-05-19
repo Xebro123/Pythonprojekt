@@ -1,49 +1,58 @@
-from fastapi import FastAPI, Request, Form, Depends, HTTPException, status
+from fastapi import FastAPI, Request, Form, HTTPException, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.gzip import GZipMiddleware
 from config import settings
 from data_service import data_service
 from auth_directus import create_access_token, get_current_user_optional
-from schemas import UserCreate, UserLogin, StudentProgress
+from schemas import UserCreate, StudentProgress
+from cache import progress_cache
 from api.courses import router as courses_router
 import uvicorn
 import subprocess
 import tempfile
 import os
-from datetime import datetime, timedelta
 
 app = FastAPI(title=settings.APP_TITLE, description=settings.APP_DESCRIPTION)
 
-# Include API routers
+# Middleware
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# Routery
 app.include_router(courses_router)
 
-# Mount static files
+# Statické soubory + šablony
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Templates
 templates = Jinja2Templates(directory="templates")
 
-# Helper funkce pro získání dat z Directus
-async def get_courses_data():
-    """Získání všech kurzů z Directus"""
-    return await data_service.get_courses()
+
+# ── Pomocné funkce ────────────────────────────────────────────────────────────
+
+def _google_auth_url() -> str:
+    return f"{settings.DIRECTUS_URL}/auth/login/google?redirect={settings.APP_URL}/auth/callback"
 
 async def get_student_progress(user_id: str = None) -> StudentProgress:
-    """Získání pokroku studenta z Directus"""
-    if user_id:
-        return await data_service.get_user_progress(user_id)
-    else:
+    """Pro nepřihlášené vrátí prázdný progress ihned (bez volání Directus)."""
+    if not user_id:
         return StudentProgress(name="Host", completed_lessons=[], current_level="Úvod")
 
-# Routes
+    cached = progress_cache.get(f"progress:{user_id}")
+    if cached:
+        return cached
+
+    progress = await data_service.get_user_progress(user_id)
+    progress_cache.set(f"progress:{user_id}", progress, ttl=60)
+    return progress
+
+
+# ── Stránky ───────────────────────────────────────────────────────────────────
+
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    """Hlavní dashboard platformy"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
-    # Seznam dostupných kurzů na platformě
+
     available_courses = [
         {
             "id": "python",
@@ -52,12 +61,12 @@ async def dashboard(request: Request):
             "icon": "fas fa-python",
             "color": "success",
             "status": "available",
-            "progress": len(student.completed_lessons) if student else 0,
+            "progress": len(student.completed_lessons),
             "total_lessons": 10
         },
         {
             "id": "javascript",
-            "title": "JavaScript Kurz", 
+            "title": "JavaScript Kurz",
             "description": "Webové programování s JavaScriptem",
             "icon": "fab fa-js-square",
             "color": "warning",
@@ -71,12 +80,12 @@ async def dashboard(request: Request):
             "description": "Umělá inteligence pro začátečníky",
             "icon": "fas fa-robot",
             "color": "info",
-            "status": "coming_soon", 
+            "status": "coming_soon",
             "progress": 0,
             "total_lessons": 0
         }
     ]
-    
+
     return templates.TemplateResponse("dashboard.html", {
         "request": request,
         "courses": available_courses,
@@ -86,15 +95,13 @@ async def dashboard(request: Request):
 
 @app.get("/python", response_class=HTMLResponse)
 async def python_course(request: Request):
-    """Python kurz dashboard - seznam lekcí"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
-    # Počet lekcí
-    total_lessons = 4  # Předlekce + 3 lekce
-    completed_lessons = len(student.completed_lessons) if student else 0
+
+    total_lessons = 4
+    completed_lessons = len(student.completed_lessons)
     progress_percent = int((completed_lessons / total_lessons) * 100) if total_lessons > 0 else 0
-    
+
     return templates.TemplateResponse("python_dashboard.html", {
         "request": request,
         "student": student,
@@ -104,238 +111,159 @@ async def python_course(request: Request):
         "progress_percent": progress_percent
     })
 
-@app.get("/kurz/{course_id}", response_class=HTMLResponse)
-async def course_page(request: Request, course_id: str):
-    """Stránka kurzu"""
-    courses = await get_courses_data()
-    if course_id not in courses:
-        return templates.TemplateResponse("dashboard.html", {
-            "request": request,
-            "courses": courses,
-            "student": await get_student_progress(),
-            "error": "Kurz nenalezen"
-        })
-    
-    return templates.TemplateResponse("kurz.html", {
-        "request": request,
-        "course": courses[course_id],
-        "course_id": course_id,
-        "student": await get_student_progress()
-    })
-
 @app.get("/predlekce/python", response_class=HTMLResponse)
 async def python_intro(request: Request):
-    """Předlekce - Vítej v Pythonu s Terry želvou"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
     return templates.TemplateResponse("predlekce.html", {
-        "request": request,
-        "student": student,
-        "user": current_user
+        "request": request, "student": student, "user": current_user
     })
 
 @app.get("/python-course/lesson-1", response_class=HTMLResponse)
 async def python_lesson_1(request: Request):
-    """Lekce 1: Nauč želvu kreslit"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
     return templates.TemplateResponse("python_lesson_1.html", {
-        "request": request,
-        "student": student,
-        "user": current_user
+        "request": request, "student": student, "user": current_user
     })
 
 @app.get("/python-course/lesson-2", response_class=HTMLResponse)
 async def python_lesson_2(request: Request):
-    """Lekce 2: Tvoje první kouzelná spirála"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
     return templates.TemplateResponse("python_lesson_2.html", {
-        "request": request,
-        "student": student,
-        "user": current_user
+        "request": request, "student": student, "user": current_user
     })
 
 @app.get("/python-course/lesson-3", response_class=HTMLResponse)
 async def python_lesson_3(request: Request):
-    """Lekce 3: Barevná spirála (coming soon)"""
     current_user = await get_current_user_optional(request)
     student = await get_student_progress(current_user.get("id") if current_user else None)
-    
     return templates.TemplateResponse("python_lesson_3.html", {
-        "request": request,
-        "student": student,
-        "user": current_user
-    })
-
-@app.get("/lekce/{course_id}/{lesson_id}", response_class=HTMLResponse)
-async def lesson_page(request: Request, course_id: str, lesson_id: int):
-    """Stránka lekce"""
-    courses = await get_courses_data()
-    if course_id not in courses:
-        return templates.TemplateResponse("dashboard.html", {
-            "request": request,
-            "courses": courses,
-            "student": await get_student_progress(),
-            "error": "Kurz nenalezen"
-        })
-    
-    course = courses[course_id]
-    lesson = None
-    for l in course["lessons"]:
-        if l["id"] == lesson_id:
-            lesson = l
-            break
-    
-    if not lesson:
-        return templates.TemplateResponse("kurz.html", {
-            "request": request,
-            "course": course,
-            "course_id": course_id,
-            "student": await get_student_progress(),
-            "error": "Lekce nenalezena"
-        })
-    
-    return templates.TemplateResponse("lekce.html", {
-        "request": request,
-        "course": course,
-        "course_id": course_id,
-        "lesson": lesson,
-        "student": await get_student_progress()
+        "request": request, "student": student, "user": current_user
     })
 
 @app.get("/playground", response_class=HTMLResponse)
 async def playground(request: Request):
-    """Python Playground"""
+    current_user = await get_current_user_optional(request)
     return templates.TemplateResponse("playground.html", {
         "request": request,
-        "student": await get_student_progress()
+        "student": StudentProgress(name="Host", completed_lessons=[], current_level="Úvod"),
+        "user": current_user
     })
-
-@app.post("/run_code")
-async def run_code(code: str = Form(...)):
-    """Spuštění Python kódu"""
-    try:
-        # Create temporary file with UTF-8 encoding
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
-            # Add encoding declaration to the file
-            f.write('# -*- coding: utf-8 -*-\n')
-            f.write(code)
-            temp_file = f.name
-        
-        # Run the code with UTF-8 encoding
-        result = subprocess.run(
-            ['python', temp_file],
-            capture_output=True,
-            text=True,
-            timeout=5,
-            encoding='utf-8',
-            errors='replace'
-        )
-        
-        # Clean up
-        os.unlink(temp_file)
-        
-        return {
-            "output": result.stdout,
-            "error": result.stderr,
-            "return_code": result.returncode
-        }
-    except subprocess.TimeoutExpired:
-        return {"error": "Kód běžel příliš dlouho (max 5 sekund)"}
-    except Exception as e:
-        return {"error": f"Chyba: {str(e)}"}
 
 @app.get("/profil", response_class=HTMLResponse)
 async def profile(request: Request):
-    """Profil studenta"""
+    current_user = await get_current_user_optional(request)
+    student = await get_student_progress(current_user.get("id") if current_user else None)
     return templates.TemplateResponse("profil.html", {
-        "request": request,
-        "student": await get_student_progress()
+        "request": request, "student": student, "user": current_user
     })
 
-@app.post("/update_progress")
-async def update_progress(lesson_id: int = Form(...)):
-    """Aktualizace pokroku studenta"""
-    # V online režimu potřebujeme user_id z session/tokenu
-    # Prozatím použijeme placeholder
-    user_id = "1"  # TODO: Získat z autentifikace
-    
-    success = await data_service.update_user_progress(user_id, str(lesson_id), True)
-    
-    if success:
-        return {"success": True}
-    else:
-        return {"success": False, "error": "Chyba při aktualizaci pokroku"}
+@app.get("/kurz/{course_id}", response_class=HTMLResponse)
+async def course_page(request: Request, course_id: str):
+    current_user = await get_current_user_optional(request)
+    courses = await data_service.get_courses()
+    if course_id not in courses:
+        return templates.TemplateResponse("dashboard.html", {
+            "request": request, "courses": courses,
+            "student": await get_student_progress(),
+            "user": current_user, "error": "Kurz nenalezen"
+        })
+    return templates.TemplateResponse("kurz.html", {
+        "request": request, "course": courses[course_id],
+        "course_id": course_id, "student": await get_student_progress(),
+        "user": current_user
+    })
 
-# Autentifikace routes
+
+# ── Přihlášení / Registrace ───────────────────────────────────────────────────
+
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    """Přihlašovací stránka"""
-    return templates.TemplateResponse("login.html", {"request": request})
+    error = request.query_params.get("error")
+    error_msg = None
+    if error == "oauth_failed":
+        error_msg = "Přihlášení přes Google se nezdařilo. Zkuste to znovu."
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+        "error": error_msg,
+        "google_auth_url": _google_auth_url()
+    })
 
 @app.post("/login")
-async def login(request: Request, username: str = Form(...), password: str = Form(...)):
-    """Přihlášení studenta pomocí username"""
-    print(f"🔐 Login attempt for username: {username}")
-    
-    # TODO: Implementovat ověření studenta v Directus kolekci 'students'
-    # Prozatím vytvoříme JWT token bez ověření (DOČASNÉ ŘEŠENÍ)
-    access_token = create_access_token(data={"sub": username})
-    
-    print(f"✅ Login successful, creating token for: {username}")
-    
-    # Redirect na hlavní stránku s tokenem
+async def login(request: Request, email: str = Form(...), password: str = Form(...)):
+    auth_result = await data_service.authenticate_user(email, password)
+
+    if not auth_result or not auth_result.get("data"):
+        return templates.TemplateResponse("login.html", {
+            "request": request,
+            "error": "Neplatný email nebo heslo.",
+            "email": email,
+            "google_auth_url": _google_auth_url()
+        }, status_code=401)
+
+    directus_token = auth_result["data"]["access_token"]
+    user_info = await data_service.get_user_info_by_token(directus_token)
+
+    user_id = str(user_info.get("id", email)) if user_info else email
+    nickname = (user_info.get("first_name") or "") if user_info else ""
+
+    access_token = create_access_token(data={
+        "sub": user_id,
+        "email": email,
+        "nickname": nickname
+    })
+
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
-    response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=86400)
+    response.set_cookie(
+        key="access_token", value=access_token,
+        httponly=True, max_age=86400, samesite="lax"
+    )
     return response
 
 @app.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
-    """Registrační stránka"""
-    return templates.TemplateResponse("register.html", {"request": request})
+    return templates.TemplateResponse("register.html", {
+        "request": request,
+        "google_auth_url": _google_auth_url()
+    })
 
 @app.post("/register")
 async def register(user_data: UserCreate):
-    """Registrace nového studenta"""
     try:
-        print(f"🚀 Starting registration in main.py for: {user_data.username}")
-        register_result = await data_service.register_user(
-            user_data.username, 
-            user_data.email,
-            user_data.password
+        directus_user = await data_service.register_user(
+            email=user_data.email,
+            password=user_data.password,
+            nickname=user_data.nickname
         )
-        
-        print(f"🔍 register_result in main.py: {register_result}")
-        print(f"🔍 register_result type: {type(register_result)}")
-        print(f"🔍 register_result bool: {bool(register_result)}")
-        
-        if register_result:
-            # Automatické přihlášení po registraci
-            access_token = create_access_token(data={"sub": user_data.username})
-            
-            print(f"✅ Registration successful, returning success response")
-            return {
-                "success": True,
-                "access_token": access_token,
-                "message": "Registrace úspěšná",
-                "username": user_data.username
-            }
-        else:
-            print(f"❌ register_result is falsy, raising HTTPException")
+
+        if not directus_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Chyba při registraci. Uživatelské jméno nebo email už mohou být použity."
+                detail="Registrace selhala. Email může být již použit."
             )
+
+        user_id = str(directus_user.get("id", user_data.email))
+        nickname = user_data.nickname or user_data.email.split("@")[0]
+
+        access_token = create_access_token(data={
+            "sub": user_id,
+            "email": user_data.email,
+            "nickname": nickname
+        })
+
+        return {
+            "success": True,
+            "access_token": access_token,
+            "message": "Registrace úspěšná",
+            "display_name": nickname
+        }
+
     except HTTPException:
         raise
     except Exception as e:
-        print(f"❌ Registration error in main.py: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"❌ Register error: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Chyba při registraci: {str(e)}"
@@ -343,17 +271,84 @@ async def register(user_data: UserCreate):
 
 @app.post("/logout")
 async def logout():
-    """Odhlášení uživatele"""
     response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
     response.delete_cookie(key="access_token")
     return response
 
+
+# ── Google OAuth ──────────────────────────────────────────────────────────────
+
+@app.get("/auth/google")
+async def auth_google():
+    """Přesměruje na Google OAuth přes Directus."""
+    return RedirectResponse(url=_google_auth_url())
+
+@app.get("/auth/callback")
+async def auth_callback(request: Request, access_token: str = None, error: str = None):
+    """Zpracuje callback po Google OAuth."""
+    if error or not access_token:
+        return RedirectResponse(url="/login?error=oauth_failed")
+
+    user_info = await data_service.get_user_info_by_token(access_token)
+    if not user_info:
+        return RedirectResponse(url="/login?error=oauth_failed")
+
+    user_id = str(user_info.get("id", ""))
+    email = user_info.get("email", "")
+    nickname = user_info.get("first_name", "")
+
+    our_token = create_access_token(data={
+        "sub": user_id,
+        "email": email,
+        "nickname": nickname
+    })
+
+    response = RedirectResponse(url="/", status_code=status.HTTP_302_FOUND)
+    response.set_cookie(
+        key="access_token", value=our_token,
+        httponly=True, max_age=86400, samesite="lax"
+    )
+    return response
+
+
+# ── API ───────────────────────────────────────────────────────────────────────
+
+@app.post("/run_code")
+async def run_code(code: str = Form(...)):
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as f:
+            f.write('# -*- coding: utf-8 -*-\n')
+            f.write(code)
+            temp_file = f.name
+
+        result = subprocess.run(
+            ['python', temp_file],
+            capture_output=True, text=True,
+            timeout=5, encoding='utf-8', errors='replace'
+        )
+        os.unlink(temp_file)
+        return {"output": result.stdout, "error": result.stderr, "return_code": result.returncode}
+    except subprocess.TimeoutExpired:
+        return {"error": "Kód běžel příliš dlouho (max 5 sekund)"}
+    except Exception as e:
+        return {"error": f"Chyba: {str(e)}"}
+
+@app.post("/update_progress")
+async def update_progress(request: Request, lesson_id: int = Form(...)):
+    current_user = await get_current_user_optional(request)
+    if not current_user:
+        return {"success": False, "error": "Nejsi přihlášen(a)"}
+
+    user_id = current_user.get("id")
+    # Invalidace cache po aktualizaci pokroku
+    progress_cache.delete(f"progress:{user_id}")
+
+    success = await data_service.update_user_progress(user_id, str(lesson_id), True)
+    return {"success": success}
+
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint pro testování Directus připojení"""
     import httpx
-    from config import settings
-    
     health_status = {
         "app": "ok",
         "directus": {
@@ -363,34 +358,29 @@ async def health_check():
             "collections": []
         }
     }
-    
     try:
-        # Test 1: Je Directus dostupný?
         async with httpx.AsyncClient(timeout=5.0) as client:
             try:
-                response = await client.get(f"{settings.DIRECTUS_URL}/server/ping")
-                health_status["directus"]["reachable"] = response.status_code == 200
+                r = await client.get(f"{settings.DIRECTUS_URL}/server/ping")
+                health_status["directus"]["reachable"] = r.status_code == 200
             except Exception as e:
-                health_status["directus"]["error"] = f"Cannot reach Directus: {str(e)}"
-            
-            # Test 2: Funguje autentifikace?
+                health_status["directus"]["error"] = str(e)
+
             if settings.DIRECTUS_TOKEN:
                 try:
                     headers = {"Authorization": f"Bearer {settings.DIRECTUS_TOKEN}"}
-                    response = await client.get(f"{settings.DIRECTUS_URL}/collections", headers=headers)
-                    health_status["directus"]["authenticated"] = response.status_code == 200
-                    
-                    if response.status_code == 200:
-                        collections = response.json().get("data", [])
-                        health_status["directus"]["collections"] = [c["collection"] for c in collections]
-                    else:
-                        health_status["directus"]["auth_error"] = response.text
+                    r = await client.get(f"{settings.DIRECTUS_URL}/collections", headers=headers)
+                    health_status["directus"]["authenticated"] = r.status_code == 200
+                    if r.status_code == 200:
+                        health_status["directus"]["collections"] = [
+                            c["collection"] for c in r.json().get("data", [])
+                        ]
                 except Exception as e:
                     health_status["directus"]["auth_error"] = str(e)
     except Exception as e:
         health_status["error"] = str(e)
-    
     return health_status
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

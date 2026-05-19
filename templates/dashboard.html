@@ -1,159 +1,266 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard - NextGen Coders{% endblock %}
 
+{% block prefetch %}
+<link rel="prefetch" href="/python">
+<link rel="prefetch" href="/predlekce/python">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <!-- Hero Section -->
-    <div class="row mb-5">
-        <div class="col-12 text-center">
-            <div class="hero-section">
-                <h1 class="display-4 fw-bold text-primary mb-3">
-                    <i class="fas fa-graduation-cap me-3"></i>Vítejte na NextGen Coders!
-                </h1>
-                <p class="lead text-muted mb-4">
-                    Platforma pro výuku programování pro žáky základních škol
-                </p>
-                {% if user %}
-                <div class="hero-stats">
-                    <div class="row justify-content-center">
-                        <div class="col-md-3 col-6 mb-3">
-                            <div class="stat-card">
-                                <i class="fas fa-book-open text-success"></i>
-                                <h4>{{ student.completed_lessons|length }}</h4>
-                                <p>Dokončené lekce</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6 mb-3">
-                            <div class="stat-card">
-                                <i class="fas fa-trophy text-warning"></i>
-                                <h4>{{ student.total_points }}</h4>
-                                <p>Celkové body</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-6 mb-3">
-                            <div class="stat-card">
-                                <i class="fas fa-medal text-info"></i>
-                                <h4>{{ student.achievements|length }}</h4>
-                                <p>Odměny</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- Hero -->
+<div style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%); padding: 3rem 1rem 4rem; margin: -1.5rem -12px 0; text-align: center;">
+    <div class="container">
+        {% if user %}
+        <p style="color: #a5b4fc; font-size: 1rem; margin-bottom: 0.25rem;">Vítej zpátky,</p>
+        <h1 style="color: white; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem;">
+            {{ user.display_name }} 👋
+        </h1>
+        <p style="color: #c4b5fd; font-size: 1.1rem; margin-bottom: 2rem;">Pokračuj tam, kde jsi skončil(a)</p>
+        <div class="row justify-content-center g-3" style="max-width: 600px; margin: 0 auto;">
+            <div class="col-4">
+                <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; backdrop-filter: blur(10px);">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #34d399;">{{ student.completed_lessons|length }}</div>
+                    <div style="color: #a5b4fc; font-size: 0.8rem;">Hotové lekce</div>
                 </div>
-                {% endif %}
+            </div>
+            <div class="col-4">
+                <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; backdrop-filter: blur(10px);">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #fbbf24;">{{ student.total_points }}</div>
+                    <div style="color: #a5b4fc; font-size: 0.8rem;">Body</div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; backdrop-filter: blur(10px);">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #60a5fa;">{{ student.achievements|length }}</div>
+                    <div style="color: #a5b4fc; font-size: 0.8rem;">Odznaky</div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Courses Section -->
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-center mb-5">
-                <i class="fas fa-code me-2"></i>Dostupné kurzy
-            </h2>
+        {% else %}
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">🚀</div>
+        <h1 style="color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem;">NextGen Coders</h1>
+        <p style="color: #c4b5fd; font-size: 1.2rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+            Platforma pro výuku programování a digitálních dovedností pro žáky základních škol
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/register" style="background: linear-gradient(135deg, #34d399, #059669); color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(52,211,153,0.4);">
+                🎉 Začít zdarma
+            </a>
+            <a href="/python" style="background: rgba(255,255,255,0.15); color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px);">
+                👀 Prohlédnout kurzy
+            </a>
         </div>
+        {% endif %}
     </div>
+</div>
+
+<!-- Kurzy -->
+<div class="container" style="margin-top: -2rem;">
+    <h2 style="font-size: 1.4rem; font-weight: 700; color: #1e1b4b; margin-bottom: 1.5rem; padding-top: 1rem;">
+        📚 Kurzy
+    </h2>
 
     <div class="row g-4">
         {% for course in courses %}
-        <div class="col-lg-4 col-md-6">
-            <div class="course-card h-100 {% if course.status == 'coming_soon' %}coming-soon{% endif %}">
-                <div class="course-header">
-                    <div class="course-icon">
-                        <i class="{{ course.icon }} text-{{ course.color }}"></i>
+        <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="ngc-course-card {% if course.status == 'coming_soon' %}ngc-coming-soon{% endif %}" style="--course-color: {{ course.color_hex if course.color_hex else '#6366f1' }};">
+                <!-- Badge status -->
+                {% if course.status == 'available' %}
+                <div class="ngc-badge ngc-badge-available">✅ Dostupné</div>
+                {% else %}
+                <div class="ngc-badge ngc-badge-soon">🔜 Brzy</div>
+                {% endif %}
+
+                <!-- Emoji ikona -->
+                <div class="ngc-emoji">{{ course.emoji }}</div>
+
+                <!-- Nadpis -->
+                <h3 class="ngc-course-title">{{ course.title }}</h3>
+                <p class="ngc-course-subtitle">{{ course.subtitle }}</p>
+                <p class="ngc-course-desc">{{ course.description }}</p>
+
+                <!-- Meta -->
+                <div class="ngc-meta">
+                    <span>👤 {{ course.age }}</span>
+                    {% if course.status == 'available' and course.total_lessons > 0 %}
+                    <span>📖 {{ course.total_lessons }} lekce</span>
+                    {% endif %}
+                </div>
+
+                <!-- Progress (jen pro dostupné kurzy přihlášeného uživatele) -->
+                {% if course.status == 'available' and user and course.total_lessons > 0 %}
+                <div style="margin: 0.75rem 0;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #6b7280; margin-bottom: 4px;">
+                        <span>Pokrok</span>
+                        <span>{{ course.progress }}/{{ course.total_lessons }}</span>
                     </div>
-                    <h3 class="course-title">{{ course.title }}</h3>
-                    {% if course.status == 'coming_soon' %}
-                    <span class="badge bg-secondary">Brzy</span>
-                    {% endif %}
-                </div>
-                <div class="course-body">
-                    <p class="course-description">{{ course.description }}</p>
-                    {% if course.status == 'available' %}
-                    <div class="course-progress mb-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <small class="text-muted">Pokrok</small>
-                            <small class="text-muted">{{ course.progress }}/{{ course.total_lessons }}</small>
-                        </div>
-                        <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-{{ course.color }}" role="progressbar" 
-                                 style="width: {{ (course.progress / course.total_lessons * 100) if course.total_lessons > 0 else 0 }}%">
-                            </div>
-                        </div>
+                    <div style="background: #e5e7eb; border-radius: 99px; height: 6px;">
+                        <div style="background: #10b981; border-radius: 99px; height: 6px; width: {{ [(course.progress / course.total_lessons * 100)|int, 100]|min }}%;"></div>
                     </div>
-                    {% endif %}
                 </div>
-                <div class="course-footer">
-                    {% if course.status == 'available' %}
-                    <a href="/python" class="btn btn-{{ course.color }} btn-lg w-100">
-                        <i class="fas fa-arrow-right me-2"></i>
-                        {% if course.progress > 0 %}Pokračovat{% else %}Začít kurz{% endif %}
-                    </a>
-                    {% else %}
-                    <button class="btn btn-outline-secondary btn-lg w-100" disabled>
-                        <i class="fas fa-clock me-2"></i>Brzy dostupné
-                    </button>
-                    {% endif %}
-                </div>
+                {% endif %}
+
+                <!-- Tlačítko -->
+                {% if course.status == 'available' %}
+                <a href="{{ course.url }}" class="ngc-btn-primary">
+                    {% if course.progress and course.progress > 0 %}▶ Pokračovat{% else %}🚀 Začít kurz{% endif %}
+                </a>
+                {% else %}
+                <a href="{{ course.url }}" class="ngc-btn-secondary">
+                    👁 Zobrazit náhled
+                </a>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Quick Actions -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3 class="text-center mb-4">
-                <i class="fas fa-bolt me-2"></i>Rychlé akce
-            </h3>
-        </div>
-    </div>
-
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="quick-action-card">
-                <div class="quick-action-icon">
-                    <i class="fas fa-play text-success"></i>
-                </div>
-                <h5>Code Playground</h5>
-                <p>Vyzkoušejte si kód přímo v prohlížeči</p>
-                <a href="/playground" class="btn btn-outline-success">
-                    <i class="fas fa-code me-1"></i>Otevřít
+    <!-- Quick actions -->
+    <div style="margin-top: 3rem; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; color: #1e1b4b; margin-bottom: 1.5rem;">⚡ Rychlé akce</h2>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a href="/playground" class="ngc-quick-card">
+                    <span style="font-size: 2rem;">💻</span>
+                    <div>
+                        <div style="font-weight: 700;">Code Playground</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Zkoušej kód přímo v prohlížeči</div>
+                    </div>
                 </a>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="quick-action-card">
-                <div class="quick-action-icon">
-                    <i class="fas fa-user text-info"></i>
-                </div>
-                <h5>Můj Profil</h5>
-                <p>Sledujte svůj pokrok a úspěchy</p>
-                <a href="/profil" class="btn btn-outline-info">
-                    <i class="fas fa-chart-line me-1"></i>Zobrazit
+            <div class="col-md-4">
+                <a href="/profil" class="ngc-quick-card">
+                    <span style="font-size: 2rem;">🏆</span>
+                    <div>
+                        <div style="font-weight: 700;">Můj profil</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Pokrok, body a odznaky</div>
+                    </div>
                 </a>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="quick-action-card">
-                <div class="quick-action-icon">
-                    <i class="fas fa-question-circle text-warning"></i>
-                </div>
-                <h5>Nápověda</h5>
-                <p>Potřebujete pomoc? Podívejte se na nápovědu</p>
-                <button class="btn btn-outline-warning" onclick="showHelp()">
-                    <i class="fas fa-lightbulb me-1"></i>Nápověda
-                </button>
+            <div class="col-md-4">
+                <a href="/python" class="ngc-quick-card">
+                    <span style="font-size: 2rem;">🐢</span>
+                    <div>
+                        <div style="font-weight: 700;">Terry čeká!</div>
+                        <div style="font-size: 0.85rem; color: #6b7280;">Pokračuj v Python kurzu</div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
-<script>
-function showHelp() {
-    alert('Vítejte na NextGen Coders! Vyberte si kurz výše a začněte s výukou programování. Můžete také vyzkoušet Code Playground pro testování kódu.');
+<style>
+.ngc-course-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+    position: relative;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #f1f5f9;
 }
-</script>
+.ngc-course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+.ngc-coming-soon {
+    background: #fafafa;
+}
+.ngc-coming-soon .ngc-emoji {
+    filter: grayscale(30%);
+    opacity: 0.85;
+}
+.ngc-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 99px;
+    letter-spacing: 0.02em;
+}
+.ngc-badge-available { background: #dcfce7; color: #15803d; }
+.ngc-badge-soon { background: #f1f5f9; color: #64748b; }
+.ngc-emoji { font-size: 3rem; margin-bottom: 0.75rem; display: block; }
+.ngc-course-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    margin-bottom: 0.15rem;
+}
+.ngc-course-subtitle {
+    font-size: 0.85rem;
+    color: #8b5cf6;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.ngc-course-desc {
+    color: #4b5563;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+}
+.ngc-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+.ngc-btn-primary {
+    display: block;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    text-align: center;
+    padding: 0.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+    margin-top: auto;
+}
+.ngc-btn-primary:hover { opacity: 0.9; color: white; }
+.ngc-btn-secondary {
+    display: block;
+    background: #f8fafc;
+    color: #475569;
+    text-align: center;
+    padding: 0.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid #e2e8f0;
+    transition: background 0.2s;
+    margin-top: auto;
+}
+.ngc-btn-secondary:hover { background: #f1f5f9; color: #334155; }
+.ngc-quick-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 16px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: #1e1b4b;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.ngc-quick-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    color: #1e1b4b;
+}
+</style>
 {% endblock %}

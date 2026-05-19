@@ -73,34 +73,74 @@ async def dashboard(request: Request):
     available_courses = [
         {
             "id": "python",
-            "title": "Python Kurz",
-            "description": "Naučte se základy programování v Pythonu",
-            "icon": "fas fa-python",
+            "title": "Python",
+            "subtitle": "Programování s želvou Terry",
+            "description": "Nauč se základy programování v Pythonu zábavnou formou s naší přátelskou želvou Terry.",
+            "icon": "fab fa-python",
+            "emoji": "🐢",
             "color": "success",
             "status": "available",
+            "url": "/python",
             "progress": len(student.completed_lessons),
-            "total_lessons": 10
+            "total_lessons": 4,
+            "age": "10–15 let",
         },
         {
             "id": "javascript",
-            "title": "JavaScript Kurz",
-            "description": "Webové programování s JavaScriptem",
+            "title": "JavaScript",
+            "subtitle": "Magie webu",
+            "description": "Oživuj webové stránky, vytvárej animace a interaktivní aplikace — přímo v prohlížeči.",
             "icon": "fab fa-js-square",
+            "emoji": "🌐",
             "color": "warning",
             "status": "coming_soon",
+            "url": "/kurz/javascript",
             "progress": 0,
-            "total_lessons": 0
+            "total_lessons": 0,
+            "age": "11–15 let",
         },
         {
-            "id": "ai",
-            "title": "AI Kurz (Vibe Coding)",
-            "description": "Umělá inteligence pro začátečníky",
+            "id": "vibe-coding",
+            "title": "Vibe Coding",
+            "subtitle": "Programování s AI",
+            "description": "Moderní způsob tvorby aplikací — programuj spolu s umělou inteligencí a vytvárej věci, které tě baví.",
             "icon": "fas fa-robot",
+            "emoji": "🤖",
             "color": "info",
             "status": "coming_soon",
+            "url": "/kurz/vibe-coding",
             "progress": 0,
-            "total_lessons": 0
-        }
+            "total_lessons": 0,
+            "age": "12–16 let",
+        },
+        {
+            "id": "kybernetika",
+            "title": "Kybernetická bezpečnost",
+            "subtitle": "Bezpečně online",
+            "description": "Nauč se chránit sebe i svá data na internetu. Hesla, phishing, soukromí — tohle chce každý vědět.",
+            "icon": "fas fa-shield-alt",
+            "emoji": "🔐",
+            "color": "danger",
+            "status": "coming_soon",
+            "url": "/kurz/kybernetika",
+            "progress": 0,
+            "total_lessons": 0,
+            "age": "10–16 let",
+        },
+        {
+            "id": "pc-life-balance",
+            "title": "PC-Life Balance",
+            "subtitle": "Zdravý vztah k technologiím",
+            "description": "Kdy a jak správně používat digitální svět. Obrazovkový čas, digitální pohoda a zdravé návyky.",
+            "icon": "fas fa-balance-scale",
+            "emoji": "⚖️",
+            "color": "purple",
+            "status": "coming_soon",
+            "url": "/kurz/pc-life-balance",
+            "progress": 0,
+            "total_lessons": 0,
+            "age": "9–15 let",
+        },
     ]
 
     return templates.TemplateResponse("dashboard.html", {
@@ -175,6 +215,46 @@ async def profile(request: Request):
     student = await get_student_progress(current_user.get("id") if current_user else None)
     return templates.TemplateResponse("profil.html", {
         "request": request, "student": student, "user": current_user
+    })
+
+@app.get("/kurz/javascript", response_class=HTMLResponse)
+async def javascript_course(request: Request):
+    current_user = await get_current_user_optional(request)
+    return templates.TemplateResponse("coming_soon.html", {
+        "request": request, "user": current_user,
+        "course_title": "JavaScript", "course_emoji": "🌐",
+        "course_color": "#f59e0b",
+        "topics": ["Proměnné a funkce", "Manipulace s webem (DOM)", "Animace a efekty", "Jednoduché hry v prohlížeči"],
+    })
+
+@app.get("/kurz/vibe-coding", response_class=HTMLResponse)
+async def vibe_coding_course(request: Request):
+    current_user = await get_current_user_optional(request)
+    return templates.TemplateResponse("coming_soon.html", {
+        "request": request, "user": current_user,
+        "course_title": "Vibe Coding", "course_emoji": "🤖",
+        "course_color": "#06b6d4",
+        "topics": ["Jak funguje AI asistent", "Prompt engineering pro programátory", "Tvorba aplikací s AI pomocníkem", "Projekty: web, hra, chatbot"],
+    })
+
+@app.get("/kurz/kybernetika", response_class=HTMLResponse)
+async def kybernetika_course(request: Request):
+    current_user = await get_current_user_optional(request)
+    return templates.TemplateResponse("coming_soon.html", {
+        "request": request, "user": current_user,
+        "course_title": "Kybernetická bezpečnost", "course_emoji": "🔐",
+        "course_color": "#ef4444",
+        "topics": ["Silná hesla a správce hesel", "Phishing a podvodné zprávy", "Soukromí na sociálních sítích", "Bezpečné chování online"],
+    })
+
+@app.get("/kurz/pc-life-balance", response_class=HTMLResponse)
+async def pc_life_balance_course(request: Request):
+    current_user = await get_current_user_optional(request)
+    return templates.TemplateResponse("coming_soon.html", {
+        "request": request, "user": current_user,
+        "course_title": "PC-Life Balance", "course_emoji": "⚖️",
+        "course_color": "#8b5cf6",
+        "topics": ["Zdravý obrazovkový čas", "Digitální detox a přestávky", "Sociální sítě bez závislosti", "Technologie jako nástroj, ne pán"],
     })
 
 @app.get("/kurz/{course_id}", response_class=HTMLResponse)
